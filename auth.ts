@@ -21,7 +21,7 @@ async function getUser(email: string) {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as any,
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
