@@ -4,11 +4,23 @@ import { useState } from 'react';
 import { Card } from '@/components/Card';
 import { BetModal } from '@/components/BetModal';
 import { Countdown } from '@/components/Countdown';
+import { CommentSection } from './CommentSection';
+import { useToast } from '@/components/Toast';
 
 type Option = {
   id: string;
   label: string;
   odds: number;
+};
+
+type Comment = {
+  id: string;
+  content: string;
+  createdAt: Date | string;
+  userId: string;
+  user: {
+    name: string | null;
+  };
 };
 
 type Market = {
@@ -19,25 +31,28 @@ type Market = {
   expiresAt: Date | string | null;
   creator?: { name: string | null } | null;
   creatorId?: string | null;
+  comments?: Comment[];
 };
 
 interface MarketListProps {
   markets: Market[];
   userBalance: number;
   userId: string;
+  userName?: string | null;
 }
 
-export function MarketList({ markets, userBalance, userId }: MarketListProps) {
+export function MarketList({ markets, userBalance, userId, userName }: MarketListProps) {
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
   const [selectedMarketQuestion, setSelectedMarketQuestion] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addToast } = useToast();
 
   const handleOptionClick = (option: Option, market: Market) => {
     if (market.expiresAt && new Date(market.expiresAt) <= new Date()) {
        return; // Expirado
     }
     if (market.creatorId === userId) {
-      alert("Você não pode apostar na sua própria criação! Isso seria roubo, e nós somos honestos... na medida do possível.");
+      addToast("Você não pode apostar na sua própria criação! Isso seria conflito de interesses.", 'error');
       return;
     }
     setSelectedOption(option);
@@ -113,6 +128,13 @@ export function MarketList({ markets, userBalance, userId }: MarketListProps) {
                   </button>
                 )})}
               </div>
+
+              <CommentSection
+                marketId={market.id}
+                comments={market.comments || []}
+                currentUser={{ id: userId, name: userName || 'Usuário' }}
+                marketCreatorId={market.creatorId}
+              />
             </Card>
           )})
         )}

@@ -46,6 +46,19 @@ model User {
   sessions      Session[]
   bets          Bet[]
   markets       Market[]
+  comments      Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  marketId  String
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -67,6 +80,7 @@ model Market {
   creator     User?    @relation(fields: [creatorId], references: [id])
   outcomeId   String?
   options     Option[]
+  comments    Comment[]
 }
 
 model Option {
