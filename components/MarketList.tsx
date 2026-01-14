@@ -61,19 +61,29 @@ export function MarketList({ markets, userBalance, userId }: MarketListProps) {
               key={market.id}
               className={`p-6 border-slate-700 bg-slate-800 transition-colors ${isExpired ? 'opacity-75 grayscale' : 'hover:border-orange-500/50'}`}
             >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                    <h3 className="text-lg font-bold text-white">{market.question}</h3>
-                    <div className="flex flex-wrap items-center gap-3 mt-2">
-                        <span className="text-xs text-slate-500 bg-slate-900 px-2 py-1 rounded">
-                            Por: {market.creator?.name || 'Sistema'}
-                        </span>
-                        {market.expiresAt && <Countdown targetDate={market.expiresAt} />}
-                    </div>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1 min-w-0 pr-4">
+                  <h3 className="text-lg font-bold text-white mb-2">{market.question}</h3>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-xs text-slate-500 bg-slate-900 px-2 py-1 rounded">
+                      Por: {market.creator?.name || 'Sistema'}
+                    </span>
+                  </div>
                 </div>
-                <span className={`px-2 py-1 text-xs rounded-full border ${isExpired ? 'bg-red-900/30 text-red-400 border-red-800' : 'bg-green-900/30 text-green-400 border-green-800'}`}>
-                  {isExpired ? 'ENCERRADO' : 'ABERTO'}
-                </span>
+                <div className="flex flex-col items-end gap-2">
+                  {market.expiresAt && (
+                    <Countdown targetDate={market.expiresAt} />
+                  )}
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full border ${
+                      isExpired
+                        ? 'bg-red-900/30 text-red-400 border-red-800'
+                        : 'bg-green-900/30 text-green-400 border-green-800'
+                    }`}
+                  >
+                    {isExpired ? 'ENCERRADO' : 'ABERTO'}
+                  </span>
+                </div>
               </div>
               
               {market.description && (
