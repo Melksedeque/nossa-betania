@@ -2,15 +2,18 @@
 
 import { mendigarRecarga } from '@/app/lib/actions';
 import { useState } from 'react';
+import { useToast } from '@/components/Toast';
 
 export function MendigarButton({ userId }: { userId: string }) {
   const [loading, setLoading] = useState(false);
+  const { addToast } = useToast();
 
   const handleMendigar = async () => {
     setLoading(true);
     const result = await mendigarRecarga(userId);
     setLoading(false);
-    alert(result.message);
+    
+    addToast(result.message, result.success ? 'success' : 'error');
   };
 
   return (

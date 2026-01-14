@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Market, Option } from '@prisma/client';
 import { resolveMarket } from '@/app/lib/actions';
 import { Button } from './Button';
+import { useToast } from '@/components/Toast';
 
 type MarketProp = Omit<Market, 'createdAt' | 'expiresAt'> & {
   createdAt: string;
@@ -21,6 +22,7 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const { addToast } = useToast();
 
   const handleOpenResolve = (market: MarketProp) => {
     setSelectedMarket(market);
@@ -36,11 +38,11 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
     setIsLoading(false);
 
     if (result.success) {
-      alert(result.message); // Ou usar um toast melhor depois
+      addToast(result.message, 'success');
       setIsModalOpen(false);
       setSelectedMarket(null);
     } else {
-      alert(result.message);
+      addToast(result.message, 'error');
     }
   };
 
