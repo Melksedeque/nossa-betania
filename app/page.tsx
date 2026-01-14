@@ -110,7 +110,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">2. Analise o Cenário</h3>
                 <p className="text-slate-400">
-                  Confira os mercados abertos. "O ar condicionado vai quebrar hoje?" ou "Fulano vai trazer marmita?". As odds mudam em tempo real.
+                  Confira os mercados abertos. &quot;O ar condicionado vai quebrar hoje?&quot; ou &quot;Fulano vai trazer marmita?&quot;. As odds mudam em tempo real.
                 </p>
               </Card>
 
