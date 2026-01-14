@@ -59,7 +59,7 @@ export function Countdown({ targetDate, onExpire }: CountdownProps) {
 
   if (!timeLeft) {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full border border-red-500/60 bg-red-900/30 px-3 py-1 text-xs font-mono text-red-300">
+      <span className="inline-flex items-center gap-1 rounded-full border border-red-500/60 bg-red-900/30 px-3 py-1 text-xs font-mono text-red-300 cursor-pointer">
         <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
         Encerrado
       </span>
