@@ -1,6 +1,6 @@
 'use client';
 
-import { adminUpdateMarket, adminDeleteMarket } from '@/lib/actions';
+import { adminUpdateMarket, adminDeleteMarket } from '@/app/lib/actions';
 import { useState } from 'react';
 
 type AdminMarket = {
@@ -143,4 +143,3 @@ export function MarketListAdmin({ markets }: MarketListProps) {
     </div>
   );
 }
-

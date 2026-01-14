@@ -1,7 +1,7 @@
 'use client';
 
 import { User } from '@prisma/client';
-import { toggleUserRole, deleteUser } from '@/lib/actions';
+import { toggleUserRole, deleteUser } from '@/app/lib/actions';
 import { useState } from 'react';
 
 interface UserListProps {

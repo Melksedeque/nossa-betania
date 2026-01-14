@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { updatePassword } from '@/lib/actions';
+import { updatePassword } from '@/app/lib/actions';
 
 export function PasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,4 +75,3 @@ export function PasswordForm() {
     </form>
   );
 }
-
