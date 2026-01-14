@@ -1,9 +1,9 @@
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from 'prisma/config';
 import 'dotenv/config';
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   datasource: {
-    url: env('POSTGRES_PRISMA_URL'),
+    url: process.env.POSTGRES_PRISMA_URL ?? "postgresql://postgres:password@localhost:5432/nossa-betania",
   },
 });
