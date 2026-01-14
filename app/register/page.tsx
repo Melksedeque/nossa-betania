@@ -1,13 +1,22 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { register } from '@/app/lib/actions';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import Link from 'next/link';
+import { useToast } from '@/components/Toast';
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState(register, undefined);
+
+  const { addToast } = useToast();
+
+  useEffect(() => {
+    if (!state) return;
+
+    addToast(state, state.includes('sucesso') ? 'success' : 'error');
+  }, [state, addToast]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-900 p-4">
@@ -69,14 +78,20 @@ export default function RegisterPage() {
           </div>
           
           <div
-            className="flex h-8 items-end space-x-1"
+            className="mt-2"
             aria-live="polite"
             aria-atomic="true"
           >
             {state && (
-              <p className={`text-sm w-full text-center ${state.includes('sucesso') ? 'text-green-500' : 'text-red-500'}`}>
+              <div
+                className={`text-sm w-full text-center rounded-md border px-3 py-2 ${
+                  state.includes('sucesso')
+                    ? 'border-green-500/60 bg-green-500/10 text-green-400'
+                    : 'border-red-500/60 bg-red-500/10 text-red-300'
+                }`}
+              >
                 {state}
-              </p>
+              </div>
             )}
           </div>
         </form>
