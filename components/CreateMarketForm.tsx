@@ -93,7 +93,7 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
           id="expiresAt"
           value={expiresAt}
           onChange={(e) => setExpiresAt(e.target.value)}
-          className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 [color-scheme:dark]"
+          className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 scheme-dark"
           required
         />
         <p className="text-xs text-slate-500 mt-1">
