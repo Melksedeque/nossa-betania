@@ -6,6 +6,8 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
+      /** The user's unique identifier. */
+      id: string;
       /** The user's role. */
       role: string;
       /** The user's balance in Armandólars. */
