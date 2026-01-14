@@ -29,9 +29,18 @@ async function main() {
   console.log('🧹 Casa limpa (Dados antigos removidos).');
 
   // 2. Criar Usuários (O Elenco do Escritório)
-  const passwordHash = await bcrypt.hash('123456', 10);
+  const defaultPasswordHash = await bcrypt.hash('123456', 10);
+  const adminPasswordHash = await bcrypt.hash('km25@vX3!', 10);
 
   const users = [
+    {
+      name: 'Dono da Banca',
+      email: 'freelancer@melksedeque.com.br',
+      image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=AdminBoss',
+      role: 'ADMIN',
+      balance: 10000.00, // O Dono tem que ter grana
+      password: adminPasswordHash
+    },
     {
       name: 'Gerente de PowerPoint',
       email: 'gerente@nossabetania.com',
@@ -63,10 +72,11 @@ async function main() {
   ];
 
   for (const u of users) {
+    const { password, ...userData } = u;
     await prisma.user.create({
       data: {
-        ...u,
-        password: passwordHash,
+        ...userData,
+        password: password || defaultPasswordHash,
       }
     });
   }
