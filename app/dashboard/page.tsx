@@ -7,8 +7,8 @@ import { MarketList } from '@/components/MarketList';
 
 import { Button } from '@/components/Button';
 import Link from 'next/link';
-import { MyMarkets } from '@/components/MyMarkets';
 import { MendigarButton } from '@/components/MendigarButton';
+import { DashboardTabs } from '@/components/DashboardTabs';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -82,30 +82,26 @@ export default async function DashboardPage() {
           </div>
         </div>
         
-        {/* Meus Mercados (Se houver) */}
-        {myMarkets.length > 0 && (
-          <MyMarkets markets={myMarkets} userId={session.user.id} />
-        )}
-
+        {/* Conteúdo Principal com Abas */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Coluna Principal: Mercados Abertos (Agora interativa) */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                🔥 Mercados Abertos
-              </h2>
+            <div className="flex justify-end">
               <Link href="/dashboard/criar">
                 <Button size="sm" variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">
                   + Criar Aposta
                 </Button>
               </Link>
             </div>
-            
-            <MarketList 
-              markets={markets} 
-              userBalance={userBalance} 
-              userId={session.user.id} 
+
+            <DashboardTabs 
+              openMarkets={markets} 
+              myMarkets={myMarkets} 
+              user={{ 
+                id: session.user.id, 
+                balance: userBalance, 
+                name: session.user.name || 'Anônimo' 
+              }} 
             />
           </div>
 
