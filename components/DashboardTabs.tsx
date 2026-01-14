@@ -3,11 +3,35 @@
 import { useState } from 'react';
 import { MarketList } from './MarketList';
 import { MyMarkets } from './MyMarkets';
-import { Market, MyMarket } from '@prisma/client';
+
+type DashboardMarketBase = {
+  id: string;
+  question: string;
+  description: string | null;
+  options: {
+    id: string;
+    label: string;
+    odds: number;
+    marketId: string;
+  }[];
+  createdAt: string;
+  expiresAt: string | null;
+  creatorId?: string | null;
+};
+
+type DashboardOpenMarket = DashboardMarketBase & {
+  creator?: { name: string | null } | null;
+};
+
+type DashboardMyMarket = DashboardMarketBase & {
+  status: string;
+  outcomeId: string | null;
+  creatorId: string | null;
+};
 
 interface DashboardTabsProps {
-  openMarkets: Market[];
-  myMarkets: MyMarket[];
+  openMarkets: DashboardOpenMarket[];
+  myMarkets: DashboardMyMarket[];
   user: {
     id: string;
     balance: number;
