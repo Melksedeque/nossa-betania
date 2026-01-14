@@ -145,18 +145,22 @@ export async function placeBet(
   }
 }
 
+import { revalidatePath } from 'next/cache';
+
 export async function createMarket(
   question: string,
   description: string,
-  expiresAt: Date,
+  expiresAtString: string,
   creatorId: string
 ) {
   try {
+    const expiresAt = new Date(expiresAtString);
+
     if (!question || question.length < 5) {
       return { success: false, message: 'A pergunta deve ter pelo menos 5 caracteres.' };
     }
 
-    if (expiresAt <= new Date()) {
+    if (isNaN(expiresAt.getTime()) || expiresAt <= new Date()) {
       return { success: false, message: 'A data de encerramento deve ser no futuro.' };
     }
 
@@ -176,6 +180,7 @@ export async function createMarket(
       },
     });
 
+    revalidatePath('/dashboard');
     return { success: true, message: 'Aposta criada com sucesso!', marketId: market.id };
   } catch (error) {
     console.error('Create market error:', error);
