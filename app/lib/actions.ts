@@ -5,6 +5,7 @@ import { AuthError } from 'next-auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
 
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
@@ -135,17 +136,13 @@ export async function placeBet(
       }),
     ]);
 
-    // Revalidar o dashboard para atualizar saldo e dados
-    // revalidatePath('/dashboard'); // Importar revalidatePath de 'next/cache' se necessário, mas aqui retornamos sucesso para o client atualizar
-
+    revalidatePath('/dashboard');
     return { success: true, message: 'Aposta realizada com sucesso! Boa sorte.' };
   } catch (error) {
     console.error('Place bet error:', error);
     return { success: false, message: 'Erro ao processar a aposta. Tente novamente.' };
   }
 }
-
-import { revalidatePath } from 'next/cache';
 
 export async function createMarket(
   question: string,
@@ -185,5 +182,117 @@ export async function createMarket(
   } catch (error) {
     console.error('Create market error:', error);
     return { success: false, message: 'Erro ao criar a aposta. Tente novamente.' };
+  }
+}
+
+export async function resolveMarket(
+  marketId: string,
+  winningOptionId: string,
+  userId: string
+) {
+  try {
+    // 1. Verificar permissão (apenas o criador ou admin pode resolver)
+    const market = await prisma.market.findUnique({
+      where: { id: marketId },
+      include: { options: true },
+    });
+
+    if (!market) {
+      return { success: false, message: 'Mercado não encontrado.' };
+    }
+
+    if (market.creatorId !== userId) {
+      // TODO: Verificar se é Admin também
+      return { success: false, message: 'Apenas o criador pode encerrar esta aposta.' };
+    }
+
+    if (market.status === 'SETTLED') {
+      return { success: false, message: 'Esta aposta já foi encerrada.' };
+    }
+
+    const winningOption = market.options.find(o => o.id === winningOptionId);
+    if (!winningOption) {
+      return { success: false, message: 'Opção inválida.' };
+    }
+
+    // 2. Encontrar todas as apostas vencedoras
+    const winningBets = await prisma.bet.findMany({
+      where: {
+        optionId: winningOptionId,
+        status: 'PENDING',
+      },
+    });
+
+    // 3. Processar pagamentos e atualizações em transação
+    await prisma.$transaction(async (tx) => {
+      // Atualizar status do mercado
+      await tx.market.update({
+        where: { id: marketId },
+        data: {
+          status: 'SETTLED',
+          outcomeId: winningOptionId,
+        },
+      });
+
+      // Atualizar apostas vencedoras para WON
+      await tx.bet.updateMany({
+        where: { optionId: winningOptionId },
+        data: { status: 'WON' },
+      });
+
+      // Atualizar apostas perdedoras para LOST (todas deste mercado que não são a vencedora)
+      // Como updateMany não suporta join, fazemos via optionId
+      const losingOptionIds = market.options
+        .filter(o => o.id !== winningOptionId)
+        .map(o => o.id);
+
+      await tx.bet.updateMany({
+        where: {
+          optionId: { in: losingOptionIds },
+          status: 'PENDING',
+        },
+        data: { status: 'LOST' },
+      });
+
+      // Pagar os vencedores
+      for (const bet of winningBets) {
+        const payout = bet.amount * winningOption.odds;
+        await tx.user.update({
+          where: { id: bet.userId },
+          data: { balance: { increment: payout } },
+        });
+      }
+    });
+
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Aposta encerrada e pagamentos realizados!' };
+  } catch (error) {
+    console.error('Resolve market error:', error);
+    return { success: false, message: 'Erro ao resolver a aposta.' };
+  }
+}
+
+export async function mendigarRecarga(userId: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) return { success: false, message: 'Usuário não encontrado.' };
+
+    if (user.balance >= 10) {
+      return { success: false, message: 'Você ainda tem dinheiro! Só aceitamos mendigos reais (saldo < 10).' };
+    }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { balance: { increment: 100 } },
+    });
+
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Recarga de emergência recebida! Gaste com sabedoria.' };
+  } catch (error) {
+    console.error('Mendigar error:', error);
+    return { success: false, message: 'O banco está fechado. Tente novamente.' };
   }
 }

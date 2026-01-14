@@ -65,6 +65,7 @@ model Market {
   expiresAt   DateTime?
   creatorId   String?
   creator     User?    @relation(fields: [creatorId], references: [id])
+  outcomeId   String?
   options     Option[]
 }
 
