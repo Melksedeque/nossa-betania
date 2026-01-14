@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn, signOut } from '@/auth';
+import { signIn, signOut, auth } from '@/auth';
 import { AuthError } from 'next-auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
@@ -11,6 +11,15 @@ const RegisterSchema = z.object({
   name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
   email: z.email({ message: 'Email inválido.' }),
   password: z.string().min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
+});
+
+const UpdateProfileSchema = z.object({
+  name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
+  image: z
+    .string()
+    .url({ message: 'URL de avatar inválida.' })
+    .or(z.literal(''))
+    .optional(),
 });
 
 export async function authenticate(
@@ -382,5 +391,45 @@ export async function deleteComment(commentId: string, userId: string) {
   } catch (error) {
     console.error('Delete comment error:', error);
     return { success: false, message: 'Erro ao remover comentário.' };
+  }
+}
+
+export async function updateUserProfile(
+  prevState: { success: boolean; message: string } | undefined,
+  formData: FormData,
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return { success: false, message: 'Não autorizado.' };
+    }
+
+    const validatedFields = UpdateProfileSchema.safeParse({
+      name: formData.get('name') ?? '',
+      image: formData.get('image') ?? '',
+    });
+
+    if (!validatedFields.success) {
+      return { success: false, message: 'Dados inválidos. Verifique nome e avatar.' };
+    }
+
+    const { name, image } = validatedFields.data;
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        name,
+        image: image && image !== '' ? image : null,
+      },
+    });
+
+    revalidatePath('/dashboard');
+    revalidatePath('/dashboard/perfil');
+
+    return { success: true, message: 'Perfil atualizado com sucesso!' };
+  } catch (error) {
+    console.error('Update profile error:', error);
+    return { success: false, message: 'Erro ao atualizar perfil.' };
   }
 }
