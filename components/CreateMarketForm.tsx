@@ -44,7 +44,7 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
         setError(result.message);
         setIsPending(false);
       }
-    } catch (err) {
+    } catch {
       setError('Erro de comunicação. Tente novamente.');
       setIsPending(false);
     }
