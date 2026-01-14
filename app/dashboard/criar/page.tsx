@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default async function CreateMarketPage() {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect('/login');
   }
 
