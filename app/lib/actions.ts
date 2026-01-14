@@ -84,3 +84,63 @@ export async function register(
     return 'Erro ao criar conta. Tente novamente mais tarde.';
   }
 }
+
+export async function placeBet(
+  userId: string,
+  optionId: string,
+  amount: number
+) {
+  try {
+    if (amount <= 0) {
+      return { success: false, message: 'O valor da aposta deve ser maior que zero.' };
+    }
+
+    // 1. Verificar saldo do usuário
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { balance: true },
+    });
+
+    if (!user) {
+      return { success: false, message: 'Usuário não encontrado.' };
+    }
+
+    if (user.balance < amount) {
+      return { success: false, message: 'Saldo insuficiente para esta aposta.' };
+    }
+
+    // 2. Verificar se o mercado está aberto (opcional, mas recomendado)
+    const option = await prisma.option.findUnique({
+      where: { id: optionId },
+      include: { market: true },
+    });
+
+    if (!option || option.market.status !== 'OPEN') {
+      return { success: false, message: 'Este mercado não está aceitando apostas.' };
+    }
+
+    // 3. Realizar a transação (Debitar saldo + Criar aposta)
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: { balance: { decrement: amount } },
+      }),
+      prisma.bet.create({
+        data: {
+          userId,
+          optionId,
+          amount,
+          status: 'PENDING',
+        },
+      }),
+    ]);
+
+    // Revalidar o dashboard para atualizar saldo e dados
+    // revalidatePath('/dashboard'); // Importar revalidatePath de 'next/cache' se necessário, mas aqui retornamos sucesso para o client atualizar
+
+    return { success: true, message: 'Aposta realizada com sucesso! Boa sorte.' };
+  } catch (error) {
+    console.error('Place bet error:', error);
+    return { success: false, message: 'Erro ao processar a aposta. Tente novamente.' };
+  }
+}
