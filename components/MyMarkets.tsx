@@ -48,7 +48,7 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
     return (
       <div className="text-center py-8 text-slate-500 bg-slate-800/50 rounded-lg border border-slate-700/50">
         <p>Você ainda não criou nenhuma aposta.</p>
-        <p className="text-sm mt-2">Clique em "+ Criar Aposta" para começar o caos!</p>
+        <p className="text-sm mt-2">Clique em &quot;+ Criar Aposta&quot; para começar o caos!</p>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
 
             <h3 className="text-xl font-bold text-white mb-2">Quem venceu?</h3>
             <p className="text-slate-400 text-sm mb-6">
-              Defina o resultado de: <span className="text-white font-medium">"{selectedMarket.question}"</span>. 
+              Defina o resultado de: <span className="text-white font-medium">&quot;{selectedMarket.question}&quot;</span>. 
               <br/>
               <span className="text-red-400 font-bold block mt-2">⚠️ Cuidado: Essa ação é irreversível e dispara os pagamentos imediatamente!</span>
             </p>
