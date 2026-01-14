@@ -22,6 +22,11 @@ const UpdateProfileSchema = z.object({
     .optional(),
 });
 
+const UpdatePasswordSchema = z.object({
+  currentPassword: z.string().min(6, { message: 'Senha atual inválida.' }),
+  newPassword: z.string().min(6, { message: 'A nova senha deve ter pelo menos 6 caracteres.' }),
+});
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -487,5 +492,105 @@ export async function deleteUser(userId: string) {
   } catch (error) {
     console.error('Delete user error:', error);
     return { success: false, message: 'Erro ao remover usuário.' };
+  }
+}
+
+export async function adminUpdateMarket(
+  marketId: string,
+  data: { question?: string; description?: string | null },
+) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const { question, description } = data;
+
+    if (question && question.length < 5) {
+      return { success: false, message: 'A pergunta deve ter pelo menos 5 caracteres.' };
+    }
+
+    await prisma.market.update({
+      where: { id: marketId },
+      data: {
+        ...(question !== undefined ? { question } : {}),
+        ...(description !== undefined ? { description } : {}),
+      },
+    });
+
+    revalidatePath('/admin');
+    return { success: true, message: 'Mercado atualizado com sucesso.' };
+  } catch (error) {
+    console.error('Admin update market error:', error);
+    return { success: false, message: 'Erro ao atualizar mercado.' };
+  }
+}
+
+export async function adminDeleteMarket(marketId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    await prisma.market.delete({
+      where: { id: marketId },
+    });
+
+    revalidatePath('/admin');
+    return { success: true, message: 'Mercado removido com sucesso.' };
+  } catch (error) {
+    console.error('Admin delete market error:', error);
+    return { success: false, message: 'Erro ao remover mercado.' };
+  }
+}
+
+export async function updatePassword(
+  prevState: { success: boolean; message: string } | undefined,
+  formData: FormData,
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id || !session.user.email) {
+      return { success: false, message: 'Não autorizado.' };
+    }
+
+    const validated = UpdatePasswordSchema.safeParse({
+      currentPassword: formData.get('currentPassword') ?? '',
+      newPassword: formData.get('newPassword') ?? '',
+    });
+
+    if (!validated.success) {
+      return { success: false, message: 'Dados inválidos. Verifique as senhas.' };
+    }
+
+    const { currentPassword, newPassword } = validated.data;
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (!user || !user.password) {
+      return { success: false, message: 'Conta não suporta alteração de senha por aqui.' };
+    }
+
+    const isValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isValid) {
+      return { success: false, message: 'Senha atual incorreta.' };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    return { success: true, message: 'Senha alterada com sucesso.' };
+  } catch (error) {
+    console.error('Update password error:', error);
+    return { success: false, message: 'Erro ao alterar senha.' };
   }
 }
