@@ -24,6 +24,14 @@ export default async function CreateMarketPage() {
               Crie um mercado para a galera apostar. Lembre-se: você (ou o Admin) precisará definir o resultado depois!
             </p>
           </div>
+
+          <div className="mb-6 rounded-xl border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm text-yellow-200">
+            <p className="font-semibold text-yellow-300 mb-1">Atenção: Juiz não aposta na própria aposta</p>
+            <p>
+              Quem cria a aposta <span className="font-semibold">não pode apostar nela</span>. Se você quiser apostar
+              nesse mercado, peça para o Dono da Banca criar a aposta para você.
+            </p>
+          </div>
           
           <CreateMarketForm userId={session.user.id} />
         </div>
