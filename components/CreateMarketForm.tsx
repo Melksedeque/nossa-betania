@@ -14,8 +14,38 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
   const [question, setQuestion] = useState('');
   const [description, setDescription] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
+  
+  // Estado para opções personalizadas
+  const [options, setOptions] = useState([
+    { label: 'Sim', probability: 50 },
+    { label: 'Não', probability: 50 },
+  ]);
+
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+
+  const handleOptionChange = (index: number, field: 'label' | 'probability', value: string | number) => {
+    const newOptions = [...options];
+    if (field === 'label') {
+      newOptions[index].label = value as string;
+    } else {
+      newOptions[index].probability = Number(value);
+    }
+    setOptions(newOptions);
+  };
+
+  const addOption = () => {
+    setOptions([...options, { label: `Opção ${options.length + 1}`, probability: 0 }]);
+  };
+
+  const removeOption = (index: number) => {
+    if (options.length <= 2) {
+      alert('Você precisa de pelo menos 2 opções!');
+      return;
+    }
+    const newOptions = options.filter((_, i) => i !== index);
+    setOptions(newOptions);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +58,13 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
       return;
     }
 
+    const totalProb = options.reduce((acc, curr) => acc + curr.probability, 0);
+    if (Math.abs(totalProb - 100) > 0.1) {
+      setError(`A soma das probabilidades deve ser 100%. Atual: ${totalProb}%`);
+      setIsPending(false);
+      return;
+    }
+
     const expirationDate = new Date(expiresAt);
     if (expirationDate <= new Date()) {
       setError('A data de encerramento deve ser no futuro.');
@@ -36,7 +73,7 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
     }
 
     try {
-      const result = await createMarket(question, description, expirationDate.toISOString(), userId);
+      const result = await createMarket(question, description, expirationDate.toISOString(), userId, options);
 
       if (result.success) {
         router.push('/dashboard');
@@ -86,6 +123,65 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
           rows={3}
           className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
+      </div>
+
+      <div>
+        <div className="flex justify-between items-center mb-2">
+          <label className="block text-sm font-medium text-slate-300">
+            Opções e Probabilidades
+          </label>
+          <button
+            type="button"
+            onClick={addOption}
+            className="text-xs text-orange-400 hover:text-orange-300 cursor-pointer"
+          >
+            + Adicionar Opção
+          </button>
+        </div>
+        
+        <div className="space-y-3">
+          {options.map((option, index) => (
+            <div key={index} className="flex gap-2 items-center">
+              <input
+                type="text"
+                value={option.label}
+                onChange={(e) => handleOptionChange(index, 'label', e.target.value)}
+                placeholder={`Opção ${index + 1}`}
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                required
+              />
+              <div className="relative w-24">
+                <input
+                  type="number"
+                  value={option.probability}
+                  onChange={(e) => handleOptionChange(index, 'probability', e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 text-right pr-8"
+                  min="0"
+                  max="100"
+                  required
+                />
+                <span className="absolute right-3 top-2 text-slate-500 text-sm">%</span>
+              </div>
+              <div className="w-16 text-right text-xs text-slate-400 font-mono">
+                x{option.probability > 0 ? (100 / option.probability).toFixed(2) : '∞'}
+              </div>
+              <button
+                type="button"
+                onClick={() => removeOption(index)}
+                className="text-slate-500 hover:text-red-400 p-2 cursor-pointer"
+                title="Remover opção"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-2 text-right text-sm">
+          <span className={`font-bold ${Math.abs(options.reduce((acc, curr) => acc + curr.probability, 0) - 100) < 0.1 ? 'text-green-400' : 'text-red-400'}`}>
+            Total: {options.reduce((acc, curr) => acc + curr.probability, 0)}%
+          </span>
+        </div>
       </div>
 
       <div>

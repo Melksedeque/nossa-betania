@@ -156,7 +156,8 @@ export async function createMarket(
   question: string,
   description: string,
   expiresAtString: string,
-  creatorId: string
+  creatorId: string,
+  optionsInput: { label: string; probability: number }[] = []
 ) {
   try {
     const expiresAt = new Date(expiresAtString);
@@ -169,6 +170,30 @@ export async function createMarket(
       return { success: false, message: 'A data de encerramento deve ser no futuro.' };
     }
 
+    // Validar opções
+    let optionsToCreate = [];
+    if (optionsInput.length === 0) {
+      // Padrão antigo se nada for enviado
+      optionsToCreate = [
+        { label: 'Sim', odds: 2.0 },
+        { label: 'Não', odds: 2.0 },
+      ];
+    } else {
+      if (optionsInput.length < 2) {
+        return { success: false, message: 'A aposta deve ter pelo menos 2 opções.' };
+      }
+
+      const totalProbability = optionsInput.reduce((acc, curr) => acc + curr.probability, 0);
+      if (Math.abs(totalProbability - 100) > 0.1) {
+        return { success: false, message: 'A soma das probabilidades deve ser 100%.' };
+      }
+
+      optionsToCreate = optionsInput.map(opt => ({
+        label: opt.label,
+        odds: Number((100 / opt.probability).toFixed(2)) // 50% -> 2.0, 25% -> 4.0
+      }));
+    }
+
     const market = await prisma.market.create({
       data: {
         question,
@@ -177,10 +202,7 @@ export async function createMarket(
         creatorId,
         status: 'OPEN',
         options: {
-          create: [
-            { label: 'Sim', odds: 2.0 },
-            { label: 'Não', odds: 2.0 },
-          ],
+          create: optionsToCreate,
         },
       },
     });
@@ -302,5 +324,63 @@ export async function mendigarRecarga(userId: string) {
   } catch (error) {
     console.error('Mendigar error:', error);
     return { success: false, message: 'O banco está fechado. Tente novamente.' };
+  }
+}
+
+export async function addComment(marketId: string, userId: string, content: string) {
+  try {
+    if (!content || content.trim().length === 0) {
+      return { success: false, message: 'O comentário não pode estar vazio.' };
+    }
+
+    if (content.length > 500) {
+      return { success: false, message: 'Calma lá, textão! Máximo de 500 caracteres.' };
+    }
+
+    await prisma.comment.create({
+      data: {
+        content,
+        marketId,
+        userId,
+      },
+    });
+
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Comentário enviado!' };
+  } catch (error) {
+    console.error('Add comment error:', error);
+    return { success: false, message: 'Erro ao enviar comentário.' };
+  }
+}
+
+export async function deleteComment(commentId: string, userId: string) {
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      include: { market: true },
+    });
+
+    if (!comment) {
+      return { success: false, message: 'Comentário não encontrado.' };
+    }
+
+    // Permitir deletar se for o autor do comentário OU o criador do mercado (moderação)
+    const isAuthor = comment.userId === userId;
+    const isMarketCreator = comment.market.creatorId === userId;
+    // TODO: Adicionar verificação de Admin aqui também
+
+    if (!isAuthor && !isMarketCreator) {
+      return { success: false, message: 'Você não tem permissão para deletar este comentário.' };
+    }
+
+    await prisma.comment.delete({
+      where: { id: commentId },
+    });
+
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Comentário removido.' };
+  } catch (error) {
+    console.error('Delete comment error:', error);
+    return { success: false, message: 'Erro ao remover comentário.' };
   }
 }
