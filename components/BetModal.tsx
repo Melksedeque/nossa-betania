@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { placeBet } from '@/app/lib/actions';
