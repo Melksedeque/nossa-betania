@@ -1,6 +1,6 @@
 'use client';
 
-import { signOut } from '@/auth';
+import { logout } from '@/app/lib/actions';
 import { Button } from '@/components/Button';
 
 interface LogoutButtonProps {
@@ -10,7 +10,7 @@ interface LogoutButtonProps {
 
 export function LogoutButton({ variant = 'ghost', size = 'sm' }: LogoutButtonProps) {
   const handleLogout = async () => {
-    await signOut({ redirectTo: '/login' });
+    await logout();
   };
 
   return (
@@ -25,4 +25,3 @@ export function LogoutButton({ variant = 'ghost', size = 'sm' }: LogoutButtonPro
     </Button>
   );
 }
-
