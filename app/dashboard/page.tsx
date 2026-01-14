@@ -13,7 +13,11 @@ async function getOpenMarkets() {
     where: { status: 'OPEN' },
     include: { 
       options: true,
-      creator: { select: { name: true } }
+      creator: { select: { name: true } },
+      comments: {
+        include: { user: { select: { name: true } } },
+        orderBy: { createdAt: 'desc' }
+      }
     },
     orderBy: { createdAt: 'desc' },
   });
@@ -35,6 +39,20 @@ async function getLeaderboard() {
   });
 }
 
+async function getUserBets(userId: string) {
+  return await prisma.bet.findMany({
+    where: { userId },
+    include: {
+      option: {
+        include: {
+          market: true,
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
 export default async function DashboardPage() {
   const session = await auth();
 
@@ -47,12 +65,31 @@ export default async function DashboardPage() {
     ...market,
     createdAt: market.createdAt.toISOString(),
     expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
+    comments: market.comments.map(comment => ({
+      ...comment,
+      createdAt: comment.createdAt.toISOString(),
+    })),
   }));
   
   const myMarkets = (await getMyMarkets(session.user.id)).map(market => ({
     ...market,
     createdAt: market.createdAt.toISOString(),
     expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
+  }));
+
+  const userBets = (await getUserBets(session.user.id)).map(bet => ({
+    ...bet,
+    createdAt: bet.createdAt.toISOString(),
+    option: {
+      ...bet.option,
+      market: {
+        ...bet.option.market,
+        createdAt: bet.option.market.createdAt.toISOString(),
+        expiresAt: bet.option.market.expiresAt
+          ? bet.option.market.expiresAt.toISOString()
+          : null,
+      },
+    },
   }));
 
   const leaderboard = await getLeaderboard();
@@ -100,6 +137,7 @@ export default async function DashboardPage() {
             <DashboardTabs 
               openMarkets={markets} 
               myMarkets={myMarkets} 
+              bets={userBets}
               user={{ 
                 id: session.user.id, 
                 balance: userBalance, 
