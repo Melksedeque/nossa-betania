@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
@@ -84,6 +84,10 @@ export async function register(
     console.error('Registration error:', error);
     return 'Erro ao criar conta. Tente novamente mais tarde.';
   }
+}
+
+export async function logout() {
+  await signOut({ redirectTo: '/login' });
 }
 
 export async function placeBet(
