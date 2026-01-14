@@ -144,3 +144,41 @@ export async function placeBet(
     return { success: false, message: 'Erro ao processar a aposta. Tente novamente.' };
   }
 }
+
+export async function createMarket(
+  question: string,
+  description: string,
+  expiresAt: Date,
+  creatorId: string
+) {
+  try {
+    if (!question || question.length < 5) {
+      return { success: false, message: 'A pergunta deve ter pelo menos 5 caracteres.' };
+    }
+
+    if (expiresAt <= new Date()) {
+      return { success: false, message: 'A data de encerramento deve ser no futuro.' };
+    }
+
+    const market = await prisma.market.create({
+      data: {
+        question,
+        description,
+        expiresAt,
+        creatorId,
+        status: 'OPEN',
+        options: {
+          create: [
+            { label: 'Sim', odds: 2.0 },
+            { label: 'Não', odds: 2.0 },
+          ],
+        },
+      },
+    });
+
+    return { success: true, message: 'Aposta criada com sucesso!', marketId: market.id };
+  } catch (error) {
+    console.error('Create market error:', error);
+    return { success: false, message: 'Erro ao criar a aposta. Tente novamente.' };
+  }
+}
