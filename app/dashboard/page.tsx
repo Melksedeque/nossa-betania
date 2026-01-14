@@ -3,6 +3,7 @@ import { Card } from '@/components/Card';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
+import { MarketList } from '@/components/MarketList';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -58,44 +59,12 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Coluna Principal: Mercados Abertos */}
-          <div className="lg:col-span-2 space-y-6">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              🔥 Mercados Abertos
-            </h2>
-            
-            {markets.length === 0 ? (
-              <Card className="p-8 text-center border-slate-800 bg-slate-900/50">
-                <p className="text-slate-500">Nenhuma aposta rolando agora. Volte ao trabalho!</p>
-              </Card>
-            ) : (
-              markets.map((market) => (
-                <Card key={market.id} className="p-6 border-slate-700 bg-slate-800 hover:border-orange-500/50 transition-colors">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-lg font-bold text-white">{market.question}</h3>
-                    <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
-                      OPEN
-                    </span>
-                  </div>
-                  <p className="text-slate-400 text-sm mb-6">{market.description}</p>
-                  
-                  <div className="grid grid-cols-2 gap-3">
-                    {market.options.map((option) => (
-                      <button 
-                        key={option.id}
-                        className="group relative flex justify-between items-center p-3 rounded-lg bg-slate-900 border border-slate-700 hover:border-orange-500 hover:bg-slate-900/80 transition-all"
-                      >
-                        <span className="text-slate-300 font-medium group-hover:text-white">{option.label}</span>
-                        <span className="text-orange-500 font-bold bg-orange-500/10 px-2 py-0.5 rounded text-sm">
-                          x{option.odds.toFixed(2)}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </Card>
-              ))
-            )}
-          </div>
+          {/* Coluna Principal: Mercados Abertos (Agora interativa) */}
+          <MarketList 
+            markets={markets} 
+            userBalance={userBalance} 
+            userId={session.user.id} 
+          />
 
           {/* Sidebar: Ranking */}
           <div className="space-y-6">
