@@ -5,10 +5,16 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { MarketList } from '@/components/MarketList';
 
+import { Button } from '@/components/Button';
+import Link from 'next/link';
+
 async function getOpenMarkets() {
   return await prisma.market.findMany({
     where: { status: 'OPEN' },
-    include: { options: true },
+    include: { 
+      options: true,
+      creator: { select: { name: true } }
+    },
     orderBy: { createdAt: 'desc' },
   });
 }
@@ -29,7 +35,11 @@ export default async function DashboardPage() {
   }
 
   const userBalance = session.user.balance;
-  const markets = await getOpenMarkets();
+  const markets = (await getOpenMarkets()).map(market => ({
+    ...market,
+    createdAt: market.createdAt.toISOString(),
+    expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
+  }));
   const leaderboard = await getLeaderboard();
 
   return (
