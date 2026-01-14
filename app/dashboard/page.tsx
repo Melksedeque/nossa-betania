@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import Link from 'next/link';
 import { MendigarButton } from '@/components/MendigarButton';
 import { DashboardTabs } from '@/components/DashboardTabs';
+import { LogoutButton } from '@/components/LogoutButton';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -62,11 +63,16 @@ export default async function DashboardPage() {
         
         {/* Header de Boas-vindas e Saldo */}
         <div className="flex flex-col md:flex-row justify-between items-center bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Olá, <span className="text-orange-500">{session.user.name}</span>! 👋
-            </h1>
-            <p className="text-slate-400">Pronto para perder dinheiro hoje?</p>
+          <div className="w-full md:w-auto flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-1">
+                  Olá, <span className="text-orange-500">{session.user.name}</span>! 👋
+                </h1>
+                <p className="text-slate-400 text-sm">Pronto para perder dinheiro hoje?</p>
+              </div>
+              <LogoutButton />
+            </div>
           </div>
           <div className="mt-4 md:mt-0 text-right">
             <p className="text-sm text-slate-400 uppercase tracking-wider">Seu Saldo</p>
