@@ -20,11 +20,14 @@ export async function authenticate(
     await signIn('credentials', formData);
   } catch (error) {
     if (error instanceof AuthError) {
+      console.error('AuthError:', error.type, error.message);
       switch (error.type) {
         case 'CredentialsSignin':
           return 'Credenciais inválidas.';
+        case 'CallbackRouteError':
+          return 'Erro de conexão ou configuração. Tente novamente.';
         default:
-          return 'Algo deu errado.';
+          return `Algo deu errado. (${error.type})`;
       }
     }
     throw error;
