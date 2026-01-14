@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { MarketList } from './MarketList';
 import { MyMarkets } from './MyMarkets';
+import { Market, MyMarket } from '@prisma/client';
 
 interface DashboardTabsProps {
-  openMarkets: any[]; // Using any to avoid complex type mapping between components for now
-  myMarkets: any[];
+  openMarkets: Market[];
+  myMarkets: MyMarket[];
   user: {
     id: string;
     balance: number;

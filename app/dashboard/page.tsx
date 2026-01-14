@@ -1,10 +1,7 @@
-
 import { Card } from '@/components/Card';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { MarketList } from '@/components/MarketList';
-
 import { Button } from '@/components/Button';
 import Link from 'next/link';
 import { MendigarButton } from '@/components/MendigarButton';
@@ -108,7 +105,7 @@ export default async function DashboardPage() {
           {/* Sidebar: Ranking */}
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              🏆 Top Bilionários
+              🌽 Top Milho-nários
             </h2>
             <Card className="p-0 overflow-hidden border-slate-800 bg-slate-900/50">
               {leaderboard.map((user, index) => (

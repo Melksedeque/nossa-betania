@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
@@ -119,7 +118,7 @@ export default function Home() {
                 <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   🏆
                 </div>
-                <h3 className="text-xl font-bold mb-2">3. Vire Lenda</h3>
+                <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário</h3>
                 <p className="text-slate-400">
                   Acerte as previsões, multiplique seus Armandólars e suba no ranking global da firma. Quem sabe você não ganha um aumento (de ego)?
                 </p>
