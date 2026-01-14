@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: "A primeira Casa de Apostas focada no Caos Corporativo.",
 };
 
+import { ToastProvider } from "@/components/Toast";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${barlow.variable} antialiased bg-slate-900 text-slate-50`}
       >
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );
