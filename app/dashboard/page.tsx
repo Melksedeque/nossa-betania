@@ -7,6 +7,8 @@ import { MarketList } from '@/components/MarketList';
 
 import { Button } from '@/components/Button';
 import Link from 'next/link';
+import { MyMarkets } from '@/components/MyMarkets';
+import { MendigarButton } from '@/components/MendigarButton';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -15,6 +17,14 @@ async function getOpenMarkets() {
       options: true,
       creator: { select: { name: true } }
     },
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
+async function getMyMarkets(userId: string) {
+  return await prisma.market.findMany({
+    where: { creatorId: userId },
+    include: { options: true },
     orderBy: { createdAt: 'desc' },
   });
 }
@@ -40,6 +50,13 @@ export default async function DashboardPage() {
     createdAt: market.createdAt.toISOString(),
     expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
   }));
+  
+  const myMarkets = (await getMyMarkets(session.user.id)).map(market => ({
+    ...market,
+    createdAt: market.createdAt.toISOString(),
+    expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
+  }));
+
   const leaderboard = await getLeaderboard();
 
   return (
@@ -60,12 +77,15 @@ export default async function DashboardPage() {
               A$ {userBalance.toFixed(2)}
             </div>
             {userBalance < 10 && (
-              <button className="mt-2 text-xs text-orange-400 hover:text-orange-300 underline">
-                Mendigar Recarga (+100 A$)
-              </button>
+              <MendigarButton userId={session.user.id} />
             )}
           </div>
         </div>
+        
+        {/* Meus Mercados (Se houver) */}
+        {myMarkets.length > 0 && (
+          <MyMarkets markets={myMarkets} userId={session.user.id} />
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
