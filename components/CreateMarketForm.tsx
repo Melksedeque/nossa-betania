@@ -35,13 +35,17 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
       return;
     }
 
-    const result = await createMarket(question, description, expirationDate, userId);
+    try {
+      const result = await createMarket(question, description, expirationDate.toISOString(), userId);
 
-    if (result.success) {
-      router.push('/dashboard');
-      router.refresh();
-    } else {
-      setError(result.message);
+      if (result.success) {
+        router.push('/dashboard');
+      } else {
+        setError(result.message);
+        setIsPending(false);
+      }
+    } catch (err) {
+      setError('Erro de comunicação. Tente novamente.');
       setIsPending(false);
     }
   };
