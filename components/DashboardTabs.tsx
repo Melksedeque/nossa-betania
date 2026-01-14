@@ -47,7 +47,7 @@ export function DashboardTabs({ openMarkets, myMarkets, user }: DashboardTabsPro
       <div className="flex space-x-4 border-b border-slate-700 pb-2">
         <button
           onClick={() => setActiveTab('open')}
-          className={`pb-2 px-4 font-medium transition-colors ${
+          className={`pb-2 px-4 font-medium transition-colors cursor-pointer ${
             activeTab === 'open'
               ? 'text-orange-500 border-b-2 border-orange-500'
               : 'text-slate-400 hover:text-white'
@@ -57,7 +57,7 @@ export function DashboardTabs({ openMarkets, myMarkets, user }: DashboardTabsPro
         </button>
         <button
           onClick={() => setActiveTab('mine')}
-          className={`pb-2 px-4 font-medium transition-colors ${
+          className={`pb-2 px-4 font-medium transition-colors cursor-pointer ${
             activeTab === 'mine'
               ? 'text-orange-500 border-b-2 border-orange-500'
               : 'text-slate-400 hover:text-white'

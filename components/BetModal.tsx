@@ -75,7 +75,7 @@ export function BetModal({
       <Card className="w-full max-w-md border-slate-700 bg-slate-900 shadow-2xl relative animate-in fade-in zoom-in duration-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white"
+          className="absolute top-4 right-4 text-slate-400 hover:text-white cursor-pointer"
         >
           ✕
         </button>

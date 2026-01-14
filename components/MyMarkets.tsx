@@ -105,7 +105,7 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
           <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-md w-full shadow-2xl relative animate-in fade-in zoom-in duration-200">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white cursor-pointer"
             >
               ✕
             </button>
