@@ -108,7 +108,15 @@ export default async function DashboardPage() {
                 </h1>
                 <p className="text-slate-400 text-sm">Pronto para perder dinheiro hoje?</p>
               </div>
-              <LogoutButton />
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/dashboard/perfil"
+                  className="text-sm text-slate-300 hover:text-orange-400 underline-offset-4 hover:underline"
+                >
+                  Meu Perfil
+                </Link>
+                <LogoutButton />
+              </div>
             </div>
           </div>
           <div className="mt-4 md:mt-0 text-right">
