@@ -18,6 +18,7 @@ type Market = {
   options: Option[];
   expiresAt: Date | string | null;
   creator?: { name: string | null } | null;
+  creatorId?: string | null;
 };
 
 interface MarketListProps {
@@ -34,6 +35,10 @@ export function MarketList({ markets, userBalance, userId }: MarketListProps) {
   const handleOptionClick = (option: Option, market: Market) => {
     if (market.expiresAt && new Date(market.expiresAt) <= new Date()) {
        return; // Expirado
+    }
+    if (market.creatorId === userId) {
+      alert("Você não pode apostar na sua própria criação! Isso seria roubo, e nós somos honestos... na medida do possível.");
+      return;
     }
     setSelectedOption(option);
     setSelectedMarketQuestion(market.question);
@@ -76,25 +81,27 @@ export function MarketList({ markets, userBalance, userId }: MarketListProps) {
               )}
 
               <div className="grid grid-cols-2 gap-3 mt-4">
-                {market.options.map((option) => (
+                {market.options.map((option) => {
+                  const isCreator = market.creatorId === userId;
+                  return (
                   <button
                     key={option.id}
                     onClick={() => handleOptionClick(option, market)}
-                    disabled={isExpired}
+                    disabled={isExpired || isCreator}
                     className={`group relative flex justify-between items-center p-3 rounded-lg border transition-all 
-                        ${isExpired 
+                        ${isExpired || isCreator
                             ? 'bg-slate-800 border-slate-700 cursor-not-allowed opacity-50' 
                             : 'bg-slate-900 border-slate-700 hover:border-orange-500 hover:bg-slate-900/80 cursor-pointer'
                         }`}
                   >
-                    <span className={`font-medium ${isExpired ? 'text-slate-500' : 'text-slate-300 group-hover:text-white'}`}>
-                      {option.label}
+                    <span className={`font-medium ${isExpired || isCreator ? 'text-slate-500' : 'text-slate-300 group-hover:text-white'}`}>
+                      {option.label} {isCreator && '(JUIZ)'}
                     </span>
-                    <span className={`font-bold px-2 py-0.5 rounded text-sm ${isExpired ? 'text-slate-500 bg-slate-700' : 'text-orange-500 bg-orange-500/10'}`}>
+                    <span className={`font-bold px-2 py-0.5 rounded text-sm ${isExpired || isCreator ? 'text-slate-500 bg-slate-700' : 'text-orange-500 bg-orange-500/10'}`}>
                       x{option.odds.toFixed(2)}
                     </span>
                   </button>
-                ))}
+                )})}
               </div>
             </Card>
           )})
