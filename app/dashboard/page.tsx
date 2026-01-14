@@ -70,11 +70,24 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Coluna Principal: Mercados Abertos (Agora interativa) */}
-          <MarketList 
-            markets={markets} 
-            userBalance={userBalance} 
-            userId={session.user.id} 
-          />
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                🔥 Mercados Abertos
+              </h2>
+              <Link href="/dashboard/criar">
+                <Button size="sm" variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">
+                  + Criar Aposta
+                </Button>
+              </Link>
+            </div>
+            
+            <MarketList 
+              markets={markets} 
+              userBalance={userBalance} 
+              userId={session.user.id} 
+            />
+          </div>
 
           {/* Sidebar: Ranking */}
           <div className="space-y-6">
