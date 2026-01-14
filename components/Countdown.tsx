@@ -48,15 +48,35 @@ export function Countdown({ targetDate, onExpire }: CountdownProps) {
     return () => clearInterval(timer);
   }, [targetDate, onExpire]);
 
-  if (!targetDate) return <span className="text-slate-500">Sem data limite</span>;
-  if (!timeLeft) return <span className="text-red-500 font-bold">Encerrado</span>;
+  if (!targetDate) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border border-slate-600 bg-slate-900 px-3 py-1 text-xs font-mono text-slate-400">
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+        Sem data limite
+      </span>
+    );
+  }
+
+  if (!timeLeft) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border border-red-500/60 bg-red-900/30 px-3 py-1 text-xs font-mono text-red-300">
+        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+        Encerrado
+      </span>
+    );
+  }
 
   return (
-    <div className="flex gap-2 text-xs font-mono text-orange-400 bg-orange-900/20 px-2 py-1 rounded border border-orange-500/30">
-      <span title="Dias">{timeLeft.days}d</span>
+    <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/60 bg-orange-900/40 px-3 py-1 text-xs font-mono text-orange-200 shadow-sm">
+      <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+      <span title="Dias" className="hidden sm:inline">
+        {timeLeft.days}d
+      </span>
       <span title="Horas">{timeLeft.hours.toString().padStart(2, '0')}h</span>
       <span title="Minutos">{timeLeft.minutes.toString().padStart(2, '0')}m</span>
-      <span title="Segundos">{timeLeft.seconds.toString().padStart(2, '0')}s</span>
+      <span title="Segundos" className="hidden xs:inline">
+        {timeLeft.seconds.toString().padStart(2, '0')}s
+      </span>
     </div>
   );
 }
