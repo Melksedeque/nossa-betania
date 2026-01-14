@@ -433,3 +433,59 @@ export async function updateUserProfile(
     return { success: false, message: 'Erro ao atualizar perfil.' };
   }
 }
+
+export async function toggleUserRole(userId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    if (userId === session.user.id) {
+      return { success: false, message: 'Você não pode alterar seu próprio cargo.' };
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { success: false, message: 'Usuário não encontrado.' };
+    }
+
+    const newRole = user.role === 'ADMIN' ? 'USER' : 'ADMIN';
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: newRole },
+    });
+
+    revalidatePath('/admin');
+    return { success: true, message: `Usuário agora é ${newRole}.` };
+  } catch (error) {
+    console.error('Toggle role error:', error);
+    return { success: false, message: 'Erro ao alterar cargo.' };
+  }
+}
+
+export async function deleteUser(userId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    if (userId === session.user.id) {
+      return { success: false, message: 'Você não pode se deletar.' };
+    }
+
+    // Primeiro deletar dependências ou usar Cascade no Schema (assumindo Cascade ou limpeza manual)
+    // O Schema geralmente tem onDelete: Cascade, mas vamos garantir
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    revalidatePath('/admin');
+    return { success: true, message: 'Usuário removido com sucesso.' };
+  } catch (error) {
+    console.error('Delete user error:', error);
+    return { success: false, message: 'Erro ao remover usuário.' };
+  }
+}
