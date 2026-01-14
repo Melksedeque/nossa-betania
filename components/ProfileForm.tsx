@@ -4,6 +4,7 @@ import { useActionState, useEffect } from 'react';
 import { updateUserProfile } from '@/app/lib/actions';
 import { Button } from '@/components/Button';
 import { useToast } from '@/components/Toast';
+import Image from 'next/image';
 
 interface ProfileFormProps {
   name: string | null;
@@ -64,10 +65,12 @@ export function ProfileForm({ name, email, image }: ProfileFormProps) {
         />
         {image && (
           <div className="mt-3 flex items-center gap-3">
-            <img
+            <Image
               src={image}
               alt="Avatar atual"
               className="h-12 w-12 rounded-full border border-slate-700 object-cover"
+              width={48}
+              height={48}
             />
             <span className="text-xs text-slate-400">Pré-visualização do avatar atual</span>
           </div>
