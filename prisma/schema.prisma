@@ -45,6 +45,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   bets          Bet[]
+  markets       Market[]
 }
 
 model VerificationToken {
@@ -61,6 +62,9 @@ model Market {
   description String?
   status      String   @default("OPEN") // OPEN, CLOSED, SETTLED
   createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+  creatorId   String?
+  creator     User?    @relation(fields: [creatorId], references: [id])
   options     Option[]
 }
 
