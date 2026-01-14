@@ -84,5 +84,6 @@ model Bet {
   optionId  String
   user      User     @relation(fields: [userId], references: [id])
   option    Option   @relation(fields: [optionId], references: [id])
+  status    String   @default("PENDING") // PENDING, WON, LOST
   createdAt DateTime @default(now())
 }
