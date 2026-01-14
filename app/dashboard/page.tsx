@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { MendigarButton } from '@/components/MendigarButton';
 import { DashboardTabs } from '@/components/DashboardTabs';
 import { LogoutButton } from '@/components/LogoutButton';
+import { Logo } from '@/components/Logo';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -95,33 +96,45 @@ export default async function DashboardPage() {
   const leaderboard = await getLeaderboard();
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-900">
+      <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4 gap-4">
+          <Logo className="shrink-0" />
+          <nav className="flex items-center gap-4 text-sm">
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white hover:bg-slate-800/60 px-3 py-1.5 rounded-full transition-colors"
+            >
+              Voltar ao Site
+            </Link>
+            <Link
+              href="/dashboard/perfil"
+              className="text-slate-300 hover:text-white hover:bg-slate-800/60 px-3 py-1.5 rounded-full transition-colors"
+            >
+              Meu Perfil
+            </Link>
+            <LogoutButton />
+          </nav>
+        </div>
+      </header>
+
+      <div className="max-w-6xl mx-auto space-y-8 p-6">
         
         {/* Header de Boas-vindas e Saldo */}
-        <div className="flex flex-col md:flex-row justify-between items-center bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+        <div className="flex flex-col md:flex-row justify-between items-center bg-slate-900/60 p-6 rounded-2xl border border-slate-800 shadow-lg shadow-black/40">
           <div className="w-full md:w-auto flex flex-col gap-2">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-white mb-1">
-                  Olá, <span className="text-orange-500">{session.user.name}</span>! 👋
+                <h1 className="text-3xl font-bold text-white mb-1 tracking-tight">
+                  Olá, <span className="text-orange-400">{session.user.name}</span>! 👋
                 </h1>
                 <p className="text-slate-400 text-sm">Pronto para perder dinheiro hoje?</p>
               </div>
-              <div className="flex items-center gap-4">
-                <Link
-                  href="/dashboard/perfil"
-                  className="text-sm text-slate-300 hover:text-orange-400 underline-offset-4 hover:underline"
-                >
-                  Meu Perfil
-                </Link>
-                <LogoutButton />
-              </div>
             </div>
           </div>
-          <div className="mt-4 md:mt-0 text-right">
-            <p className="text-sm text-slate-400 uppercase tracking-wider">Seu Saldo</p>
-            <div className="text-4xl font-black text-green-400">
+          <div className="mt-4 md:mt-0 text-right space-y-2">
+            <p className="text-xs text-slate-400 uppercase tracking-[0.2em]">Seu Saldo</p>
+            <div className="text-4xl font-black text-green-400 font-mono">
               A$ {userBalance.toFixed(2)}
             </div>
             {userBalance < 10 && (
