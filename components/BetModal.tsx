@@ -133,7 +133,7 @@ export function BetModal({
           )}
 
           <Button
-            className="w-full"
+            className="w-full cursor-pointer"
             size="lg"
             onClick={handlePlaceBet}
             disabled={!isValidAmount || isPending}
