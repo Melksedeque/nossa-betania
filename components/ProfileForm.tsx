@@ -48,6 +48,7 @@ export function ProfileForm({ name, email, image }: ProfileFormProps) {
           value={email || ''}
           readOnly
           className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-400"
+          disabled
         />
       </div>
 
