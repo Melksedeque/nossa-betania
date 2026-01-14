@@ -34,6 +34,14 @@ export function BetModal({
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    if (isOpen) {
+      setAmount('');
+      setMessage(null);
+      setIsPending(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen || !option) return null;
 
   const betAmount = parseFloat(amount) || 0;
