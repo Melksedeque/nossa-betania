@@ -120,6 +120,10 @@ export async function placeBet(
       return { success: false, message: 'Este mercado não está aceitando apostas.' };
     }
 
+    if (option.market.creatorId === userId) {
+      return { success: false, message: 'Você não pode apostar na sua própria criação. Isso seria conflito de interesses!' };
+    }
+
     // 3. Realizar a transação (Debitar saldo + Criar aposta)
     await prisma.$transaction([
       prisma.user.update({
