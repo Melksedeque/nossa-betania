@@ -63,7 +63,7 @@ export default async function DashboardPage() {
     redirect('/login');
   }
 
-  const userBalance = session.user.balance;
+  const userBalance = session.user.balance ?? 0;
   const marketsRaw = await getOpenMarkets();
 
   const markets = marketsRaw.map(market => ({
@@ -176,7 +176,7 @@ export default async function DashboardPage() {
                     </span>
                   </div>
                   <span className="text-green-400 font-mono font-bold">
-                    A$ {user.balance.toFixed(0)}
+                    A$ {(user.balance ?? 0).toFixed(0)}
                   </span>
                 </div>
               ))}

@@ -159,7 +159,7 @@ export function UserList({ users, currentUserId }: UserListProps) {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-emerald-400 font-medium">
-                  R$ {user.balance.toFixed(2)}
+                  R$ {(user.balance ?? 0).toFixed(2)}
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
                   {user.id !== currentUserId && (
@@ -229,8 +229,8 @@ export function UserList({ users, currentUserId }: UserListProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-700/80">
                   <div className="text-xs text-slate-400 uppercase tracking-wide">Saldo</div>
-                  <div className="text-xl font-bold text-emerald-400 mt-1">
-                    R$ {details.user.balance.toFixed(2)}
+                <div className="text-xl font-bold text-emerald-400 mt-1">
+                    R$ {(details.user.balance ?? 0).toFixed(2)}
                   </div>
                 </div>
                 <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-700/80">

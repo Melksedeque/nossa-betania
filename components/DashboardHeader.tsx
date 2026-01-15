@@ -55,7 +55,7 @@ export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
           <div className="flex items-center gap-4">
              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-900 rounded-full border border-slate-800" title="Seu Saldo">
                 <span className="text-xs text-slate-400">Saldo:</span>
-                <span className="text-sm font-bold text-green-400">A$ {user.balance.toFixed(2)}</span>
+                <span className="text-sm font-bold text-green-400">A$ {(user.balance ?? 0).toFixed(2)}</span>
             </div>
 
             <button
