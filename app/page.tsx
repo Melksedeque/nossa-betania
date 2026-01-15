@@ -20,9 +20,7 @@ export default async function Home() {
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-orange-500 tracking-tighter">
-              <Logo className="shrink-0" logoUrl={logoUrl} />
-            </span>
+            <Logo className="shrink-0" logoUrl={logoUrl} />
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium text-slate-300">
             <Link href="#como-funciona" className="hover:text-orange-500 transition-colors">
@@ -37,12 +35,12 @@ export default async function Home() {
           </nav>
           <div className="flex gap-4">
             <Link href={isLoggedIn ? "/dashboard" : "/login"}>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="cursor-pointer">
                 {isLoggedIn ? "Voltar ao Jogo" : "Entrar"}
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="sm">Criar Conta</Button>
+              <Button size="sm" className="cursor-pointer">Criar Conta</Button>
             </Link>
           </div>
         </div>
@@ -55,15 +53,18 @@ export default async function Home() {
           
           <div className="container mx-auto px-4 relative z-10 text-center max-w-4xl">
             <div className="inline-block px-3 py-1 mb-6 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium animate-pulse">
-              🚀 A Reunião de Segunda foi adiada? Lucre com isso!
+              🚨 Alerta de Caos: mais uma reunião que podia ser e-mail.
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
-              A Primeira Casa de Apostas focada no<br /><span className="text-orange-500">Caos Corporativo</span>.
+              A Casa de Apostas oficial do <br />
+              <span className="text-orange-500">&quot;vamos marcar uma call rapidinho?&quot;</span>
             </h1>
             
             <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Transforme o estresse do dia a dia em lucro (fictício). Aposte se o deploy vai quebrar, se o chefe vai atrasar ou se o café vai acabar antes do meio-dia.
+              Aqui você aposta no que realmente importa: se o deploy vai cair em produção,
+              se o gestor vai pedir &quot;só um ajuste rápido&quot; às 17:59 ou se o café vai acabar
+              antes da daily. Estresse real, lucro fictício e muita terapia em forma de aposta.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -82,15 +83,15 @@ export default async function Home() {
             <div className="mt-16 grid grid-cols-3 gap-4 md:gap-8 text-center opacity-80">
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">100+</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Apostas Diárias</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Discussões salvas do Slack</div>
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">ZERO</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Dinheiro Real</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Risco financeiro (só emocional)</div>
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">100%</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Diversão</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Probabilidade do chefe não entender a piada</div>
               </div>
             </div>
           </div>
@@ -102,7 +103,8 @@ export default async function Home() {
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4">Como funciona o esquema?</h2>
               <p className="text-slate-400 max-w-xl mx-auto">
-                É simples. Não usamos dinheiro de verdade, usamos Armandólars. O objetivo é ver quem tem a melhor leitura do ambiente de trabalho.
+                Pense na Nossa Betânia como aquela resenha pós-expediente, só que oficializada.
+                Em vez de só reclamar, você transforma o caos da firma em mercados de apostas.
               </p>
             </div>
 
@@ -111,9 +113,10 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   💰
                 </div>
-                <h3 className="text-xl font-bold mb-2">1. Receba seu Bônus</h3>
+                <h3 className="text-xl font-bold mb-2">1. Receba seu Bônus Corporativo</h3>
                 <p className="text-slate-400">
-                  Cadastre-se e ganhe automaticamente <strong className="text-orange-400">100 Armandólars</strong> para começar a banca. Sem pegadinhas.
+                  Cadastre-se e ganhe <strong className="text-orange-400">100 Armandólars</strong> de
+                  graça. É o único bônus da firma que não vem com &quot;meta agressiva&quot; escondida.
                 </p>
               </Card>
 
@@ -121,9 +124,11 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   📊
                 </div>
-                <h3 className="text-xl font-bold mb-2">2. Analise o Cenário</h3>
+                <h3 className="text-xl font-bold mb-2">2. Analise o Caos</h3>
                 <p className="text-slate-400">
-                  Confira os mercados abertos. &quot;O ar condicionado vai quebrar hoje?&quot; ou &quot;Fulano vai trazer marmita?&quot;. As odds mudam em tempo real.
+                  Explore mercados como &quot;O ar-condicionado vai quebrar durante a daily?&quot; ou
+                  &quot;O deploy de sexta vai em produção sem teste?&quot;. As odds mudam conforme o humor
+                  do time e do gestor.
                 </p>
               </Card>
 
@@ -131,9 +136,10 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   🏆
                 </div>
-                <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário</h3>
+                <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário da Firma</h3>
                 <p className="text-slate-400">
-                  Acerte as previsões, multiplique seus Armandólars e suba no ranking global da firma. Quem sabe você não ganha um aumento (de ego)?
+                  Acerte as previsões, suba no ranking e ganhe algo mais raro que aumento:
+                  respeito informal no grupo do café.
                 </p>
               </Card>
             </div>
@@ -143,8 +149,8 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="bg-slate-950 py-12 border-t border-slate-800">
-        <div className="container mx-auto px-4 text-center">
-          <div className="text-2xl font-bold text-slate-700 tracking-tighter mb-4">
+        <div className="container mx-auto px-4 text-center flex flex-col items-center">
+          <div className="mb-4">
             <Logo className="shrink-0" logoUrl={logoUrl} />
           </div>
           <p className="text-slate-500 text-sm max-w-md mx-auto mb-8">
