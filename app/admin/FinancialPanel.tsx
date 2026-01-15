@@ -60,7 +60,7 @@ export function FinancialPanel() {
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`px-3 py-1.5 mx-1 cursor-pointer rounded-md text-xs font-medium transition-colors ${
                 period === p
                   ? 'bg-amber-500 text-white'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700'
