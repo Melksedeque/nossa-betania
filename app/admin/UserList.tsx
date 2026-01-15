@@ -3,6 +3,7 @@
 import { User } from '@prisma/client';
 import { toggleUserRole, deleteUser, adminGetUserDetails } from '@/app/lib/actions';
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface UserListProps {
   users: User[];
@@ -129,7 +130,13 @@ export function UserList({ users, currentUserId }: UserListProps) {
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
                       {user.image ? (
-                        <img src={user.image} alt={user.name || ''} className="w-full h-full object-cover" />
+                        <Image 
+                          src={user.image}
+                          alt={user.name || ''}
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <span className="text-xs font-bold text-slate-400">
                           {user.name?.[0]?.toUpperCase() || '?'}
