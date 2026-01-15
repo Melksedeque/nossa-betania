@@ -102,7 +102,7 @@ export default async function AdminPage() {
           <div className="flex gap-4 items-center">
             <Link 
               href="/admin/configuracoes" 
-              className="px-4 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors border border-slate-700"
+              className="cursor-pointer px-4 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors border border-slate-700"
             >
               Configurações
             </Link>
