@@ -419,7 +419,6 @@ export async function adminGetUserDetails(userId: string) {
         image: true,
         role: true,
         balance: true,
-        createdAt: true,
       },
     });
 

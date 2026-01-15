@@ -13,14 +13,15 @@ export default async function AdminSettingsPage() {
     redirect('/dashboard');
   }
 
-  const deletedMarkets = await prisma.market.findMany({
-    where: { deletedAt: { not: null } },
+  const deletedMarketsRaw = await prisma.market.findMany({
     include: {
       creator: { select: { name: true, email: true } },
     },
-    orderBy: { deletedAt: 'desc' },
-    take: 50,
+    orderBy: { createdAt: 'desc' },
+    take: 200,
   });
+
+  const deletedMarkets = deletedMarketsRaw.filter(market => market.deletedAt).slice(0, 50);
 
   const deletedComments = await prisma.comment.findMany({
     where: { deletedAt: { not: null } },

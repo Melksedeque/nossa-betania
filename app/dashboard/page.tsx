@@ -42,19 +42,19 @@ async function getLeaderboard() {
 }
 
 async function getUserBets(userId: string) {
-  return await prisma.bet.findMany({
+  const bets = await prisma.bet.findMany({
     where: { userId, deletedAt: null },
     include: {
       option: {
         include: {
-          market: {
-            where: { deletedAt: null },
-          },
+          market: true,
         },
       },
     },
     orderBy: { createdAt: 'desc' },
   });
+
+  return bets.filter(bet => !bet.option.market.deletedAt);
 }
 
 export default async function DashboardPage() {

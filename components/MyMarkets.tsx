@@ -1,15 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { Market, Option } from '@prisma/client';
 import { resolveMarket } from '@/app/lib/actions';
 import { Button } from './Button';
 import { useToast } from '@/components/Toast';
 
-type MarketProp = Omit<Market, 'createdAt' | 'expiresAt'> & {
+type MarketOption = {
+  id: string;
+  label: string;
+  odds: number;
+  marketId: string;
+};
+
+type MarketProp = {
+  id: string;
+  question: string;
+  description: string | null;
+  status: string;
   createdAt: string;
   expiresAt: string | null;
-  options: Option[];
+  outcomeId: string | null;
+  options: MarketOption[];
 };
 
 interface MyMarketsProps {

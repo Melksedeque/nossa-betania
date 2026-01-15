@@ -23,7 +23,6 @@ export function UserList({ users, currentUserId }: UserListProps) {
           image: string | null;
           role: string;
           balance: number;
-          createdAt: string;
         };
         metrics: {
           totalVolumeApostado: number;
@@ -41,7 +40,6 @@ export function UserList({ users, currentUserId }: UserListProps) {
               id: string;
               question: string;
               status: string;
-              deletedAt: string | null;
             };
           };
         }[];
@@ -101,8 +99,8 @@ export function UserList({ users, currentUserId }: UserListProps) {
     const result = await adminGetUserDetails(userId);
     setDetailsLoadingId(null);
 
-    if (!result.success) {
-      alert('Erro: ' + result.message);
+    if (!result.success || !result.data) {
+      alert('Erro: ' + (result.message ?? 'Não foi possível carregar os detalhes do usuário.'));
       setSelectedUserId(null);
       setDetails(null);
       return;
