@@ -62,7 +62,7 @@ export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
 
             <button
               onClick={() => setIsProfileModalOpen(true)}
-              className="flex items-center gap-3 hover:bg-slate-900 rounded-full pl-2 pr-4 py-1.5 transition-colors group border border-transparent hover:border-slate-800"
+              className="flex items-center gap-3 cursor-pointer hover:bg-slate-900 rounded-full pl-2 pr-4 py-1.5 transition-colors group border border-transparent hover:border-slate-800"
             >
               {user.image ? (
                  <Image src={user.image} alt={user.name || 'User'} className="w-8 h-8 rounded-full object-cover border border-slate-700 group-hover:border-slate-500" />
