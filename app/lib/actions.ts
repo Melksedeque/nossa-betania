@@ -162,10 +162,11 @@ export async function sendContactEmail(
   }
 
   const resend = new Resend(apiKey);
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 
   try {
     const { error } = await resend.emails.send({
-      from: 'Nossa Betânia <noreply@nossabetania.com>',
+      from: `Nossa Betânia <${fromEmail}>`,
       to: 'freelancer@melksedeque.com.br',
       replyTo: email,
       subject: `Contato pelo site - ${name}`,
@@ -174,7 +175,7 @@ export async function sendContactEmail(
 
     if (error) {
       console.error('Erro Resend:', error);
-      return { success: false, message: 'Erro ao enviar o e-mail. Tente novamente mais tarde.' };
+      return { success: false, message: `Erro ao enviar o e-mail: ${error.message}` };
     }
 
     return { success: true, message: 'Mensagem enviada com sucesso!' };
@@ -225,6 +226,7 @@ export async function sendCreateMarketRequest(
   }
 
   const resend = new Resend(apiKey);
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 
   try {
     const html = `
@@ -238,7 +240,7 @@ export async function sendCreateMarketRequest(
     `;
 
     const { error } = await resend.emails.send({
-      from: 'Nossa Betânia <noreply@nossabetania.com>',
+      from: `Nossa Betânia <${fromEmail}>`,
       to: 'freelancer@melksedeque.com.br',
       subject: 'Solicitação de criação de nova aposta',
       html,
@@ -246,13 +248,13 @@ export async function sendCreateMarketRequest(
 
     if (error) {
       console.error('Erro Resend (solicitação de aposta):', error);
-      return { success: false, message: 'Erro ao enviar a solicitação. Tente novamente mais tarde.' };
+      return { success: false, message: `Erro ao enviar a solicitação: ${error.message}` };
     }
 
     return { success: true, message: 'Solicitação enviada com sucesso para o Dono da Banca!' };
   } catch (error) {
     console.error('Erro ao enviar solicitação de aposta:', error);
-    return { success: false, message: 'Erro ao enviar a solicitação. Tente novamente mais tarde.' };
+    return { success: false, message: 'Erro inesperado ao enviar a solicitação.' };
   }
 }
 
