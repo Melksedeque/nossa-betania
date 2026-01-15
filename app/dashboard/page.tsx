@@ -98,7 +98,6 @@ export default async function DashboardPage() {
 
   return (
     <>
-        
         {/* Header de Boas-vindas e Saldo */}
         <div className="flex flex-col md:flex-row justify-between items-center bg-slate-900/60 p-6 rounded-2xl border border-slate-800 shadow-lg shadow-black/40">
           <div className="w-full md:w-auto flex flex-col gap-2">
@@ -111,7 +110,7 @@ export default async function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="mt-4 md:mt-0 text-right space-y-2">
+          <div className="mt-4 text-right space-y-2">
             <p className="text-xs text-slate-400 uppercase tracking-[0.2em]">Seu Saldo</p>
             <div className="text-4xl font-black text-green-400 font-mono">
               A$ {userBalance.toFixed(2)}

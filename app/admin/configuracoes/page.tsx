@@ -38,7 +38,7 @@ export default async function AdminSettingsPage() {
       <div className="w-full mx-auto space-y-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Configurações</h1>
-          <Link href="/admin" className="text-orange-500 hover:text-orange-400">
+          <Link href="/admin" className="cursor-pointer text-orange-500 hover:text-orange-400 font-medium">
             Voltar ao Painel
           </Link>
         </div>
