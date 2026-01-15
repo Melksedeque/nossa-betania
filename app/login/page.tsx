@@ -12,10 +12,7 @@ export default async function LoginPage() {
 
   const logoUrl = logoSetting?.value;
 
-  let logoHref = "/";
-  if (session?.user) {
-    logoHref = session.user.role === "ADMIN" ? "/admin/dashboard" : "/dashboard";
-  }
+  const logoHref = "/";
 
   return <LoginForm logoUrl={logoUrl} logoHref={logoHref} />;
 }

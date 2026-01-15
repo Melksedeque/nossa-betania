@@ -14,10 +14,7 @@ export default async function Home() {
   });
   const logoUrl = logoSetting?.value;
 
-  let logoHref = '/';
-  if (session?.user) {
-    logoHref = session.user.role === 'ADMIN' ? '/admin/dashboard' : '/dashboard';
-  }
+  const logoHref = '/';
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -25,7 +22,7 @@ export default async function Home() {
       <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm sticky top-0 z-40">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
+            <Logo className="shrink-0" logoUrl={logoUrl} href="/" />
           </div>
           <nav className="hidden md:flex gap-6 text-md font-medium text-slate-300">
             <Link href="#como-funciona" className="hover:text-orange-500 transition-colors">
