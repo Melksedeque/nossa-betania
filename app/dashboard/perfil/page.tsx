@@ -13,8 +13,7 @@ export default async function ProfilePage() {
   const user = session.user;
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-xl mx-auto space-y-6">
+    <div className="max-w-xl mx-auto">
         <Card className="border-slate-800 bg-slate-950/50">
           <h1 className="text-2xl font-bold text-white mb-4">Meu Perfil</h1>
           <ProfileForm
@@ -23,8 +22,6 @@ export default async function ProfilePage() {
             image={user.image || ''}
           />
         </Card>
-      </div>
     </div>
   );
 }
-
