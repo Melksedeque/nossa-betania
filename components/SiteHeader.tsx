@@ -24,6 +24,9 @@ export function SiteHeader({ isLoggedIn, logoUrl }: SiteHeaderProps) {
           <Link href="/manifesto" className="hover:text-orange-500 transition-colors">
             Manifesto
           </Link>
+          <Link href="/contato" className="hover:text-orange-500 transition-colors">
+            Contato
+          </Link>
         </nav>
         <div className="flex gap-4">
           <Link href={isLoggedIn ? '/dashboard' : '/login'}>
