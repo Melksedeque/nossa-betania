@@ -12,8 +12,6 @@ export function LogoUploadForm() {
   async function handleSubmit(formData: FormData) {
     setIsUploading(true);
     try {
-      // Se o usuário usou a URL, precisamos garantir que o backend saiba lidar com isso
-      // ou se ele enviou arquivo. O ImageInput usa 'logo' para arquivo e 'logo_url' para URL.
       const result = await adminUploadLogo(formData);
       if (result.success) {
         addToast(result.message, 'success');
