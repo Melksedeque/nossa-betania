@@ -106,9 +106,6 @@ export default async function AdminPage() {
             >
               Configurações
             </Link>
-            {/* <Link href="/dashboard" className="text-orange-500 hover:text-orange-400 font-medium">
-              Voltar ao Jogo
-            </Link> */}
           </div>
         </div>
 
