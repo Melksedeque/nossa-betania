@@ -7,8 +7,6 @@ import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
@@ -680,33 +678,9 @@ export async function updateUserProfile(
 
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-
-      const publicDir = join(process.cwd(), 'public');
-      const uploadsDir = join(publicDir, 'uploads', 'avatars');
-
-      try {
-        await mkdir(uploadsDir, { recursive: true });
-      } catch (err) {
-        console.error('Error creating directory:', err);
-      }
-
-      const ext = file.name.split('.').pop() || 'png';
-      const filename = `${session.user.id}-${Date.now()}.${ext}`;
-      const filepath = join(uploadsDir, filename);
-      const publicPath = `/uploads/avatars/${filename}`;
-
-      try {
-        await writeFile(filepath, buffer);
-        image = publicPath;
-      } catch (writeErr) {
-        console.error('Error writing file:', writeErr);
-        // Em Vercel (Production), writeFile não funciona para persistência.
-        // Se estivermos em produção (NODE_ENV=production), avise o usuário ou use outra estratégia.
-        if (process.env.NODE_ENV === 'production' && process.env.VERCEL) {
-           return { success: false, message: 'Upload de arquivos não suportado no Vercel (FileSystem é somente leitura).' };
-        }
-        throw new Error('Falha ao salvar arquivo no disco.');
-      }
+      const base64 = buffer.toString('base64');
+      const dataUrl = `data:${file.type};base64,${base64}`;
+      image = dataUrl;
     }
 
     const validated = UpdateProfileSchema.safeParse({
@@ -1114,43 +1088,19 @@ export async function adminUploadLogo(formData: FormData) {
       return { success: false, message: 'O arquivo deve ser uma imagem.' };
     }
 
-    if (file.size > 2 * 1024 * 1024) { // 2MB
+    if (file.size > 2 * 1024 * 1024) {
       return { success: false, message: 'A imagem deve ter no máximo 2MB.' };
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const base64 = buffer.toString('base64');
+    const dataUrl = `data:${file.type};base64,${base64}`;
 
-    const publicDir = join(process.cwd(), 'public');
-    const uploadsDir = join(publicDir, 'uploads');
-
-    try {
-      await mkdir(uploadsDir, { recursive: true });
-    } catch (err) {
-      console.error('Error creating directory:', err);
-    }
-
-    // Generate unique filename to avoid caching issues
-    const ext = file.name.split('.').pop() || 'png';
-    const filename = `logo-${Date.now()}.${ext}`;
-    const filepath = join(uploadsDir, filename);
-    const publicPath = `/uploads/${filename}`;
-
-    try {
-      await writeFile(filepath, buffer);
-    } catch (writeErr) {
-      console.error('Error writing logo file:', writeErr);
-      if (process.env.NODE_ENV === 'production' && process.env.VERCEL) {
-         return { success: false, message: 'Upload não suportado no Vercel.' };
-      }
-      throw new Error('Falha ao salvar logo no disco.');
-    }
-
-    // Save to DB
     await prisma.systemSetting.upsert({
       where: { key: 'logo_url' },
-      update: { value: publicPath },
-      create: { key: 'logo_url', value: publicPath },
+      update: { value: dataUrl },
+      create: { key: 'logo_url', value: dataUrl },
     });
 
     revalidatePath('/');
