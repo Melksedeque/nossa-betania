@@ -72,17 +72,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       
       // Buscar dados atualizados do usuário (como saldo e role)
       if (session.user.email) {
-         // Nota: Em serverless, tente otimizar isso para não chamar o banco a cada requisição
-         // se não for estritamente necessário. Mas para saldo atualizado, é bom.
          try {
              const user = await prisma.user.findUnique({
                 where: { email: session.user.email },
-                select: { role: true, balance: true }
+                select: { role: true, balance: true, image: true }
              });
              
              if (user) {
                  session.user.role = user.role;
                  session.user.balance = user.balance;
+                 session.user.image = user.image;
              }
          } catch (e) {
              console.error("Error fetching user session details", e);

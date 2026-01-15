@@ -686,7 +686,8 @@ export async function updateUserProfile(
 
       try {
         await mkdir(uploadsDir, { recursive: true });
-      } catch {
+      } catch (err) {
+        console.error('Error creating directory:', err);
       }
 
       const ext = file.name.split('.').pop() || 'png';
@@ -694,8 +695,18 @@ export async function updateUserProfile(
       const filepath = join(uploadsDir, filename);
       const publicPath = `/uploads/avatars/${filename}`;
 
-      await writeFile(filepath, buffer);
-      image = publicPath;
+      try {
+        await writeFile(filepath, buffer);
+        image = publicPath;
+      } catch (writeErr) {
+        console.error('Error writing file:', writeErr);
+        // Em Vercel (Production), writeFile não funciona para persistência.
+        // Se estivermos em produção (NODE_ENV=production), avise o usuário ou use outra estratégia.
+        if (process.env.NODE_ENV === 'production' && process.env.VERCEL) {
+           return { success: false, message: 'Upload de arquivos não suportado no Vercel (FileSystem é somente leitura).' };
+        }
+        throw new Error('Falha ao salvar arquivo no disco.');
+      }
     }
 
     const validated = UpdateProfileSchema.safeParse({
@@ -1115,7 +1126,8 @@ export async function adminUploadLogo(formData: FormData) {
 
     try {
       await mkdir(uploadsDir, { recursive: true });
-    } catch {
+    } catch (err) {
+      console.error('Error creating directory:', err);
     }
 
     // Generate unique filename to avoid caching issues
@@ -1124,7 +1136,15 @@ export async function adminUploadLogo(formData: FormData) {
     const filepath = join(uploadsDir, filename);
     const publicPath = `/uploads/${filename}`;
 
-    await writeFile(filepath, buffer);
+    try {
+      await writeFile(filepath, buffer);
+    } catch (writeErr) {
+      console.error('Error writing logo file:', writeErr);
+      if (process.env.NODE_ENV === 'production' && process.env.VERCEL) {
+         return { success: false, message: 'Upload não suportado no Vercel.' };
+      }
+      throw new Error('Falha ao salvar logo no disco.');
+    }
 
     // Save to DB
     await prisma.systemSetting.upsert({
