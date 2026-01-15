@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { UserList } from './UserList';
 import { MarketListAdmin } from './MarketList';
 import { CommentListAdmin } from './CommentList';
+import { BetListAdmin } from './BetList';
 
 export default async function AdminPage() {
   const session = await auth();
@@ -70,6 +71,26 @@ export default async function AdminPage() {
     where: { deletedAt: null },
     orderBy: { createdAt: 'desc' },
     take: 100,
+  });
+
+  const bets = await prisma.bet.findMany({
+    where: { deletedAt: null },
+    include: {
+      user: {
+        select: { id: true, name: true, email: true },
+      },
+      option: {
+        select: {
+          id: true,
+          label: true,
+          market: {
+            select: { id: true, question: true, status: true },
+          },
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 200,
   });
 
   return (
@@ -195,6 +216,26 @@ export default async function AdminPage() {
                 createdAt: comment.createdAt.toISOString(),
                 user: comment.user,
                 market: comment.market,
+              }))}
+            />
+          </section>
+
+          {/* Seção de Apostas */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-white">Gerenciar Apostas</h2>
+              <span className="text-xs text-slate-500">
+                Exibindo últimas {bets.length} apostas
+              </span>
+            </div>
+            <BetListAdmin
+              bets={bets.map(bet => ({
+                id: bet.id,
+                amount: bet.amount,
+                status: bet.status,
+                createdAt: bet.createdAt.toISOString(),
+                user: bet.user,
+                option: bet.option,
               }))}
             />
           </section>

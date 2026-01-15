@@ -367,6 +367,39 @@ export async function addComment(marketId: string, userId: string, content: stri
   }
 }
 
+export async function adminUpdateBetStatus(betId: string, status: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const allowedStatuses = ['PENDING', 'WON', 'LOST'];
+    if (!allowedStatuses.includes(status)) {
+      return { success: false, message: 'Status inválido.' };
+    }
+
+    const bet = await prisma.bet.findUnique({
+      where: { id: betId },
+    });
+
+    if (!bet || bet.deletedAt) {
+      return { success: false, message: 'Aposta não encontrada.' };
+    }
+
+    await prisma.bet.update({
+      where: { id: betId },
+      data: { status },
+    });
+
+    revalidatePath('/admin');
+    return { success: true, message: 'Status da aposta atualizado.' };
+  } catch (error) {
+    console.error('Admin update bet status error:', error);
+    return { success: false, message: 'Erro ao atualizar status da aposta.' };
+  }
+}
+
 export async function deleteComment(commentId: string, userId: string) {
   try {
     const comment = await prisma.comment.findUnique({
