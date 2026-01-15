@@ -11,12 +11,8 @@ export default async function CreateMarketPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-2xl mx-auto">
-        <Link href="/dashboard" className="text-slate-400 hover:text-white mb-6 inline-block">
-          &larr; Voltar para o Dashboard
-        </Link>
-        
         <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 shadow-xl">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-white mb-2">Criar Nova Aposta</h1>
