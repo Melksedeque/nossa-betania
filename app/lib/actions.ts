@@ -7,6 +7,8 @@ import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
@@ -1057,5 +1059,63 @@ export async function updatePassword(
   } catch (error) {
     console.error('Update password error:', error);
     return { success: false, message: 'Erro ao alterar senha.' };
+  }
+}
+
+export async function adminUploadLogo(formData: FormData) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const file = formData.get('logo') as File;
+    if (!file || file.size === 0) {
+      return { success: false, message: 'Nenhum arquivo enviado.' };
+    }
+
+    if (!file.type.startsWith('image/')) {
+      return { success: false, message: 'O arquivo deve ser uma imagem.' };
+    }
+
+    if (file.size > 2 * 1024 * 1024) { // 2MB
+      return { success: false, message: 'A imagem deve ter no máximo 2MB.' };
+    }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const publicDir = join(process.cwd(), 'public');
+    const uploadsDir = join(publicDir, 'uploads');
+
+    try {
+      await mkdir(uploadsDir, { recursive: true });
+    } catch (_err) {
+      // Ignore if exists
+    }
+
+    // Generate unique filename to avoid caching issues
+    const ext = file.name.split('.').pop() || 'png';
+    const filename = `logo-${Date.now()}.${ext}`;
+    const filepath = join(uploadsDir, filename);
+    const publicPath = `/uploads/${filename}`;
+
+    await writeFile(filepath, buffer);
+
+    // Save to DB
+    await prisma.systemSetting.upsert({
+      where: { key: 'logo_url' },
+      update: { value: publicPath },
+      create: { key: 'logo_url', value: publicPath },
+    });
+
+    revalidatePath('/');
+    revalidatePath('/dashboard');
+    revalidatePath('/admin/configuracoes');
+
+    return { success: true, message: 'Logo atualizada com sucesso!' };
+  } catch (error) {
+    console.error('Admin upload logo error:', error);
+    return { success: false, message: 'Erro ao fazer upload da logo.' };
   }
 }

@@ -96,6 +96,11 @@ model Option {
   bets     Bet[]
 }
 
+model SystemSetting {
+  key   String @id
+  value String
+}
+
 model Bet {
   id        String   @id @default(cuid())
   amount    Float

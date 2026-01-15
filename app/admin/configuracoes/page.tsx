@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { PasswordForm } from '../PasswordForm';
+import { LogoUploadForm } from './LogoUploadForm';
 import { adminRestoreComment, adminHardDeleteComment, adminRestoreMarket, adminHardDeleteMarket } from '@/app/lib/actions';
 
 export default async function AdminSettingsPage() {
@@ -39,6 +40,17 @@ export default async function AdminSettingsPage() {
           <Link href="/admin" className="text-orange-500 hover:text-orange-400">
             Voltar ao Painel
           </Link>
+        </div>
+
+        <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+          <h2 className="text-xl font-bold text-white mb-4">Aparência</h2>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-200 mb-2">Logo do Site</h3>
+            <p className="text-xs text-slate-400 mb-4">
+              Faça upload da logo que aparecerá no cabeçalho e na dashboard.
+            </p>
+            <LogoUploadForm />
+          </div>
         </div>
 
         <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
