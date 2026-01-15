@@ -127,8 +127,6 @@ export async function register(
       },
     });
 
-    // Após registrar, não logamos automaticamente, mas retornamos sucesso
-    // O usuário será redirecionado para login no componente client-side ou aqui
     return 'Conta criada com sucesso! Faça login.';
   } catch (error) {
     console.error('Registration error:', error);
@@ -137,7 +135,7 @@ export async function register(
 }
 
 export async function logout() {
-  await signOut({ redirectTo: '/login' });
+  await signOut({ redirectTo: '/' });
 }
 
 export async function sendContactEmail(
