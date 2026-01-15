@@ -5,6 +5,7 @@ import { authenticate } from '@/app/lib/actions';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 
 export default function LoginPage() {
   const [errorMessage, formAction, isPending] = useActionState(
@@ -16,9 +17,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-900 p-4">
       <Card className="w-full max-w-md border-slate-800 bg-slate-950/50 backdrop-blur-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-orange-500 uppercase tracking-tighter mb-2">
-            Nossa Betânia
-          </h1>
+          <Logo className="shrink-0" />
           <p className="text-slate-400">Entre para perder (ou ganhar) Armandólars.</p>
         </div>
 
