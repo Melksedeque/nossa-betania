@@ -39,6 +39,11 @@ type ContactState = {
   message: string;
 };
 
+type CreateRequestState = {
+  success: boolean;
+  message: string;
+};
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -178,6 +183,78 @@ export async function sendContactEmail(
   } catch (error) {
     console.error('Erro ao enviar e-mail de contato:', error);
     return { success: false, message: 'Erro ao enviar o e-mail. Tente novamente mais tarde.' };
+  }
+}
+
+const CreateRequestSchema = z.object({
+  question: z.string().min(5),
+  options: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+      }),
+    )
+    .min(2),
+  closesAt: z.string().min(1),
+});
+
+export async function sendCreateMarketRequest(
+  prevState: CreateRequestState,
+  formData: FormData,
+): Promise<CreateRequestState> {
+  const rawOptions = formData.getAll('options');
+
+  const parsed = CreateRequestSchema.safeParse({
+    question: formData.get('question'),
+    closesAt: formData.get('closesAt'),
+    options: rawOptions.map((opt) => ({ label: String(opt) })),
+  });
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: 'Preencha os campos corretamente antes de enviar a solicitação.',
+    };
+  }
+
+  const { question, options, closesAt } = parsed.data;
+
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.error('RESEND_API_KEY não configurada.');
+    return { success: false, message: 'Serviço de e-mail indisponível no momento.' };
+  }
+
+  const resend = new Resend(apiKey);
+
+  try {
+    const html = `
+      <h1>Nova solicitação de mercado</h1>
+      <p><strong>Pergunta:</strong> ${question}</p>
+      <p><strong>Opções:</strong></p>
+      <ul>
+        ${options.map((o) => `<li>${o.label}</li>`).join('')}
+      </ul>
+      <p><strong>Encerra em:</strong> ${closesAt}</p>
+    `;
+
+    const { error } = await resend.emails.send({
+      from: 'Nossa Betânia <noreply@nossabetania.com>',
+      to: 'freelancer@melksedeque.com.br',
+      subject: 'Solicitação de criação de nova aposta',
+      html,
+    });
+
+    if (error) {
+      console.error('Erro Resend (solicitação de aposta):', error);
+      return { success: false, message: 'Erro ao enviar a solicitação. Tente novamente mais tarde.' };
+    }
+
+    return { success: true, message: 'Solicitação enviada com sucesso para o Dono da Banca!' };
+  } catch (error) {
+    console.error('Erro ao enviar solicitação de aposta:', error);
+    return { success: false, message: 'Erro ao enviar a solicitação. Tente novamente mais tarde.' };
   }
 }
 

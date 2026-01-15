@@ -47,9 +47,6 @@ export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
                   <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
                     Dashboard
                   </Link>
-                  <Link href="/dashboard/criar" className="text-slate-300 hover:text-white transition-colors">
-                    Criar Aposta
-                  </Link>
                 </>
               )}
             </nav>

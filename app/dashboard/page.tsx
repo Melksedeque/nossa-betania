@@ -1,11 +1,12 @@
+import React from 'react';
 import { Card } from '@/components/Card';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/Button';
-import Link from 'next/link';
 import { MendigarButton } from '@/components/MendigarButton';
 import { DashboardTabs } from '@/components/DashboardTabs';
+import { CreateMarketRequestModal } from '@/components/CreateMarketRequestModal';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -63,7 +64,9 @@ export default async function DashboardPage() {
   }
 
   const userBalance = session.user.balance;
-  const markets = (await getOpenMarkets()).map(market => ({
+  const marketsRaw = await getOpenMarkets();
+
+  const markets = marketsRaw.map(market => ({
     ...market,
     createdAt: market.createdAt.toISOString(),
     expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
@@ -73,13 +76,23 @@ export default async function DashboardPage() {
     })),
   }));
   
-  const myMarkets = (await getMyMarkets(session.user.id)).map(market => ({
-    ...market,
-    createdAt: market.createdAt.toISOString(),
-    expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
-  }));
+  const myMarketsRaw = await getMyMarkets(session.user.id);
 
-  const userBets = (await getUserBets(session.user.id)).map(bet => ({
+  const myMarkets = myMarketsRaw
+    .filter(market => market.status !== 'SETTLED')
+    .map(market => ({
+      ...market,
+      createdAt: market.createdAt.toISOString(),
+      expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
+    }));
+
+  const betsRaw = await getUserBets(session.user.id);
+
+  const openBetStatuses = ['PENDING'];
+
+  const historyBets = betsRaw.filter(bet => !openBetStatuses.includes(bet.status));
+
+  const history = historyBets.map(bet => ({
     ...bet,
     createdAt: bet.createdAt.toISOString(),
     option: {
@@ -124,18 +137,12 @@ export default async function DashboardPage() {
         {/* Conteúdo Principal com Abas */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex justify-end">
-              <Link href="/dashboard/criar">
-                <Button size="sm" variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">
-                  + Criar Aposta
-                </Button>
-              </Link>
-            </div>
+            <CreateMarketRequestModalTrigger />
 
             <DashboardTabs 
               openMarkets={markets} 
               myMarkets={myMarkets} 
-              bets={userBets}
+              bets={history}
               user={{ 
                 id: session.user.id, 
                 balance: userBalance, 
@@ -177,6 +184,28 @@ export default async function DashboardPage() {
           </div>
 
         </div>
+    </>
+  );
+}
+
+function CreateMarketRequestModalTrigger() {
+  'use client';
+
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <>
+      <div className="flex justify-end">
+        <Button
+          size="sm"
+          variant="outline"
+          className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white cursor-pointer"
+          onClick={() => setIsOpen(true)}
+        >
+          + Solicitar Nova Aposta
+        </Button>
+      </div>
+      <CreateMarketRequestModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 }

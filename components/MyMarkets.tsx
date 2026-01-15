@@ -59,9 +59,14 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
 
   if (markets.length === 0) {
     return (
-      <div className="text-center py-8 text-slate-500 bg-slate-800/50 rounded-lg border border-slate-700/50">
-        <p>Você ainda não criou nenhuma aposta.</p>
-        <p className="text-sm mt-2">Clique em &quot;+ Criar Aposta&quot; para começar o caos!</p>
+      <div className="space-y-3">
+        <h2 className="text-xl font-bold text-orange-400 mb-2 flex items-center gap-2">
+          <span>👑</span> Minhas Apostas
+        </h2>
+        <div className="text-center py-8 text-slate-500 bg-slate-800/50 rounded-lg border border-slate-700/50">
+          <p>Você ainda não tem apostas em andamento.</p>
+          <p className="text-sm mt-2">Quando você apostar em algum mercado, ele aparece aqui.</p>
+        </div>
       </div>
     );
   }
@@ -69,9 +74,9 @@ export function MyMarkets({ markets, userId }: MyMarketsProps) {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-orange-400 mb-4 flex items-center gap-2">
-        <span>👑</span> Minhas Apostas (Eu sou a Lei)
+        <span>👑</span> Minhas Apostas
       </h2>
-      
+
       <div className="grid gap-4">
         {markets.map((market) => (
           <div 
