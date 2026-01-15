@@ -26,9 +26,11 @@ export function RegisterForm({ logoUrl }: RegisterFormProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-900 p-4">
       <Card className="w-full max-w-md border-slate-800 bg-slate-950/50 backdrop-blur-sm">
-        <div className="text-center mb-8">
-          <Logo className="shrink-0" logoUrl={logoUrl} />
-          <p className="text-slate-400">Cadastre-se e ganhe 100 Armandólars.</p>
+        <div className="container mx-auto px-4 text-center flex flex-col items-center">
+          <div className="mb-4">
+            <Logo className="shrink-0" logoUrl={logoUrl} />
+          </div>
+          <p className="text-slate-400 mb-6">Cadastre-se e ganhe 100 Armandólars.</p>
         </div>
 
         <form action={formAction} className="space-y-4">
@@ -75,7 +77,7 @@ export function RegisterForm({ logoUrl }: RegisterFormProps) {
           </div>
           
           <div className="pt-2">
-            <Button className="w-full" size="lg" disabled={isPending}>
+            <Button className="w-full cursor-pointer" size="lg" disabled={isPending}>
               {isPending ? 'Criando Conta...' : 'Cadastrar e Ganhar Bônus'}
             </Button>
           </div>

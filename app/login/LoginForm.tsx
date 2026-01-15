@@ -20,9 +20,11 @@ export function LoginForm({ logoUrl }: LoginFormProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-900 p-4">
       <Card className="w-full max-w-md border-slate-800 bg-slate-950/50 backdrop-blur-sm">
-        <div className="text-center mb-8">
-          <Logo className="shrink-0" logoUrl={logoUrl} />
-          <p className="text-slate-400">Entre para perder (ou ganhar) Armandólars.</p>
+        <div className="container mx-auto px-4 text-center flex flex-col items-center">
+          <div className="mb-4">
+            <Logo className="shrink-0" logoUrl={logoUrl} />
+          </div>
+          <p className="text-slate-400 mb-6">Entre para perder (ou ganhar) Armandólars.</p>
         </div>
 
         <form action={formAction} className="space-y-4">
@@ -55,20 +57,20 @@ export function LoginForm({ logoUrl }: LoginFormProps) {
           </div>
           
           <div className="pt-2">
-            <Button className="w-full" size="lg" disabled={isPending}>
+            <Button className="w-full cursor-pointer" size="lg" disabled={isPending}>
               {isPending ? 'Validando Crachá...' : 'Bater Ponto (Entrar)'}
             </Button>
           </div>
           
-          <div
-            className="flex h-8 items-end space-x-1"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {errorMessage && (
+          {errorMessage && (
+            <div
+              className="flex h-8 items-end space-x-1"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               <p className="text-sm text-red-500">{errorMessage}</p>
-            )}
-          </div>
+            </div>
+          )}
         </form>
 
         <div className="mt-6 text-center text-sm text-slate-500">

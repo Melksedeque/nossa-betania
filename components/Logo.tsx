@@ -12,7 +12,7 @@ export function Logo({ className = "", logoUrl }: LogoProps) {
   return (
     <Link href="/dashboard" className={`flex items-center gap-2 group ${className}`}>
       {logoUrl ? (
-        <div className="relative h-12 w-12 overflow-hidden rounded-lg shadow-lg shadow-orange-500/20 transform group-hover:rotate-12 transition-transform">
+        <div className="relative h-12 w-12 rounded-full shadow-lg shadow-orange-500/20 transform group-hover:rotate-12 transition-transform">
           <Image
             src={logoUrl}
             alt="Logo"
@@ -27,10 +27,10 @@ export function Logo({ className = "", logoUrl }: LogoProps) {
         </div>
       )}
       <span className="flex flex-col tracking-wide">
-        <span className="text-2xl font-bold text-white font-barlow">
+        <span className="text-3xl font-bold text-white font-barlow">
           Nossa<span className="text-orange-500">Bet</span>ânia
         </span>
-        <span className="text-sm text-slate-200 font-inter font-light">
+        <span className="text-xs text-slate-400 font-inter font-light">
           Onde seu estresse real vira lucro fictício!
           </span>
       </span>

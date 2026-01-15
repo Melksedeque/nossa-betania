@@ -17,12 +17,12 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header / Navbar */}
-      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm sticky top-0 z-40">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Logo className="shrink-0" logoUrl={logoUrl} />
           </div>
-          <nav className="hidden md:flex gap-6 text-sm font-medium text-slate-300">
+          <nav className="hidden md:flex gap-6 text-md font-medium text-slate-300">
             <Link href="#como-funciona" className="hover:text-orange-500 transition-colors">
               Como Funciona
             </Link>
@@ -35,12 +35,12 @@ export default async function Home() {
           </nav>
           <div className="flex gap-4">
             <Link href={isLoggedIn ? "/dashboard" : "/login"}>
-              <Button variant="ghost" size="sm" className="cursor-pointer">
+              <Button variant="ghost" size="md" className="cursor-pointer">
                 {isLoggedIn ? "Voltar ao Jogo" : "Entrar"}
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="sm" className="cursor-pointer">Criar Conta</Button>
+              <Button size="md" className="cursor-pointer">Criar Conta</Button>
             </Link>
           </div>
         </div>
@@ -57,24 +57,23 @@ export default async function Home() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
-              A Casa de Apostas oficial do <br />
-              <span className="text-orange-500">&quot;vamos marcar uma call rapidinho?&quot;</span>
+              A Primeira Casa de Apostas focada no<br /><span className="text-orange-500">Caos Corporativo</span>
             </h1>
             
             <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Aqui você aposta no que realmente importa: se o deploy vai cair em produção,
+              Aqui você aposta no que realmente importa: se o sistema vai cair,
               se o gestor vai pedir &quot;só um ajuste rápido&quot; às 17:59 ou se o café vai acabar
-              antes da daily. Estresse real, lucro fictício e muita terapia em forma de aposta.
+              antes das 10h. Estresse real, lucro fictício e muita terapia em forma de aposta.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/register">
-                <Button size="lg" className="w-full sm:w-auto text-lg shadow-lg shadow-orange-500/20">
+                <Button size="lg" className="w-full sm:w-auto cursor-pointer text-lg shadow-lg shadow-orange-500/20">
                   Começar a Apostar
                 </Button>
               </Link>
               <Link href="/markets">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto cursor-pointer text-lg">
                   Ver Mercados
                 </Button>
               </Link>
@@ -83,7 +82,7 @@ export default async function Home() {
             <div className="mt-16 grid grid-cols-3 gap-4 md:gap-8 text-center opacity-80">
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">100+</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Discussões salvas do Slack</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Discussões salvas do Meet</div>
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">ZERO</div>
@@ -153,13 +152,15 @@ export default async function Home() {
           <div className="mb-4">
             <Logo className="shrink-0" logoUrl={logoUrl} />
           </div>
-          <p className="text-slate-500 text-sm max-w-md mx-auto mb-8">
+          <p className="text-slate-500 text-sm max-w-md mx-auto mb-2">
             Aviso Legal: Este site é uma paródia. Não há envolvimento de dinheiro real. 
             Os Armandólars não têm valor comercial e não podem ser trocados por coxinha na cantina.
+          </p>
+          <p className="text-slate-500 text-sm max-w-md mx-auto mb-8">
             Aposte com responsabilidade (e não deixe seu chefe ver).
           </p>
           <div className="text-slate-600 text-xs">
-            &copy; {new Date().getFullYear()} Nossa Betânia. Desenvolvido com ódio e cafeína.
+            &copy; {new Date().getFullYear()} Nossa Betânia. Desenvolvido na base do ódio e da cafeína.
           </div>
         </div>
       </footer>
