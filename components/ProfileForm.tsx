@@ -68,7 +68,7 @@ export function ProfileForm({ name, email, image, onSuccess }: ProfileFormProps)
           type="submit"
           size="md"
           disabled={isPending}
-          className="w-full"
+          className="w-full cursor-pointer"
         >
           {isPending ? 'Salvando...' : 'Salvar alterações'}
         </Button>

@@ -60,7 +60,7 @@ export function ImageInput({
           <button
             type="button"
             onClick={() => setInputType('file')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
               inputType === 'file'
                 ? 'bg-slate-600 text-white'
                 : 'text-slate-400 hover:text-slate-200'
@@ -71,7 +71,7 @@ export function ImageInput({
           <button
             type="button"
             onClick={() => setInputType('url')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
               inputType === 'url'
                 ? 'bg-slate-600 text-white'
                 : 'text-slate-400 hover:text-slate-200'
@@ -91,7 +91,7 @@ export function ImageInput({
                 src={previewUrl}
                 alt="Preview"
                 fill
-                className="object-cover"
+                className="object-cover cursor-pointer"
                 sizes="96px"
               />
             ) : (

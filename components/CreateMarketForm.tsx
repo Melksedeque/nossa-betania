@@ -205,7 +205,7 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full"
+          className="w-full cursor-pointer"
         >
           {isPending ? 'Criando...' : 'Criar Aposta'}
         </Button>
