@@ -10,9 +10,10 @@ interface ProfileFormProps {
   name: string | null;
   email: string | null;
   image: string | null;
+  onSuccess?: () => void;
 }
 
-export function ProfileForm({ name, email, image }: ProfileFormProps) {
+export function ProfileForm({ name, email, image, onSuccess }: ProfileFormProps) {
   const [state, formAction, isPending] = useActionState(updateUserProfile, undefined);
   const { addToast } = useToast();
 
@@ -20,7 +21,11 @@ export function ProfileForm({ name, email, image }: ProfileFormProps) {
     if (!state) return;
 
     addToast(state.message, state.success ? 'success' : 'error');
-  }, [state, addToast]);
+    
+    if (state.success && onSuccess) {
+      onSuccess();
+    }
+  }, [state, addToast, onSuccess]);
 
   return (
     <form action={formAction} className="space-y-6">

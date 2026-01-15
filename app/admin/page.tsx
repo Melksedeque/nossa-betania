@@ -95,8 +95,7 @@ export default async function AdminPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-6xl mx-auto">
+    <>
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Painel Administrativo</h1>
@@ -246,7 +245,6 @@ export default async function AdminPage() {
             />
           </section>
         </div>
-      </div>
-    </div>
+    </>
   );
 }
