@@ -2,11 +2,11 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { UserList } from '../../UserList';
-import { MarketListAdmin } from '../../MarketList';
-import { CommentListAdmin } from '../../CommentList';
-import { BetListAdmin } from '../../BetList';
-import { FinancialPanel } from '../../FinancialPanel';
+import { UserList } from '../UserList';
+import { MarketListAdmin } from '../MarketList';
+import { CommentListAdmin } from '../CommentList';
+import { BetListAdmin } from '../BetList';
+import { FinancialPanel } from '../FinancialPanel';
 
 export default async function AdminPage() {
   const session = await auth();

@@ -18,7 +18,7 @@ export function LogoUploadForm() {
       } else {
         addToast(result.message, 'error');
       }
-    } catch (_error) {
+    } catch {
       addToast('Erro inesperado ao enviar logo.', 'error');
     } finally {
       setIsUploading(false);

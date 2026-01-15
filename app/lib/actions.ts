@@ -686,8 +686,7 @@ export async function updateUserProfile(
 
       try {
         await mkdir(uploadsDir, { recursive: true });
-      } catch (_err) {
-        // Ignore if exists
+      } catch {
       }
 
       const ext = file.name.split('.').pop() || 'png';
@@ -1116,8 +1115,7 @@ export async function adminUploadLogo(formData: FormData) {
 
     try {
       await mkdir(uploadsDir, { recursive: true });
-    } catch (_err) {
-      // Ignore if exists
+    } catch {
     }
 
     // Generate unique filename to avoid caching issues

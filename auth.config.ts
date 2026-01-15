@@ -1,4 +1,5 @@
-import type { NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig, Session, User } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 
 export const authConfig = {
   pages: {
@@ -20,13 +21,13 @@ export const authConfig = {
       
       return true;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token?.role && session.user) {
         session.user.role = token.role;
       }
       return session;
     },
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }: { token: JWT; user?: User | null }) {
       if (user) {
         token.role = user.role;
       }
