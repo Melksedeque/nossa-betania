@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/components/Card';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
@@ -6,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { MendigarButton } from '@/components/MendigarButton';
 import { DashboardTabs } from '@/components/DashboardTabs';
-import { CreateMarketRequestModal } from '@/components/CreateMarketRequestModal';
+import { CreateMarketRequestModalTrigger } from '@/components/CreateMarketRequestModal';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -183,29 +182,7 @@ export default async function DashboardPage() {
             </Card>
           </div>
 
-        </div>
-    </>
-  );
-}
-
-function CreateMarketRequestModalTrigger() {
-  'use client';
-
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  return (
-    <>
-      <div className="flex justify-end">
-        <Button
-          size="sm"
-          variant="outline"
-          className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white cursor-pointer"
-          onClick={() => setIsOpen(true)}
-        >
-          + Solicitar Nova Aposta
-        </Button>
       </div>
-      <CreateMarketRequestModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 }

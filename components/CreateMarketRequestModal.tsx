@@ -155,3 +155,22 @@ export function CreateMarketRequestModal({ isOpen, onClose }: CreateMarketReques
   );
 }
 
+export function CreateMarketRequestModalTrigger() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <div className="flex justify-end">
+        <Button
+          size="sm"
+          variant="outline"
+          className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white cursor-pointer"
+          onClick={() => setIsOpen(true)}
+        >
+          + Solicitar Nova Aposta
+        </Button>
+      </div>
+      <CreateMarketRequestModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </>
+  );
+}
