@@ -18,7 +18,6 @@ const RegisterSchema = z.object({
 const UpdateProfileSchema = z.object({
   name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
   image: z
-    .string()
     .url({ message: 'URL de avatar inválida.' })
     .or(z.literal(''))
     .optional(),
@@ -30,9 +29,9 @@ const UpdatePasswordSchema = z.object({
 });
 
 const ContactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  message: z.string().min(10),
+  name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
+  email: z.email({ message: 'Email inválido.' }),
+  message: z.string().min(10, { message: 'A mensagem deve ter pelo menos 10 caracteres.' }),
 });
 
 type ContactState = {
