@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
+import { Resend } from 'resend';
 
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
@@ -27,6 +28,17 @@ const UpdatePasswordSchema = z.object({
   currentPassword: z.string().min(6, { message: 'Senha atual inválida.' }),
   newPassword: z.string().min(6, { message: 'A nova senha deve ter pelo menos 6 caracteres.' }),
 });
+
+const ContactSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  message: z.string().min(10),
+});
+
+type ContactState = {
+  success: boolean;
+  message: string;
+};
 
 export async function authenticate(
   prevState: string | undefined,
@@ -122,6 +134,52 @@ export async function register(
 
 export async function logout() {
   await signOut({ redirectTo: '/login' });
+}
+
+export async function sendContactEmail(
+  prevState: ContactState,
+  formData: FormData,
+): Promise<ContactState> {
+  const parsed = ContactSchema.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    message: formData.get('message'),
+  });
+
+  if (!parsed.success) {
+    return { success: false, message: 'Campos inválidos. Verifique os dados e tente novamente.' };
+  }
+
+  const { name, email, message } = parsed.data;
+
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.error('RESEND_API_KEY não configurada.');
+    return { success: false, message: 'Serviço de e-mail indisponível no momento.' };
+  }
+
+  const resend = new Resend(apiKey);
+
+  try {
+    const { error } = await resend.emails.send({
+      from: 'Nossa Betânia <noreply@nossabetania.com>',
+      to: 'freelancer@melksedeque.com.br',
+      replyTo: email,
+      subject: `Contato pelo site - ${name}`,
+      text: message,
+    });
+
+    if (error) {
+      console.error('Erro Resend:', error);
+      return { success: false, message: 'Erro ao enviar o e-mail. Tente novamente mais tarde.' };
+    }
+
+    return { success: true, message: 'Mensagem enviada com sucesso!' };
+  } catch (error) {
+    console.error('Erro ao enviar e-mail de contato:', error);
+    return { success: false, message: 'Erro ao enviar o e-mail. Tente novamente mais tarde.' };
+  }
 }
 
 export async function placeBet(
