@@ -26,9 +26,11 @@ export function Logo({ className = "", logoUrl }: LogoProps) {
           NB
         </div>
       )}
-      <span className="text-2xl font-bold text-white tracking-tighter font-barlow">
-        Nossa<span className="text-orange-500">Bet</span>ânia<br />
-        <span className="text-sm text-slate-400">Onde seu estresse real se torna lucro fictício!</span>
+      <span className="tracking-tighter">
+        <span className="text-2xl font-bold text-white font-barlow">
+          Nossa<span className="text-orange-500">Bet</span>ânia
+        </span>
+        <span className="text-sm text-slate-200 font-inter font-light">Onde seu estresse real vira lucro fictício!</span>
       </span>
     </Link>
   );
