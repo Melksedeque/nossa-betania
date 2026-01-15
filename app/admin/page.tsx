@@ -6,6 +6,7 @@ import { UserList } from './UserList';
 import { MarketListAdmin } from './MarketList';
 import { CommentListAdmin } from './CommentList';
 import { BetListAdmin } from './BetList';
+import { FinancialPanel } from './FinancialPanel';
 
 export default async function AdminPage() {
   const session = await auth();
@@ -168,6 +169,11 @@ export default async function AdminPage() {
             </p>
           </div>
         </div>
+
+        {/* Painel Financeiro Detalhado */}
+        <section className="mb-8">
+          <FinancialPanel />
+        </section>
 
         {/* Áreas de Gerenciamento */}
         <div className="grid gap-8">

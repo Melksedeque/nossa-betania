@@ -3,6 +3,7 @@
 import { signIn, signOut, auth } from '@/auth';
 import { AuthError } from 'next-auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
@@ -908,6 +909,107 @@ export async function adminHardDeleteMarket(marketId: string) {
     return { success: false, message: 'Erro ao remover mercado.' };
   }
 }
+
+export async function adminGetFinancialStats(period: '24h' | '7d' | '30d' | 'all') {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    let startDate: Date | undefined;
+    const now = new Date();
+
+    switch (period) {
+      case '24h':
+        startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case '7d':
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case '30d':
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      case 'all':
+        startDate = undefined;
+        break;
+    }
+
+    const whereCondition: Prisma.BetWhereInput = {
+      deletedAt: null,
+    };
+
+    if (startDate) {
+      whereCondition.createdAt = {
+        gte: startDate,
+      };
+    }
+
+    const bets = await prisma.bet.findMany({
+      where: whereCondition,
+      include: {
+        user: {
+          select: { name: true, email: true },
+        },
+        option: {
+          include: {
+            market: {
+              select: { question: true },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    let totalIn = 0;
+    let totalOut = 0;
+    let pendingLiability = 0;
+
+    const transactions = bets.map(bet => {
+      const payout = bet.status === 'WON' ? bet.amount * bet.option.odds : 0;
+      const potentialPayout = bet.status === 'PENDING' ? bet.amount * bet.option.odds : 0;
+
+      totalIn += bet.amount;
+      totalOut += payout;
+      pendingLiability += potentialPayout;
+
+      return {
+        id: bet.id,
+        date: bet.createdAt.toISOString(),
+        user: bet.user.name || bet.user.email,
+        market: bet.option.market.question,
+        option: bet.option.label,
+        odds: bet.option.odds,
+        amount: bet.amount,
+        payout: payout,
+        status: bet.status,
+        profit: bet.amount - payout,
+      };
+    });
+
+    const netProfit = totalIn - totalOut;
+
+    return {
+      success: true,
+      data: {
+        period,
+        stats: {
+          totalIn,
+          totalOut,
+          netProfit,
+          pendingLiability,
+          count: bets.length,
+        },
+        transactions,
+      },
+    };
+  } catch (error) {
+    console.error('Admin get financial stats error:', error);
+    return { success: false, message: 'Erro ao carregar dados financeiros.' };
+  }
+}
+
 
 export async function updatePassword(
   prevState: { success: boolean; message: string } | undefined,
