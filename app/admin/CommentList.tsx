@@ -106,7 +106,7 @@ export function CommentListAdmin({ comments }: CommentListProps) {
                       className="w-full bg-slate-900 border border-slate-600 rounded-md px-2 py-1 text-sm text-white focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                   ) : (
-                    <p className="text-slate-300 text-xs leading-snug break-words max-w-xs">
+                    <p className="text-slate-300 text-xs leading-snug wrap-break-word max-w-xs">
                       {comment.content}
                     </p>
                   )}

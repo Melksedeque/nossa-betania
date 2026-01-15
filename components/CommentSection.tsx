@@ -114,7 +114,7 @@ export function CommentSection({ marketId, currentUser, comments: initialComment
                       )}
                     </div>
                   </div>
-                  <p className="text-slate-400 break-words">{comment.content}</p>
+                  <p className="text-slate-400 wrap-break-words">{comment.content}</p>
                 </div>
               ))
             )}
