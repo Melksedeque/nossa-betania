@@ -20,7 +20,7 @@ export default async function Home() {
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-orange-500 uppercase tracking-tighter">
+            <span className="text-2xl font-bold text-orange-500 tracking-tighter">
               <Logo className="shrink-0" logoUrl={logoUrl} />
             </span>
           </div>
@@ -59,7 +59,7 @@ export default async function Home() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
-              A Primeira Casa de Apostas focada no <span className="text-orange-500">Caos Corporativo</span>.
+              A Primeira Casa de Apostas focada no<br /><span className="text-orange-500">Caos Corporativo</span>.
             </h1>
             
             <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -144,7 +144,7 @@ export default async function Home() {
       {/* Footer */}
       <footer className="bg-slate-950 py-12 border-t border-slate-800">
         <div className="container mx-auto px-4 text-center">
-          <div className="text-2xl font-bold text-slate-700 uppercase tracking-tighter mb-4">
+          <div className="text-2xl font-bold text-slate-700 tracking-tighter mb-4">
             <Logo className="shrink-0" logoUrl={logoUrl} />
           </div>
           <p className="text-slate-500 text-sm max-w-md mx-auto mb-8">
