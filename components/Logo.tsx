@@ -1,20 +1,14 @@
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
 
-async function getLogoUrl() {
-  try {
-    const res = await fetch('/api/system/logo');
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.logoUrl as string | null;
-  } catch (_error) {
-    return null;
-  }
+import Link from "next/link";
+import Image from "next/image";
+
+interface LogoProps {
+  className?: string;
+  logoUrl?: string | null;
 }
 
-export async function Logo({ className = '' }: { className?: string }) {
-  const logoUrl = await getLogoUrl();
-
+export function Logo({ className = "", logoUrl }: LogoProps) {
   return (
     <Link href="/dashboard" className={`flex items-center gap-2 group ${className}`}>
       {logoUrl ? (

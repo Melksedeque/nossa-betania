@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { LogoutButton } from '@/components/LogoutButton';
 import { ProfileModal } from '@/components/ProfileModal';
+import Image from 'next/image';
 
 interface DashboardHeaderProps {
   user: {
@@ -15,9 +16,10 @@ interface DashboardHeaderProps {
     role: string;
     balance: number;
   };
+  logoUrl?: string | null;
 }
 
-export function DashboardHeader({ user }: DashboardHeaderProps) {
+export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   return (
@@ -25,9 +27,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
       <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4 gap-4">
           <div className="flex items-center gap-8">
-            <Link href="/dashboard" className="hover:opacity-80 transition-opacity">
-               <Logo className="shrink-0" />
-            </Link>
+            <Logo className="shrink-0" logoUrl={logoUrl} />
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
               <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
                 Dashboard
@@ -54,7 +54,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
               className="flex items-center gap-3 hover:bg-slate-900 rounded-full pl-2 pr-4 py-1.5 transition-colors group border border-transparent hover:border-slate-800"
             >
               {user.image ? (
-                 <img src={user.image} alt={user.name || 'User'} className="w-8 h-8 rounded-full object-cover border border-slate-700 group-hover:border-slate-500" />
+                 <Image src={user.image} alt={user.name || 'User'} className="w-8 h-8 rounded-full object-cover border border-slate-700 group-hover:border-slate-500" />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-white group-hover:bg-slate-700 transition-colors border border-slate-700">
                     <span className="text-sm font-bold">{user.name?.[0]?.toUpperCase() || 'U'}</span>

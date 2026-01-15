@@ -30,9 +30,15 @@ export default async function AdminLayout({
     return redirect('/dashboard');
   }
 
+  const logoSetting = await prisma.systemSetting.findUnique({
+    where: { key: 'logo_url' },
+  });
+
+  const logoUrl = logoSetting?.value ?? null;
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-orange-500/30">
-      <DashboardHeader user={user} />
+      <DashboardHeader user={user} logoUrl={logoUrl} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
          <Breadcrumbs />
          <main className="mt-6">
