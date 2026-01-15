@@ -400,6 +400,128 @@ export async function adminUpdateBetStatus(betId: string, status: string) {
   }
 }
 
+export async function adminGetUserDetails(userId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        role: true,
+        balance: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) {
+      return { success: false, message: 'Usuário não encontrado.' };
+    }
+
+    const bets = await prisma.bet.findMany({
+      where: { userId, deletedAt: null },
+      select: {
+        id: true,
+        amount: true,
+        status: true,
+        createdAt: true,
+        option: {
+          select: {
+            label: true,
+            market: {
+              select: {
+                id: true,
+                question: true,
+                status: true,
+                deletedAt: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+
+    const markets = await prisma.market.findMany({
+      where: { creatorId: userId, deletedAt: null },
+      select: {
+        id: true,
+        question: true,
+        status: true,
+        createdAt: true,
+        _count: {
+          select: { comments: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+
+    const comments = await prisma.comment.findMany({
+      where: { userId, deletedAt: null },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        market: {
+          select: {
+            id: true,
+            question: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 30,
+    });
+
+    const totalVolumeApostado = bets.reduce((sum, bet) => sum + bet.amount, 0);
+    const totalApostas = bets.length;
+
+    const lastActivityDates: Date[] = [];
+    if (bets[0]) lastActivityDates.push(bets[0].createdAt);
+    if (markets[0]) lastActivityDates.push(markets[0].createdAt);
+    if (comments[0]) lastActivityDates.push(comments[0].createdAt);
+
+    const ultimaAtividade = lastActivityDates.length
+      ? new Date(Math.max(...lastActivityDates.map(d => d.getTime())))
+      : null;
+
+    return {
+      success: true,
+      data: {
+        user,
+        metrics: {
+          totalVolumeApostado,
+          totalApostas,
+          ultimaAtividade: ultimaAtividade ? ultimaAtividade.toISOString() : null,
+        },
+        bets: bets.map(bet => ({
+          ...bet,
+          createdAt: bet.createdAt.toISOString(),
+        })),
+        markets: markets.map(market => ({
+          ...market,
+          createdAt: market.createdAt.toISOString(),
+        })),
+        comments: comments.map(comment => ({
+          ...comment,
+          createdAt: comment.createdAt.toISOString(),
+        })),
+      },
+    };
+  } catch (error) {
+    console.error('Admin get user details error:', error);
+    return { success: false, message: 'Erro ao carregar detalhes do usuário.' };
+  }
+}
+
 export async function deleteComment(commentId: string, userId: string) {
   try {
     const comment = await prisma.comment.findUnique({
