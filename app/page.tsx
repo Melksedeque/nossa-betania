@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
+import { auth } from "@/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  const isLoggedIn = !!session?.user;
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header / Navbar */}
@@ -25,8 +29,10 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex gap-4">
-            <Link href="/login">
-              <Button variant="ghost" size="sm">Entrar</Button>
+            <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+              <Button variant="ghost" size="sm">
+                {isLoggedIn ? "Voltar ao Jogo" : "Entrar"}
+              </Button>
             </Link>
             <Link href="/register">
               <Button size="sm">Criar Conta</Button>
