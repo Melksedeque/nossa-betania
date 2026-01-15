@@ -11,11 +11,12 @@ import { Logo } from '@/components/Logo';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
-    where: { status: 'OPEN' },
+    where: { status: 'OPEN', deletedAt: null },
     include: { 
       options: true,
       creator: { select: { name: true } },
       comments: {
+        where: { deletedAt: null },
         include: { user: { select: { name: true } } },
         orderBy: { createdAt: 'desc' }
       }
@@ -26,7 +27,7 @@ async function getOpenMarkets() {
 
 async function getMyMarkets(userId: string) {
   return await prisma.market.findMany({
-    where: { creatorId: userId },
+    where: { creatorId: userId, deletedAt: null },
     include: { options: true },
     orderBy: { createdAt: 'desc' },
   });
@@ -42,11 +43,13 @@ async function getLeaderboard() {
 
 async function getUserBets(userId: string) {
   return await prisma.bet.findMany({
-    where: { userId },
+    where: { userId, deletedAt: null },
     include: {
       option: {
         include: {
-          market: true,
+          market: {
+            where: { deletedAt: null },
+          },
         },
       },
     },

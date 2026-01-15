@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { UserList } from './UserList';
 import { MarketListAdmin } from './MarketList';
+import { CommentListAdmin } from './CommentList';
 
 export default async function AdminPage() {
   const session = await auth();
@@ -17,20 +18,25 @@ export default async function AdminPage() {
     where: { role: 'USER' },
   });
 
-  const totalMarkets = await prisma.market.count();
+  const totalMarkets = await prisma.market.count({
+    where: { deletedAt: null },
+  });
   
-  const totalBets = await prisma.bet.count();
+  const totalBets = await prisma.bet.count({
+    where: { deletedAt: null },
+  });
 
   const moneyStats = await prisma.user.aggregate({
     _sum: { balance: true },
   });
 
   const betsStats = await prisma.bet.aggregate({
+    where: { deletedAt: null },
     _sum: { amount: true },
   });
   
   const pendingBetsStats = await prisma.bet.aggregate({
-    where: { status: 'PENDING' },
+    where: { status: 'PENDING', deletedAt: null },
     _sum: { amount: true },
   });
 
@@ -48,7 +54,22 @@ export default async function AdminPage() {
         select: { options: true, comments: true },
       },
     },
+    where: { deletedAt: null },
     orderBy: { createdAt: 'desc' },
+  });
+
+  const comments = await prisma.comment.findMany({
+    include: {
+      user: {
+        select: { name: true, email: true },
+      },
+      market: {
+        select: { id: true, question: true },
+      },
+    },
+    where: { deletedAt: null },
+    orderBy: { createdAt: 'desc' },
+    take: 100,
   });
 
   return (
@@ -157,6 +178,25 @@ export default async function AdminPage() {
             <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
               <UserList users={users} currentUserId={session.user.id || ''} />
             </div>
+          </section>
+
+          {/* Seção de Comentários */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-white">Gerenciar Comentários</h2>
+              <span className="text-xs text-slate-500">
+                Exibindo últimos {comments.length} comentários
+              </span>
+            </div>
+            <CommentListAdmin
+              comments={comments.map(comment => ({
+                id: comment.id,
+                content: comment.content,
+                createdAt: comment.createdAt.toISOString(),
+                user: comment.user,
+                market: comment.market,
+              }))}
+            />
           </section>
         </div>
       </div>
