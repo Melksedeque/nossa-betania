@@ -378,23 +378,122 @@ export async function deleteComment(commentId: string, userId: string) {
       return { success: false, message: 'Comentário não encontrado.' };
     }
 
-    // Permitir deletar se for o autor do comentário OU o criador do mercado (moderação)
     const isAuthor = comment.userId === userId;
     const isMarketCreator = comment.market.creatorId === userId;
-    // TODO: Adicionar verificação de Admin aqui também
 
     if (!isAuthor && !isMarketCreator) {
       return { success: false, message: 'Você não tem permissão para deletar este comentário.' };
     }
 
-    await prisma.comment.delete({
+    await prisma.comment.update({
       where: { id: commentId },
+      data: {
+        deletedAt: new Date(),
+        deletedById: userId,
+      },
     });
 
     revalidatePath('/dashboard');
     return { success: true, message: 'Comentário removido.' };
   } catch (error) {
     console.error('Delete comment error:', error);
+    return { success: false, message: 'Erro ao remover comentário.' };
+  }
+}
+
+export async function adminUpdateComment(commentId: string, content: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    if (!content || content.trim().length === 0) {
+      return { success: false, message: 'O comentário não pode estar vazio.' };
+    }
+
+    if (content.length > 500) {
+      return { success: false, message: 'Máximo de 500 caracteres.' };
+    }
+
+    await prisma.comment.update({
+      where: { id: commentId },
+      data: { content: content.trim() },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Comentário atualizado com sucesso.' };
+  } catch (error) {
+    console.error('Admin update comment error:', error);
+    return { success: false, message: 'Erro ao atualizar comentário.' };
+  }
+}
+
+export async function adminDeleteComment(commentId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    await prisma.comment.update({
+      where: { id: commentId },
+      data: {
+        deletedAt: new Date(),
+        deletedById: session.user.id,
+      },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Comentário enviado para a lixeira.' };
+  } catch (error) {
+    console.error('Admin delete comment error:', error);
+    return { success: false, message: 'Erro ao remover comentário.' };
+  }
+}
+
+export async function adminRestoreComment(commentId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    await prisma.comment.update({
+      where: { id: commentId },
+      data: {
+        deletedAt: null,
+        deletedById: null,
+      },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Comentário restaurado.' };
+  } catch (error) {
+    console.error('Admin restore comment error:', error);
+    return { success: false, message: 'Erro ao restaurar comentário.' };
+  }
+}
+
+export async function adminHardDeleteComment(commentId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    await prisma.comment.delete({
+      where: { id: commentId },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Comentário removido permanentemente.' };
+  } catch (error) {
+    console.error('Admin hard delete comment error:', error);
     return { success: false, message: 'Erro ao remover comentário.' };
   }
 }
@@ -534,14 +633,123 @@ export async function adminDeleteMarket(marketId: string) {
       return { success: false, message: 'Acesso negado.' };
     }
 
-    await prisma.market.delete({
-      where: { id: marketId },
+    await prisma.$transaction(async tx => {
+      const now = new Date();
+
+      await tx.market.update({
+        where: { id: marketId },
+        data: {
+          deletedAt: now,
+          deletedById: session.user.id,
+        },
+      });
+
+      await tx.comment.updateMany({
+        where: { marketId },
+        data: {
+          deletedAt: now,
+          deletedById: session.user.id,
+        },
+      });
+
+      await tx.bet.updateMany({
+        where: {
+          option: {
+            marketId,
+          },
+        },
+        data: {
+          deletedAt: now,
+          deletedById: session.user.id,
+        },
+      });
     });
 
     revalidatePath('/admin');
-    return { success: true, message: 'Mercado removido com sucesso.' };
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Mercado enviado para a lixeira.' };
   } catch (error) {
     console.error('Admin delete market error:', error);
+    return { success: false, message: 'Erro ao remover mercado.' };
+  }
+}
+
+export async function adminRestoreMarket(marketId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    await prisma.$transaction(async tx => {
+      await tx.market.update({
+        where: { id: marketId },
+        data: {
+          deletedAt: null,
+          deletedById: null,
+        },
+      });
+
+      await tx.comment.updateMany({
+        where: { marketId },
+        data: {
+          deletedAt: null,
+          deletedById: null,
+        },
+      });
+
+      await tx.bet.updateMany({
+        where: {
+          option: {
+            marketId,
+          },
+        },
+        data: {
+          deletedAt: null,
+          deletedById: null,
+        },
+      });
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Mercado restaurado da lixeira.' };
+  } catch (error) {
+    console.error('Admin restore market error:', error);
+    return { success: false, message: 'Erro ao restaurar mercado.' };
+  }
+}
+
+export async function adminHardDeleteMarket(marketId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    await prisma.$transaction(async tx => {
+      await tx.bet.deleteMany({
+        where: {
+          option: {
+            marketId,
+          },
+        },
+      });
+
+      await tx.comment.deleteMany({
+        where: { marketId },
+      });
+
+      await tx.market.delete({
+        where: { id: marketId },
+      });
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Mercado removido permanentemente.' };
+  } catch (error) {
+    console.error('Admin hard delete market error:', error);
     return { success: false, message: 'Erro ao remover mercado.' };
   }
 }
