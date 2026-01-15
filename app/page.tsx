@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { auth } from "@/auth";
@@ -50,10 +51,23 @@ export default async function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 overflow-hidden">
+        <section className="relative py-20 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-orange-900/20 via-slate-900 to-slate-900 z-0" />
           
           <div className="container mx-auto px-4 relative z-10 text-center max-w-4xl">
+            {logoUrl && (
+              <div className="mb-8 flex justify-center">
+                <div className="relative h-80 w-80 rounded-full shadow-lg shadow-orange-500/30">
+                  <Image
+                    src={logoUrl}
+                    alt="Logo Nossa Betânia"
+                    fill
+                    className="object-cover"
+                    sizes="300px"
+                  />
+                </div>
+              </div>
+            )}
             <div className="inline-block px-3 py-1 mb-6 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium animate-pulse">
               🚨 Alerta de Caos: mais uma reunião que podia ser e-mail.
             </div>
