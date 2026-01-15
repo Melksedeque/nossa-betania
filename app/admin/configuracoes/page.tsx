@@ -34,7 +34,7 @@ export default async function AdminSettingsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="min-h-screen">
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Configurações</h1>
