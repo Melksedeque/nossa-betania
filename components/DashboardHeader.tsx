@@ -21,13 +21,14 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const logoHref = user.role === 'ADMIN' ? '/admin/dashboard' : '/dashboard';
 
   return (
     <>
       <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4 gap-4">
           <div className="flex items-center gap-8">
-            <Logo className="shrink-0" logoUrl={logoUrl} />
+            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
               {user.role === 'ADMIN' ? (
                 <>

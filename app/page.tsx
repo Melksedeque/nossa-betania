@@ -14,13 +14,18 @@ export default async function Home() {
   });
   const logoUrl = logoSetting?.value;
 
+  let logoHref = '/';
+  if (session?.user) {
+    logoHref = session.user.role === 'ADMIN' ? '/admin/dashboard' : '/dashboard';
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header / Navbar */}
       <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm sticky top-0 z-40">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Logo className="shrink-0" logoUrl={logoUrl} />
+            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
           </div>
           <nav className="hidden md:flex gap-6 text-md font-medium text-slate-300">
             <Link href="#como-funciona" className="hover:text-orange-500 transition-colors">
@@ -109,7 +114,7 @@ export default async function Home() {
 
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="hover:border-orange-500/50 transition-colors">
-                <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
+                <div className="w-12 h-12 bg-orange-500/30 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   💰
                 </div>
                 <h3 className="text-xl font-bold mb-2">1. Receba seu Bônus Corporativo</h3>
@@ -120,19 +125,18 @@ export default async function Home() {
               </Card>
 
               <Card className="hover:border-orange-500/50 transition-colors">
-                <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
+                <div className="w-12 h-12 bg-orange-500/30 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   📊
                 </div>
                 <h3 className="text-xl font-bold mb-2">2. Analise o Caos</h3>
                 <p className="text-slate-400">
-                  Explore mercados como &quot;O ar-condicionado vai quebrar durante a daily?&quot; ou
-                  &quot;O deploy de sexta vai em produção sem teste?&quot;. As odds mudam conforme o humor
-                  do time e do gestor.
+                  Explore mercados como &quot;Vai acabar a luz hoje?&quot; ou
+                  &quot;Seremos ignorados pelo chefe?&quot;. As odds mudam conforme o humor do time e do gestor.
                 </p>
               </Card>
 
               <Card className="hover:border-orange-500/50 transition-colors">
-                <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 text-2xl">
+                <div className="w-12 h-12 bg-orange-500/30 rounded-lg flex items-center justify-center mb-4 text-2xl">
                   🏆
                 </div>
                 <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário da Firma</h3>
@@ -148,9 +152,9 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="bg-slate-950 py-12 border-t border-slate-800">
-        <div className="container mx-auto px-4 text-center flex flex-col items-center">
+          <div className="container mx-auto px-4 text-center flex flex-col items-center">
           <div className="mb-4">
-            <Logo className="shrink-0" logoUrl={logoUrl} />
+            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
           </div>
           <p className="text-slate-500 text-sm max-w-md mx-auto mb-2">
             Aviso Legal: Este site é uma paródia. Não há envolvimento de dinheiro real. 

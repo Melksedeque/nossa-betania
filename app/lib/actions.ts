@@ -33,9 +33,28 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
+    const email = formData.get('email');
+
+    let redirectTo = '/dashboard';
+
+    if (typeof email === 'string') {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { email },
+          select: { role: true },
+        });
+
+        if (user?.role === 'ADMIN') {
+          redirectTo = '/admin/dashboard';
+        }
+      } catch (lookupError) {
+        console.error('Error looking up user role for redirect:', lookupError);
+      }
+    }
+
     await signIn('credentials', {
       ...Object.fromEntries(formData),
-      redirectTo: '/dashboard',
+      redirectTo,
     });
   } catch (error) {
     if (error instanceof AuthError) {

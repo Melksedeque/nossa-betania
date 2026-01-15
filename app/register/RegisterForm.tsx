@@ -10,9 +10,10 @@ import { Logo } from '@/components/Logo';
 
 interface RegisterFormProps {
   logoUrl?: string | null;
+  logoHref?: string;
 }
 
-export function RegisterForm({ logoUrl }: RegisterFormProps) {
+export function RegisterForm({ logoUrl, logoHref = '/' }: RegisterFormProps) {
   const [state, formAction, isPending] = useActionState(register, undefined);
 
   const { addToast } = useToast();
@@ -28,7 +29,7 @@ export function RegisterForm({ logoUrl }: RegisterFormProps) {
       <Card className="w-full max-w-md border-slate-800 bg-slate-950/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center flex flex-col items-center">
           <div className="mb-4">
-            <Logo className="shrink-0" logoUrl={logoUrl} />
+            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
           </div>
           <p className="text-slate-400 mb-6">Cadastre-se e ganhe 100 Armandólars.</p>
         </div>

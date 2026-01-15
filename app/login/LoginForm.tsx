@@ -9,9 +9,10 @@ import { Logo } from '@/components/Logo';
 
 interface LoginFormProps {
   logoUrl?: string | null;
+  logoHref?: string;
 }
 
-export function LoginForm({ logoUrl }: LoginFormProps) {
+export function LoginForm({ logoUrl, logoHref = '/' }: LoginFormProps) {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
@@ -22,7 +23,7 @@ export function LoginForm({ logoUrl }: LoginFormProps) {
       <Card className="w-full max-w-md border-slate-800 bg-slate-950/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center flex flex-col items-center">
           <div className="mb-4">
-            <Logo className="shrink-0" logoUrl={logoUrl} />
+            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
           </div>
           <p className="text-slate-400 mb-6">Entre para perder (ou ganhar) Armandólars.</p>
         </div>

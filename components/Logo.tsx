@@ -6,11 +6,12 @@ import Image from "next/image";
 interface LogoProps {
   className?: string;
   logoUrl?: string | null;
+  href?: string;
 }
 
-export function Logo({ className = "", logoUrl }: LogoProps) {
+export function Logo({ className = "", logoUrl, href = "/dashboard" }: LogoProps) {
   return (
-    <Link href="/dashboard" className={`flex items-center gap-2 group ${className}`}>
+    <Link href={href} className={`flex items-center gap-2 group ${className}`}>
       {logoUrl ? (
         <div className="relative h-12 w-12 rounded-full shadow-lg shadow-orange-500/20 transform group-hover:rotate-12 transition-transform">
           <Image
