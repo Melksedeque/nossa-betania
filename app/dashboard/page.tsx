@@ -110,7 +110,7 @@ export default async function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="mt-4 text-right space-y-2">
+          <div className="mt-4 md:mt-0 text-right space-y-2">
             <p className="text-xs text-slate-400 uppercase tracking-[0.2em]">Seu Saldo</p>
             <div className="text-4xl font-black text-green-400 font-mono">
               A$ {userBalance.toFixed(2)}
@@ -120,10 +120,9 @@ export default async function DashboardPage() {
             )}
           </div>
         </div>
-        
+
         {/* Conteúdo Principal com Abas */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
           <div className="lg:col-span-2 space-y-6">
             <div className="flex justify-end">
               <Link href="/dashboard/criar">

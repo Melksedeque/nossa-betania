@@ -37,7 +37,7 @@ export default async function DashboardLayout({
       <DashboardHeader user={user} logoUrl={logoUrl} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
          <Breadcrumbs />
-         <main className="mt-6">
+         <main className="mt-6 flex flex-col gap-8">
             {children}
          </main>
       </div>
