@@ -62,6 +62,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        // Remove large image data from token to prevent header overflow
+        delete token.picture;
+        delete token.image;
       }
       return token;
     },
