@@ -667,28 +667,55 @@ export async function updateUserProfile(
       return { success: false, message: 'Não autorizado.' };
     }
 
-    const validatedFields = UpdateProfileSchema.safeParse({
-      name: formData.get('name') ?? '',
-      image: formData.get('image') ?? '',
-    });
+    const name = formData.get('name') as string;
+    let image = formData.get('image_url') as string | null;
+    const file = formData.get('image') as File | null;
 
-    if (!validatedFields.success) {
-      return { success: false, message: 'Dados inválidos. Verifique nome e avatar.' };
+    if (file && file.size > 0) {
+      if (!file.type.startsWith('image/')) {
+        return { success: false, message: 'O arquivo deve ser uma imagem.' };
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        return { success: false, message: 'A imagem deve ter no máximo 2MB.' };
+      }
+
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const publicDir = join(process.cwd(), 'public');
+      const uploadsDir = join(publicDir, 'uploads', 'avatars');
+
+      try {
+        await mkdir(uploadsDir, { recursive: true });
+      } catch (_err) {
+        // Ignore if exists
+      }
+
+      const ext = file.name.split('.').pop() || 'png';
+      const filename = `${session.user.id}-${Date.now()}.${ext}`;
+      const filepath = join(uploadsDir, filename);
+      const publicPath = `/uploads/avatars/${filename}`;
+
+      await writeFile(filepath, buffer);
+      image = publicPath;
     }
 
-    const { name, image } = validatedFields.data;
+    const validated = UpdateProfileSchema.safeParse({
+      name,
+      image: image || undefined, // Allow undefined if empty
+    });
+
+    if (!validated.success) {
+      return { success: false, message: 'Dados inválidos. Verifique os campos.' };
+    }
 
     await prisma.user.update({
       where: { id: session.user.id },
-      data: {
-        name,
-        image: image && image !== '' ? image : null,
-      },
+      data: validated.data,
     });
 
-    revalidatePath('/dashboard');
     revalidatePath('/dashboard/perfil');
-
+    revalidatePath('/dashboard');
     return { success: true, message: 'Perfil atualizado com sucesso!' };
   } catch (error) {
     console.error('Update profile error:', error);

@@ -4,7 +4,7 @@ import { useActionState, useEffect } from 'react';
 import { updateUserProfile } from '@/app/lib/actions';
 import { Button } from '@/components/Button';
 import { useToast } from '@/components/Toast';
-import Image from 'next/image';
+import { ImageInput } from '@/components/ImageInput';
 
 interface ProfileFormProps {
   name: string | null;
@@ -52,31 +52,11 @@ export function ProfileForm({ name, email, image }: ProfileFormProps) {
         />
       </div>
 
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-slate-300" htmlFor="image">
-          URL do Avatar
-        </label>
-        <input
-          id="image"
-          name="image"
-          type="url"
-          defaultValue={image || ''}
-          placeholder="https://..."
-          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-        />
-        {image && (
-          <div className="mt-3 flex items-center gap-3">
-            <Image
-              src={image}
-              alt="Avatar atual"
-              className="h-12 w-12 rounded-full border border-slate-700 object-cover"
-              width={48}
-              height={48}
-            />
-            <span className="text-xs text-slate-400">Pré-visualização do avatar atual</span>
-          </div>
-        )}
-      </div>
+      <ImageInput
+        name="image"
+        label="Avatar"
+        defaultImage={image}
+      />
 
       <div className="pt-2">
         <Button
