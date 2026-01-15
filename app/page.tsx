@@ -3,8 +3,9 @@ import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { auth } from "@/auth";
-import { Logo } from "@/components/Logo";
 import { prisma } from "@/lib/prisma";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export default async function Home() {
   const session = await auth();
@@ -15,39 +16,9 @@ export default async function Home() {
   });
   const logoUrl = logoSetting?.value;
 
-  const logoHref = '/';
-
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header / Navbar */}
-      <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm sticky top-0 z-40">
-        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo className="shrink-0" logoUrl={logoUrl} href="/" />
-          </div>
-          <nav className="hidden md:flex gap-6 text-md font-medium text-slate-300">
-            <Link href="#como-funciona" className="hover:text-orange-500 transition-colors">
-              Como Funciona
-            </Link>
-            <Link href="#mercados" className="hover:text-orange-500 transition-colors">
-              Mercados Abertos
-            </Link>
-            <Link href="#sobre" className="hover:text-orange-500 transition-colors">
-              Manifesto
-            </Link>
-          </nav>
-          <div className="flex gap-4">
-            <Link href={isLoggedIn ? "/dashboard" : "/login"}>
-              <Button variant="ghost" size="md" className="cursor-pointer">
-                {isLoggedIn ? "Voltar ao Jogo" : "Entrar"}
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button size="md" className="cursor-pointer">Criar Conta</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader isLoggedIn={isLoggedIn} logoUrl={logoUrl} />
 
       <main className="flex-1">
         {/* Hero Section */}
@@ -161,24 +132,7 @@ export default async function Home() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 py-12 border-t border-slate-800">
-          <div className="container mx-auto px-4 text-center flex flex-col items-center">
-          <div className="mb-4">
-            <Logo className="shrink-0" logoUrl={logoUrl} href={logoHref} />
-          </div>
-          <p className="text-slate-500 text-sm max-w-md mx-auto mb-2">
-            Aviso Legal: Este site é uma paródia. Não há envolvimento de dinheiro real. 
-            Os Armandólars não têm valor comercial e não podem ser trocados por coxinha na cantina.
-          </p>
-          <p className="text-slate-500 text-sm max-w-md mx-auto mb-8">
-            Aposte com responsabilidade (e não deixe seu chefe ver).
-          </p>
-          <div className="text-slate-600 text-xs">
-            &copy; {new Date().getFullYear()} Nossa Betânia. Desenvolvido na base do ódio e da cafeína.
-          </div>
-        </div>
-      </footer>
+      <SiteFooter logoUrl={logoUrl} />
     </div>
   );
 }
