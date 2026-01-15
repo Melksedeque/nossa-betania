@@ -6,8 +6,6 @@ import { Button } from '@/components/Button';
 import Link from 'next/link';
 import { MendigarButton } from '@/components/MendigarButton';
 import { DashboardTabs } from '@/components/DashboardTabs';
-import { LogoutButton } from '@/components/LogoutButton';
-import { Logo } from '@/components/Logo';
 
 async function getOpenMarkets() {
   return await prisma.market.findMany({
@@ -99,29 +97,7 @@ export default async function DashboardPage() {
   const leaderboard = await getLeaderboard();
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4 gap-4">
-          <Logo className="shrink-0" />
-          <nav className="flex items-center gap-4 text-sm">
-            <Link
-              href="/"
-              className="text-slate-300 hover:text-white hover:bg-slate-800/60 px-3 py-1.5 rounded-full transition-colors"
-            >
-              Voltar ao Site
-            </Link>
-            <Link
-              href="/dashboard/perfil"
-              className="text-slate-300 hover:text-white hover:bg-slate-800/60 px-3 py-1.5 rounded-full transition-colors"
-            >
-              Meu Perfil
-            </Link>
-            <LogoutButton />
-          </nav>
-        </div>
-      </header>
-
-      <div className="max-w-6xl mx-auto space-y-8 p-6">
+    <>
         
         {/* Header de Boas-vindas e Saldo */}
         <div className="flex flex-col md:flex-row justify-between items-center bg-slate-900/60 p-6 rounded-2xl border border-slate-800 shadow-lg shadow-black/40">
@@ -203,7 +179,6 @@ export default async function DashboardPage() {
           </div>
 
         </div>
-      </div>
-    </div>
+    </>
   );
 }
