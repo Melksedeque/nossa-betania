@@ -29,16 +29,27 @@ export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
           <div className="flex items-center gap-8">
             <Logo className="shrink-0" logoUrl={logoUrl} />
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-              <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/dashboard/criar" className="text-slate-300 hover:text-white transition-colors">
-                Criar Aposta
-              </Link>
-               {user.role === 'ADMIN' && (
-                <Link href="/admin" className="text-orange-400 hover:text-orange-300 transition-colors">
-                  Admin Panel
-                </Link>
+              {user.role === 'ADMIN' ? (
+                <>
+                  <Link href="/admin/dashboard" className="text-slate-300 hover:text-white transition-colors">
+                    Dashboard
+                  </Link>
+                  <Link href="/dashboard/criar" className="text-slate-300 hover:text-white transition-colors">
+                    Criar Aposta
+                  </Link>
+                  <Link href="/admin/configuracoes" className="text-slate-300 hover:text-white transition-colors">
+                    Configurações
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
+                    Dashboard
+                  </Link>
+                  <Link href="/dashboard/criar" className="text-slate-300 hover:text-white transition-colors">
+                    Criar Aposta
+                  </Link>
+                </>
               )}
             </nav>
           </div>

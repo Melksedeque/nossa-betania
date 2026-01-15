@@ -12,15 +12,26 @@ export const authConfig = {
       
       if (isOnDashboard) {
         if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
+        return false;
       } else if (isOnAdmin) {
-         // Apenas admins
          if (isLoggedIn && auth?.user?.role === 'ADMIN') return true;
          return false;
       }
       
       return true;
     },
+    async session({ session, token }: any) {
+      if (token?.role && session.user) {
+        session.user.role = token.role;
+      }
+      return session;
+    },
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
   },
-  providers: [], // Add providers with an empty array for now
+  providers: [],
 } satisfies NextAuthConfig;
