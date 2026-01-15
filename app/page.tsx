@@ -3,10 +3,16 @@ import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { auth } from "@/auth";
 import { Logo } from "@/components/Logo";
+import { prisma } from "@/lib/prisma";
 
 export default async function Home() {
   const session = await auth();
   const isLoggedIn = !!session?.user;
+
+  const logoSetting = await prisma.systemSetting.findUnique({
+    where: { key: 'logo_url' },
+  });
+  const logoUrl = logoSetting?.value;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -15,7 +21,7 @@ export default async function Home() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-orange-500 uppercase tracking-tighter">
-              <Logo className="shrink-0" />
+              <Logo className="shrink-0" logoUrl={logoUrl} />
             </span>
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium text-slate-300">
@@ -139,7 +145,7 @@ export default async function Home() {
       <footer className="bg-slate-950 py-12 border-t border-slate-800">
         <div className="container mx-auto px-4 text-center">
           <div className="text-2xl font-bold text-slate-700 uppercase tracking-tighter mb-4">
-            <Logo className="shrink-0" />
+            <Logo className="shrink-0" logoUrl={logoUrl} />
           </div>
           <p className="text-slate-500 text-sm max-w-md mx-auto mb-8">
             Aviso Legal: Este site é uma paródia. Não há envolvimento de dinheiro real. 
