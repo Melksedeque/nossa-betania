@@ -53,6 +53,8 @@ model Comment {
   id        String   @id @default(cuid())
   content   String
   createdAt DateTime @default(now())
+  deletedAt DateTime?
+  deletedById String?
   
   userId    String
   user      User     @relation(fields: [userId], references: [id])
@@ -81,6 +83,8 @@ model Market {
   outcomeId   String?
   options     Option[]
   comments    Comment[]
+  deletedAt   DateTime?
+  deletedById String?
 }
 
 model Option {
@@ -101,4 +105,6 @@ model Bet {
   option    Option   @relation(fields: [optionId], references: [id])
   status    String   @default("PENDING") // PENDING, WON, LOST
   createdAt DateTime @default(now())
+  deletedAt DateTime?
+  deletedById String?
 }
