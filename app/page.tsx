@@ -41,48 +41,49 @@ export default async function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative py-20 md:py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-orange-900/20 via-slate-900 to-slate-900 z-0" />
-          
-          <div className="container mx-auto px-4 relative z-10 text-center max-w-4xl">
-            {logoUrl && (
-              <div className="mb-8 flex justify-center">
-                <div className="relative h-80 w-80 rounded-full shadow-lg shadow-orange-500/30">
+          <div className="container flex content-between mx-auto px-4 relative z-10 max-w-7xl">
+            <div className="w-4xl">
+              <div className="inline-block px-3 py-1 mb-6 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium animate-pulse">
+                🚨 Alerta de Caos: mais uma reunião que podia ser e-mail.
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
+                A Primeira Casa de Apostas focada no<br /><span className="text-orange-500">Caos Corporativo</span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Aqui você aposta no que realmente importa: se o sistema vai cair,
+                se o gestor vai pedir &quot;só um ajuste rápido&quot; às 17:59 ou se o café vai acabar
+                antes das 10h. Estresse real, lucro fictício e muita terapia em forma de aposta.
+              </p>
+
+              <div className="flex gap-4 justify-center">
+                <Link href={isLoggedIn ? '/dashboard' : '/login'}>
+                  <Button size="lg" className="text-lg px-8 cursor-pointer shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-shadow">
+                    {isLoggedIn ? 'Acessar Painel' : 'Começar a Apostar'}
+                  </Button>
+                </Link>
+                {!isLoggedIn && (
+                  <Link href="/register">
+                    <Button variant="outline" size="lg" className="text-lg px-8 cursor-pointer backdrop-blur-sm bg-slate-900/50">
+                      Criar Conta
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            <div className="w-3xl flex items-center justify-center">
+              {logoUrl && (
+                <div className="relative w-120 h-120 rounded-full shadow-lg shadow-orange-500/30">
                   <Image
                     src={logoUrl}
                     alt="Logo Nossa Betânia"
                     fill
-                    className="object-cover"
+                    className="object-fit contain"
                     sizes="300px"
                   />
                 </div>
-              </div>
-            )}
-            <div className="inline-block px-3 py-1 mb-6 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium animate-pulse">
-              🚨 Alerta de Caos: mais uma reunião que podia ser e-mail.
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
-              A Primeira Casa de Apostas focada no<br /><span className="text-orange-500">Caos Corporativo</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Aqui você aposta no que realmente importa: se o sistema vai cair,
-              se o gestor vai pedir &quot;só um ajuste rápido&quot; às 17:59 ou se o café vai acabar
-              antes das 10h. Estresse real, lucro fictício e muita terapia em forma de aposta.
-            </p>
-            
-            <div className="flex gap-4 justify-center">
-              <Link href={isLoggedIn ? '/dashboard' : '/login'}>
-                <Button size="lg" className="text-lg px-8 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-shadow">
-                  {isLoggedIn ? 'Acessar Painel' : 'Começar a Apostar'}
-                </Button>
-              </Link>
-              {!isLoggedIn && (
-                <Link href="/register">
-                  <Button variant="outline" size="lg" className="text-lg px-8 backdrop-blur-sm bg-slate-900/50">
-                    Criar Conta
-                  </Button>
-                </Link>
               )}
             </div>
           </div>
@@ -98,7 +99,7 @@ export default async function Home() {
         <section id="como-funciona" className="py-20 bg-slate-950">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4">Como funciona o esquema?</h2>
+              <h2 className="text-2xl md:text-4xl font-bold mb-4">Como funciona o <span className="text-orange-500">esquema</span>?</h2>
               <p className="text-slate-400 max-w-xl mx-auto">
                 Pense na Nossa Betânia como aquela resenha pós-expediente, só que oficializada.
                 Em vez de só reclamar, você transforma o caos da firma em mercados de apostas.
