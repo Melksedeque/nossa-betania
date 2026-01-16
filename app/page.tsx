@@ -143,7 +143,7 @@ export default async function Home() {
             </div>
           </div>
         </section>
-        <SectionDivider />
+        <SectionDivider space="my-12" />
 
         <HallOfFame users={topUsers} />
 
