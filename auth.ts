@@ -73,22 +73,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.sub;
       }
       
-      // Buscar dados atualizados do usuário (como saldo e role)
+      // Buscar dados atualizados do usuário (como saldo, role e bio)
       if (session.user.email) {
-         try {
-             const user = await prisma.user.findUnique({
-                where: { email: session.user.email },
-                select: { role: true, balance: true, image: true }
-             });
-             
-             if (user) {
-                 session.user.role = user.role;
-                 session.user.balance = user.balance;
-                 session.user.image = user.image;
-             }
-         } catch (e) {
-             console.error("Error fetching user session details", e);
-         }
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { role: true, balance: true, image: true, bio: true, situation: true },
+          });
+
+          if (user) {
+            session.user.role = user.role;
+            session.user.balance = user.balance;
+            session.user.image = user.image;
+            // Campos adicionais para a experiência do usuário
+            // @ts-expect-error campos extras no objeto user da sessão
+            session.user.bio = user.bio;
+            // @ts-expect-error campos extras no objeto user da sessão
+            session.user.situation = user.situation;
+          }
+        } catch (e) {
+          console.error("Error fetching user session details", e);
+        }
       }
       
       return session;
