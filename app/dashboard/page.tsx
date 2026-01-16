@@ -114,7 +114,14 @@ export default async function DashboardPage() {
                 <h1 className="text-3xl font-bold text-white mb-1 tracking-tight">
                   Olá, <span className="text-orange-400">{session.user.name}</span>! 👋
                 </h1>
-                <p className="text-slate-400 text-sm">Pronto para perder dinheiro hoje?</p>
+                {/* Bio personalizada quando existir */}
+                {/* @ts-expect-error bio adicionada dinamicamente na sessão */}
+                {session.user.bio ? (
+                  // @ts-expect-error bio adicionada dinamicamente na sessão
+                  <p className="text-slate-400 text-sm max-w-xl">{session.user.bio}</p>
+                ) : (
+                  <p className="text-slate-400 text-sm">Pronto para perder dinheiro hoje?</p>
+                )}
               </div>
             </div>
           </div>
