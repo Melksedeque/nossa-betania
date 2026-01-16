@@ -4,6 +4,8 @@ import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { readFileSync } from 'fs';
+import path from 'path';
 
 const connectionString = process.env.POSTGRES_PRISMA_URL;
 
@@ -32,56 +34,79 @@ async function main() {
   const defaultPasswordHash = await bcrypt.hash('123456', 10);
   const adminPasswordHash = await bcrypt.hash('km25@vX3!', 10);
 
-  const users = [
+  // Admins fixos
+  const adminUsers = [
     {
       name: 'Dono da Banca',
       email: 'freelancer@melksedeque.com.br',
       image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=AdminBoss',
       role: 'ADMIN',
-      balance: 10000.00, // O Dono tem que ter grana
-      password: adminPasswordHash
+      balance: 10000.0,
+      passwordHash: adminPasswordHash,
+      bio: 'O verdadeiro chefe do caos corporativo.',
+      situation: 'ATIVO',
     },
     {
       name: 'Gerente de PowerPoint',
       email: 'gerente@nossabetania.com',
       image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
       role: 'ADMIN',
-      balance: 5000.00, // O rico
+      balance: 5000.0,
+      passwordHash: defaultPasswordHash,
+      bio: 'Transforma qualquer problema em slide de 40 páginas.',
+      situation: 'ATIVO',
     },
-    {
-      name: 'Estagiário Sobrevivente',
-      email: 'estagiario@nossabetania.com',
-      image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
-      role: 'USER',
-      balance: 2.50, // O pobre
-    },
-    {
-      name: 'Dev FullCycle (de Problemas)',
-      email: 'dev@nossabetania.com',
-      image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob',
-      role: 'USER',
-      balance: 150.00,
-    },
-    {
-      name: 'RH da Alegria',
-      email: 'rh@nossabetania.com',
-      image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rhianna',
-      role: 'USER',
-      balance: 800.00,
-    }
   ];
 
-  for (const u of users) {
-    const { password, ...userData } = u;
+  for (const admin of adminUsers) {
     await prisma.user.create({
       data: {
-        ...userData,
-        password: password || defaultPasswordHash,
-      }
+        name: admin.name,
+        email: admin.email,
+        image: admin.image,
+        role: admin.role,
+        balance: admin.balance,
+        password: admin.passwordHash,
+        bio: admin.bio,
+        situation: admin.situation,
+      },
     });
   }
 
-  console.log(`👥 ${users.length} usuários criados.`);
+  // Usuários fictícios do elenco (arquivo JSON)
+  const usersJsonPath = path.join(__dirname, '..', 'Referencias', 'usuarios.json');
+  const raw = readFileSync(usersJsonPath, 'utf-8');
+  const jsonUsers: Array<{
+    name: string;
+    email: string;
+    password: string;
+    role?: string;
+    balance?: number;
+    bio?: string;
+    image?: string;
+    situation?: string;
+  }> = JSON.parse(raw);
+
+  for (const u of jsonUsers) {
+    const passwordHash = await bcrypt.hash(u.password || '123456', 10);
+    const avatarSeed = encodeURIComponent(u.name || u.email);
+    const image = `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`;
+
+    await prisma.user.create({
+      data: {
+        name: u.name,
+        email: u.email,
+        password: passwordHash,
+        image,
+        role: u.role ?? 'USER',
+        balance: u.balance ?? 100.0,
+        bio: u.bio ?? null,
+        situation: u.situation ?? 'ATIVO',
+      },
+    });
+  }
+
+  console.log(`👥 ${adminUsers.length + jsonUsers.length} usuários criados.`);
 
   // 3. Criar Mercados (As Apostas do Caos)
   const markets = [
