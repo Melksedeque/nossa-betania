@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { HallOfFame } from "@/components/HallOfFame";
 import { SectionDivider } from "@/components/SectionDivider";
+import { Gift, Search, Trophy } from "lucide-react";
 
 export default async function Home() {
   const session = await auth();
@@ -58,19 +59,17 @@ export default async function Home() {
                 antes das 10h. Estresse real, lucro fictício e muita terapia em forma de aposta.
               </p>
 
-              <div className="flex gap-4 justify-center">
+              <div className="flex gap-5">
                 <Link href={isLoggedIn ? '/dashboard' : '/login'}>
                   <Button size="lg" className="text-lg px-8 cursor-pointer shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-shadow">
-                    {isLoggedIn ? 'Acessar Painel' : 'Começar a Apostar'}
+                    Começar a Apostar
                   </Button>
                 </Link>
-                {!isLoggedIn && (
-                  <Link href="/register">
-                    <Button variant="outline" size="lg" className="text-lg px-8 cursor-pointer backdrop-blur-sm bg-slate-900/50">
-                      Criar Conta
-                    </Button>
-                  </Link>
-                )}
+                <Link href="/markets">
+                  <Button variant="outline" size="lg" className="text-lg px-8 cursor-pointer backdrop-blur-sm bg-slate-900/50">
+                    Ver Mercados
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -92,9 +91,9 @@ export default async function Home() {
 
         {/* Features Section */}
         <section id="como-funciona" className="py-20 bg-slate-800/5">
-          <div className="container mx-auto px-4">
+          <div className="container max-w-7xl mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-2xl md:text-4xl font-bold mb-4">Como funciona o <span className="text-orange-500">esquema</span>?</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 leading-tight tracking-tight">Como funciona o <span className="text-orange-500">esquema</span>?</h2>
               <p className="text-slate-400 max-w-xl mx-auto">
                 Pense na Nossa Betânia como aquela resenha pós-expediente, só que oficializada.
                 Em vez de só reclamar, você transforma o caos da firma em mercados de apostas.
@@ -102,9 +101,9 @@ export default async function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <Card className="hover:border-orange-500/50 transition-colors">
-                <div className="w-12 h-12 bg-orange-500/30 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                  💰
+              <Card className="hover:border-orange-500/50 transition-colors text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500/30 mb-6 transition-transform group-hover:scale-110`}>
+                  <Gift className={`w-8 h-8 text-green-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">1. Receba seu Bônus Corporativo</h3>
                 <p className="text-slate-400">
@@ -113,9 +112,9 @@ export default async function Home() {
                 </p>
               </Card>
 
-              <Card className="hover:border-orange-500/50 transition-colors">
-                <div className="w-12 h-12 bg-orange-500/30 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                  📊
+              <Card className="hover:border-orange-500/50 transition-colors text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-teal-500/30 mb-6 transition-transform group-hover:scale-110`}>
+                  <Search className={`w-8 h-8 text-teal-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">2. Analise o Caos</h3>
                 <p className="text-slate-400">
@@ -124,9 +123,9 @@ export default async function Home() {
                 </p>
               </Card>
 
-              <Card className="hover:border-orange-500/50 transition-colors">
-                <div className="w-12 h-12 bg-orange-500/30 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                  🏆
+              <Card className="hover:border-orange-500/50 transition-colors text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/30 mb-6 transition-transform group-hover:scale-110`}>
+                  <Trophy className={`w-8 h-8 text-amber-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário da Firma</h3>
                 <p className="text-slate-400">
@@ -134,6 +133,13 @@ export default async function Home() {
                   respeito informal no grupo do café.
                 </p>
               </Card>
+            </div>
+            <div className="flex items-center justify-center mt-[4em]">
+              <Link href="/faqs">
+              <Button variant="outline" size="lg" className="text-lg px-8 cursor-pointer bg-slate-900/50">
+                Dúvidas? Saiba mais
+              </Button>
+            </Link>
             </div>
           </div>
         </section>
