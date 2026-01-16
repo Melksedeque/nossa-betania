@@ -6,6 +6,8 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { HallOfFame } from "@/components/HallOfFame";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export default async function Home() {
   const session = await auth();
@@ -15,6 +17,22 @@ export default async function Home() {
     where: { key: 'logo_url' },
   });
   const logoUrl = logoSetting?.value;
+
+  const topUsers = await prisma.user.findMany({
+    where: {
+      role: { not: 'ADMIN' },
+    },
+    orderBy: {
+      balance: 'desc',
+    },
+    take: 6,
+    select: {
+      id: true,
+      name: true,
+      image: true,
+      balance: true,
+    },
+  });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -53,38 +71,31 @@ export default async function Home() {
               antes das 10h. Estresse real, lucro fictício e muita terapia em forma de aposta.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register">
-                <Button size="lg" className="w-full sm:w-auto cursor-pointer text-lg shadow-lg shadow-orange-500/20">
-                  Começar a Apostar
+            <div className="flex gap-4 justify-center">
+              <Link href={isLoggedIn ? '/dashboard' : '/login'}>
+                <Button size="lg" className="text-lg px-8 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-shadow">
+                  {isLoggedIn ? 'Acessar Painel' : 'Começar a Apostar'}
                 </Button>
               </Link>
-              <Link href="/markets">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto cursor-pointer text-lg">
-                  Ver Mercados
-                </Button>
-              </Link>
-            </div>
-
-            <div className="mt-16 grid grid-cols-3 gap-4 md:gap-8 text-center opacity-80">
-              <div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-1">100+</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Discussões salvas do Meet</div>
-              </div>
-              <div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-1">ZERO</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Risco financeiro (só emocional)</div>
-              </div>
-              <div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-1">100%</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Probabilidade do chefe não entender a piada</div>
-              </div>
+              {!isLoggedIn && (
+                <Link href="/register">
+                  <Button variant="outline" size="lg" className="text-lg px-8 backdrop-blur-sm bg-slate-900/50">
+                    Criar Conta
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </section>
 
-        {/* Como Funciona Section */}
-        <section id="como-funciona" className="py-20 bg-slate-900 border-t border-slate-800">
+        <SectionDivider />
+
+        <HallOfFame users={topUsers} />
+
+        <SectionDivider />
+
+        {/* Features Section */}
+        <section id="como-funciona" className="py-20 bg-slate-950">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4">Como funciona o esquema?</h2>

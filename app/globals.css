@@ -11,7 +11,7 @@
 
 @theme {
   --font-sans: var(--font-inter);
-  --font-display: var(--font-barlow);
+  --font-display: var(--font-oswald);
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
