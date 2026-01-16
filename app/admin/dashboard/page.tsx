@@ -94,6 +94,18 @@ export default async function AdminPage() {
     take: 200,
   });
 
+  const marketItems = markets.map((m) => ({
+    id: m.id,
+    question: m.question,
+    description: m.description,
+    status: m.status,
+    createdAt: m.createdAt.toISOString(),
+    creator: m.creator,
+    _count: m._count,
+  }));
+
+  const openMarketItems = marketItems.filter((m) => m.status === 'OPEN');
+
   return (
     <>
         {/* Header */}
@@ -173,23 +185,26 @@ export default async function AdminPage() {
 
         {/* Áreas de Gerenciamento */}
         <div className="grid gap-8">
+          {/* Seção de Mercados Abertos */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-white">Mercados Abertos</h2>
+              <span className="text-xs text-slate-500">
+                {openMarketItems.length} em aberto
+              </span>
+            </div>
+            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+              <MarketListAdmin markets={openMarketItems} />
+            </div>
+          </section>
+
           {/* Seção de Mercados */}
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-white">Gerenciar Mercados</h2>
             </div>
             <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-              <MarketListAdmin
-                markets={markets.map((m) => ({
-                  id: m.id,
-                  question: m.question,
-                  description: m.description,
-                  status: m.status,
-                  createdAt: m.createdAt.toISOString(),
-                  creator: m.creator,
-                  _count: m._count,
-                }))}
-              />
+              <MarketListAdmin markets={marketItems} />
             </div>
           </section>
 
