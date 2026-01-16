@@ -39,7 +39,7 @@ export function HallOfFame({ users }: HallOfFameProps) {
              </div>
 
              {/* 1st Place */}
-             <div className="order-1 md:order-2 flex-1 w-full md:w-auto bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-orange-500/50 shadow-[0_0_30px_rgba(249,115,22,0.15)] rounded-xl p-8 flex flex-col items-center text-center transform scale-110 z-10 relative">
+             <div className="order-1 md:order-2 flex-1 w-full md:w-auto bg-linear-to-b from-slate-800 to-slate-900 border-2 border-orange-500/50 shadow-[0_0_30px_rgba(249,115,22,0.15)] rounded-xl p-8 flex flex-col items-center text-center transform scale-110 z-10 relative">
                 <div className="absolute -top-6 text-5xl animate-bounce">👑</div>
                 <div className="w-24 h-24 rounded-full border-4 border-orange-500 mb-4 overflow-hidden relative bg-slate-700">
                    {first.image ? <Image src={first.image} alt={first.name || 'User'} fill className="object-cover" /> : <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-white">{first.name?.[0]}</div>}
