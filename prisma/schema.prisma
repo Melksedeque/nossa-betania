@@ -42,6 +42,8 @@ model User {
   image         String?
   balance       Float     @default(100.0)
   role          String    @default("USER") // ADMIN ou USER
+  bio           String?
+  situation     String    @default("ATIVO")
   accounts      Account[]
   sessions      Session[]
   bets          Bet[]
