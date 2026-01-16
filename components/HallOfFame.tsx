@@ -21,7 +21,7 @@ export function HallOfFame({ users }: HallOfFameProps) {
     <section className="py-16 relative">
        <div className="text-center mb-20">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 flex items-center justify-center gap-2">
-            <span className="text-orange-500 text-3xl"><Trophy /></span> Hall da <span className='text-orange-500'>Fama</span> <span className="text-orange-500 text-3xl"><Trophy /></span>
+            <span className="text-orange-500"><Trophy height={40} width={40} /></span> Hall da <span className='text-orange-500'>inFâmia</span> <span className="text-orange-500"><Trophy height={40} width={40} /></span>
           </h2>
           <p className="text-slate-400">Os maiores acumuladores de Armandólars fictícios. Lendas do caos corporativo.</p>
        </div>
