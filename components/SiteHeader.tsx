@@ -19,16 +19,20 @@ export function SiteHeader({ isLoggedIn, logoUrl }: SiteHeaderProps) {
             Como Funciona
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out" />
           </Link>
+          <Link href="/manifesto" className="group relative hover:text-orange-500 transition-colors py-1">
+            Manifesto
+            <span className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out" />
+          </Link>
           <Link href="/markets" className="group relative hover:text-orange-500 transition-colors py-1">
             Mercados Abertos
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out" />
           </Link>
-          <Link href="/faqs" className="group relative hover:text-orange-500 transition-colors py-1">
-            FAQs
+          <Link href="/elenco" className="group relative hover:text-orange-500 transition-colors py-1">
+            Elenco
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out" />
           </Link>
-          <Link href="/manifesto" className="group relative hover:text-orange-500 transition-colors py-1">
-            Manifesto
+          <Link href="/faqs" className="group relative hover:text-orange-500 transition-colors py-1">
+            FAQs
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out" />
           </Link>
           <Link href="/contato" className="group relative hover:text-orange-500 transition-colors py-1">
