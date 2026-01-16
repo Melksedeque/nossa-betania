@@ -46,16 +46,6 @@ async function main() {
       bio: 'O verdadeiro chefe do caos corporativo.',
       situation: 'ATIVO',
     },
-    {
-      name: 'Gerente de PowerPoint',
-      email: 'gerente@nossabetania.com',
-      image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-      role: 'ADMIN',
-      balance: 5000.0,
-      passwordHash: defaultPasswordHash,
-      bio: 'Transforma qualquer problema em slide de 40 páginas.',
-      situation: 'ATIVO',
-    },
   ];
 
   for (const admin of adminUsers) {
@@ -110,43 +100,117 @@ async function main() {
 
   // 3. Criar Mercados (As Apostas do Caos)
   const markets = [
-    {
-      question: 'A reunião de Alinhamento vai durar quanto tempo?',
-      description: 'Aquela "rapidinha" de 15 minutos marcada para as 17h.',
-      options: [
-        { label: 'Menos de 30min (Milagre)', odds: 15.0 },
-        { label: '30min a 1h (Padrão)', odds: 2.0 },
-        { label: 'Mais de 1h (Vai virar pizza)', odds: 1.5 },
-      ]
-    },
-    {
-      question: 'Quem vai quebrar o Build na sexta-feira?',
-      description: 'Façam suas apostas para o culpado do fim de semana perdido.',
-      options: [
-        { label: 'O Estagiário', odds: 1.2 },
-        { label: 'O Tech Lead', odds: 5.0 },
-        { label: 'O Cliente (Pediu alteração)', odds: 2.5 },
-        { label: 'Ninguém (Fake News)', odds: 50.0 },
-      ]
-    },
-    {
-      question: 'Quantas vezes a frase "Sinergia" será dita hoje?',
-      description: 'Contagem oficial no Townhall.',
-      options: [
-        { label: '0 a 2 vezes', odds: 3.0 },
-        { label: '3 a 5 vezes', odds: 2.0 },
-        { label: 'Mais de 5 (Bingo!)', odds: 1.8 },
-      ]
-    },
-    {
-      question: 'O café da copa vai acabar antes das 10h?',
-      description: 'A crise da cafeína é real.',
-      options: [
-        { label: 'Sim (Pânico)', odds: 1.3 },
-        { label: 'Não (Tem estoque)', odds: 2.8 },
-      ]
-    }
-  ];
+  {
+    question: 'Quantas vezes o Chefe vai usar a palavra "Extraordinário" na reunião?',
+    description: 'A palavra mágica que faz o faturamento cair e o ego subir.',
+    options: [
+      { label: 'De 0 a 5 vezes', odds: 5.0 },
+      { label: 'De 6 a 15 vezes', odds: 2.0 },
+      { label: 'Mais de 15 vezes (Overdose)', odds: 1.2 },
+    ],
+    // Expira Segunda às 18h
+    expiresAt: new Date('2026-01-19T18:00:00'),
+  },
+  {
+    question: 'O "Mago do Prompt" vai terminar o sistema sozinho ou pedir socorro?',
+    description: 'Prometeu o novo Whatsapp em 3 dias usando IA. Veremos.',
+    options: [
+      { label: 'Termina sozinho (Milagre)', odds: 80.0 },
+      { label: 'Pede socorro pro Dev do Caos', odds: 1.1 },
+      { label: 'Diz que a IA "está fora do ar"', odds: 3.5 },
+    ],
+    // Expira Quarta às 12h
+    expiresAt: new Date('2026-01-21T12:00:00'),
+  },
+  {
+    question: 'Horário de entrada do "Desenvolvedor do Caos" na Daily',
+    description: 'O despertador é apenas uma sugestão meramente ilustrativa.',
+    options: [
+      { label: 'Antes do "Bom dia"', odds: 10.0 },
+      { label: 'Durante a pauta do Marketing', odds: 2.0 },
+      { label: 'Entra mudo e sai calado no final', odds: 1.5 },
+    ],
+    // Expira Segunda às 09:15
+    expiresAt: new Date('2026-01-19T09:15:00'),
+  },
+  {
+    question: 'O "Shape de Compras" vai responder o chamado antes do treino?',
+    description: 'A academia abre às 14h, o cronômetro está rodando.',
+    options: [
+      { label: 'Responde em 5 min', odds: 25.0 },
+      { label: 'Só visualiza e foge', odds: 1.8 },
+      { label: 'Culpa os meninos da TI', odds: 1.2 },
+    ],
+    // Expira Terça às 14:00
+    expiresAt: new Date('2026-01-20T14:00:00'),
+  },
+  {
+    question: 'Qual será o primeiro aviso da "Anônima do RH" na semana?',
+    description: 'Aquele clima de "somos uma família" com um toque de medo.',
+    options: [
+      { label: '"A pesquisa é anônima"', odds: 1.5 },
+      { label: '"Sem feedback de aumento hoje"', odds: 2.5 },
+      { label: '"Alguém esqueceu a marmita no microondas"', odds: 5.0 },
+    ],
+    // Expira Segunda às 10:00
+    expiresAt: new Date('2026-01-19T10:00:00'),
+  },
+  {
+    question: 'Quantos "Eu avisei" a Dra. Dináh vai soltar sobre o novo processo?',
+    description: 'O Jurídico já está com o processo no rascunho do Gmail.',
+    options: [
+      { label: 'Nenhum (Ela desistiu de nós)', odds: 10.0 },
+      { label: 'Exatamente 1', odds: 2.0 },
+      { label: 'Vai mandar o link do CLT no Slack', odds: 1.3 },
+    ],
+    // Expira Quinta às 17:00
+    expiresAt: new Date('2026-01-22T17:00:00'),
+  },
+  {
+    question: 'A "Herdeira do Nada" vai aparecer em qual reunião?',
+    description: 'Ação ativa ou descanso passivo?',
+    options: [
+      { label: 'Na de Planejamento', odds: 15.0 },
+      { label: 'Na de Resultados (Pra bater palma)', odds: 3.0 },
+      { label: 'Em todas para planejar a "Ação Ativa"', odds: 1.1 },
+    ],
+    // Expira Sexta às 16:00
+    expiresAt: new Date('2026-01-23T16:00:00'),
+  },
+  {
+    question: 'O próximo trocadilho do "Marketeiro" vai fazer alguém chorar?',
+    description: 'Nível de "tiozão do pavê" detectado nas planilhas.',
+    options: [
+      { label: 'Risada forçada (Padrão)', odds: 1.2 },
+      { label: 'Silêncio constrangedor no Meet', odds: 2.0 },
+      { label: 'Alguém vai mutar o fone de ódio', odds: 4.0 },
+    ],
+    // Expira Quarta às 15:00
+    expiresAt: new Date('2026-01-21T15:00:00'),
+  },
+  {
+    question: 'Recorde da "Vendedora": Quanto tempo dura a reunião de ajuste salarial?',
+    description: 'A conversa que o chefe foge mais que o diabo da cruz.',
+    options: [
+      { label: 'Nem vai acontecer', odds: 1.05 },
+      { label: '5 min (O famoso "vamos ver")', odds: 2.5 },
+      { label: 'Mais de 30 min (Promessa de bônus)', odds: 10.0 },
+    ],
+    // Expira Sexta às 18:00
+    expiresAt: new Date('2026-01-23T18:00:00'),
+  },
+  {
+    question: 'Status do Lead da "Rainha das Vendas"',
+    description: 'A culpa é sempre do SDR que já saiu.',
+    options: [
+      { label: 'Lead Gelado (Antártida)', odds: 1.4 },
+      { label: 'Lead Morno (Dá pra tentar)', odds: 3.0 },
+      { label: 'Lead Quente (Sumiu o contato)', odds: 6.0 },
+    ],
+    // Expira Terça às 11:00
+    expiresAt: new Date('2026-01-20T11:00:00'),
+  }
+];
 
   for (const m of markets) {
     await prisma.market.create({
