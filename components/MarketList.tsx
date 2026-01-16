@@ -34,14 +34,24 @@ type Market = {
   comments?: Comment[];
 };
 
+type UserBet = {
+  id: string;
+  option: {
+    market: {
+      id: string;
+    };
+  };
+};
+
 interface MarketListProps {
   markets: Market[];
   userBalance: number;
   userId: string;
   userName?: string | null;
+  userBets?: UserBet[];
 }
 
-export function MarketList({ markets, userBalance, userId, userName }: MarketListProps) {
+export function MarketList({ markets, userBalance, userId, userName, userBets }: MarketListProps) {
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
   const [selectedMarketQuestion, setSelectedMarketQuestion] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +70,8 @@ export function MarketList({ markets, userBalance, userId, userName }: MarketLis
     setIsModalOpen(true);
   };
 
+  const betMarketIds = new Set((userBets || []).map((bet) => bet.option.market.id));
+
   return (
     <>
       <div className="space-y-6">
@@ -70,7 +82,8 @@ export function MarketList({ markets, userBalance, userId, userName }: MarketLis
         ) : (
           markets.map((market) => {
              const isExpired = market.expiresAt ? new Date(market.expiresAt) <= new Date() : false;
-             
+             const hasBet = betMarketIds.has(market.id);
+
              return (
             <Card
               key={market.id}
@@ -88,6 +101,11 @@ export function MarketList({ markets, userBalance, userId, userName }: MarketLis
                 <div className="flex flex-col items-end gap-2">
                   {market.expiresAt && (
                     <Countdown targetDate={market.expiresAt} />
+                  )}
+                  {hasBet && (
+                    <span className="px-2 py-1 text-xs rounded-full border border-orange-500/60 bg-orange-500/10 text-orange-400">
+                      Você já apostou aqui
+                    </span>
                   )}
                   <span
                     className={`px-2 py-1 text-xs rounded-full border ${

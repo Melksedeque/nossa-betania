@@ -2,7 +2,6 @@ import { Card } from '@/components/Card';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { Button } from '@/components/Button';
 import { MendigarButton } from '@/components/MendigarButton';
 import { DashboardTabs } from '@/components/DashboardTabs';
 import { CreateMarketRequestModalTrigger } from '@/components/CreateMarketRequestModal';
@@ -19,14 +18,6 @@ async function getOpenMarkets() {
         orderBy: { createdAt: 'desc' }
       }
     },
-    orderBy: { createdAt: 'desc' },
-  });
-}
-
-async function getMyMarkets(userId: string) {
-  return await prisma.market.findMany({
-    where: { creatorId: userId, deletedAt: null },
-    include: { options: true },
     orderBy: { createdAt: 'desc' },
   });
 }
@@ -75,23 +66,28 @@ export default async function DashboardPage() {
     })),
   }));
   
-  const myMarketsRaw = await getMyMarkets(session.user.id);
-
-  const myMarkets = myMarketsRaw
-    .filter(market => market.status !== 'SETTLED')
-    .map(market => ({
-      ...market,
-      createdAt: market.createdAt.toISOString(),
-      expiresAt: market.expiresAt ? market.expiresAt.toISOString() : null,
-    }));
-
   const betsRaw = await getUserBets(session.user.id);
-
   const openBetStatuses = ['PENDING'];
 
-  const historyBets = betsRaw.filter(bet => !openBetStatuses.includes(bet.status));
+  const openBetsRaw = betsRaw.filter(bet => openBetStatuses.includes(bet.status));
+  const historyBetsRaw = betsRaw.filter(bet => !openBetStatuses.includes(bet.status));
 
-  const history = historyBets.map(bet => ({
+  const mapBet = (bet: {
+    id: string;
+    amount: number;
+    status: string;
+    createdAt: Date;
+    option: {
+      label: string;
+      odds: number;
+      market: {
+        id: string;
+        question: string;
+        status: string;
+        createdAt: Date;
+      };
+    };
+  }) => ({
     ...bet,
     createdAt: bet.createdAt.toISOString(),
     option: {
@@ -99,12 +95,12 @@ export default async function DashboardPage() {
       market: {
         ...bet.option.market,
         createdAt: bet.option.market.createdAt.toISOString(),
-        expiresAt: bet.option.market.expiresAt
-          ? bet.option.market.expiresAt.toISOString()
-          : null,
       },
     },
-  }));
+  });
+
+  const myBets = openBetsRaw.map(mapBet);
+  const history = historyBetsRaw.map(mapBet);
 
   const leaderboard = await getLeaderboard();
 
@@ -140,8 +136,8 @@ export default async function DashboardPage() {
 
             <DashboardTabs 
               openMarkets={markets} 
-              myMarkets={myMarkets} 
-              bets={history}
+              myBets={myBets}
+              historyBets={history}
               user={{ 
                 id: session.user.id, 
                 balance: userBalance, 

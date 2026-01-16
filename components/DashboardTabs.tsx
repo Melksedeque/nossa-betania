@@ -24,12 +24,6 @@ type DashboardOpenMarket = DashboardMarketBase & {
   creator?: { name: string | null } | null;
 };
 
-type DashboardMyMarket = DashboardMarketBase & {
-  status: string;
-  outcomeId: string | null;
-  creatorId: string | null;
-};
-
 type DashboardBet = {
   id: string;
   amount: number;
@@ -39,6 +33,7 @@ type DashboardBet = {
     label: string;
     odds: number;
     market: {
+      id: string;
       question: string;
       status: string;
       createdAt: string;
@@ -48,8 +43,8 @@ type DashboardBet = {
 
 interface DashboardTabsProps {
   openMarkets: DashboardOpenMarket[];
-  myMarkets: DashboardMyMarket[];
-  bets: DashboardBet[];
+  myBets: DashboardBet[];
+  historyBets: DashboardBet[];
   user: {
     id: string;
     balance: number;
@@ -57,7 +52,7 @@ interface DashboardTabsProps {
   };
 }
 
-export function DashboardTabs({ openMarkets, myMarkets, bets, user }: DashboardTabsProps) {
+export function DashboardTabs({ openMarkets, myBets, historyBets, user }: DashboardTabsProps) {
   const [activeTab, setActiveTab] = useState<'open' | 'mine' | 'history'>('open');
 
   return (
@@ -102,13 +97,13 @@ export function DashboardTabs({ openMarkets, myMarkets, bets, user }: DashboardT
             userBalance={user.balance}
             userId={user.id}
             userName={user.name}
+            userBets={myBets}
           />
         )}
 
         {activeTab === 'mine' && (
           <MyMarkets
-            markets={myMarkets}
-            userId={user.id}
+            bets={myBets}
           />
         )}
 
@@ -118,7 +113,7 @@ export function DashboardTabs({ openMarkets, myMarkets, bets, user }: DashboardT
               <span>📜</span>
               <span>Histórico de Apostas</span>
             </h2>
-            <BetHistory bets={bets} />
+            <BetHistory bets={historyBets} />
           </div>
         )}
       </div>
