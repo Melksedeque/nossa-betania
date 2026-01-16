@@ -52,10 +52,10 @@ export function MyMarkets({ bets }: MyMarketsProps) {
           return (
             <Card
               key={bet.id}
-              className="bg-slate-800 border border-slate-700 rounded-lg p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+              className="bg-slate-800 border border-slate-700 rounded-lg p-4 space-y-4"
             >
               <div>
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">
                     EM ABERTO
                   </span>
@@ -63,17 +63,22 @@ export function MyMarkets({ bets }: MyMarketsProps) {
                     Criada em {createdAt}
                   </span>
                 </div>
-                <h3 className="font-semibold text-white">{bet.option.market.question}</h3>
-                <p className="text-sm text-slate-300 mt-1">
-                  Sua aposta: <span className="text-orange-400 font-semibold">{bet.option.label}</span>
+                <h3 className="font-semibold text-white mb-1">{bet.option.market.question}</h3>
+                <p className="text-sm text-slate-300">
+                  Sua aposta:{' '}
+                  <span className="text-orange-400 font-semibold">{bet.option.label}</span>
                 </p>
               </div>
 
-              <div className="flex flex-col items-end gap-1 text-sm">
-                <span className="text-slate-400">Valor apostado</span>
-                <span className="font-bold text-white">A$ {bet.amount.toFixed(2)}</span>
-                <span className="text-slate-400 mt-2">Retorno potencial</span>
-                <span className="font-bold text-green-400">A$ {potentialReturn.toFixed(2)}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
+                  <span className="text-xs text-slate-400 block mb-1">Valor apostado</span>
+                  <span className="text-lg font-bold text-white">A$ {bet.amount.toFixed(2)}</span>
+                </div>
+                <div className="bg-green-900/20 border border-green-700 rounded-lg p-3">
+                  <span className="text-xs text-slate-400 block mb-1">Retorno potencial</span>
+                  <span className="text-lg font-bold text-green-400">A$ {potentialReturn.toFixed(2)}</span>
+                </div>
               </div>
             </Card>
           );
