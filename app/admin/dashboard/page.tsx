@@ -55,6 +55,13 @@ export default async function AdminPage() {
       _count: {
         select: { options: true, comments: true },
       },
+      options: {
+        select: {
+          id: true,
+          label: true,
+          odds: true,
+        },
+      },
     },
     where: { deletedAt: null },
     orderBy: { createdAt: 'desc' },
@@ -102,6 +109,7 @@ export default async function AdminPage() {
     createdAt: m.createdAt.toISOString(),
     creator: m.creator,
     _count: m._count,
+    options: m.options,
   }));
 
   const openMarketItems = marketItems.filter((m) => m.status === 'OPEN');

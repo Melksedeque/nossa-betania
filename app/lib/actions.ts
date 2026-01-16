@@ -386,9 +386,16 @@ export async function createMarket(
 export async function resolveMarket(
   marketId: string,
   winningOptionId: string,
-  userId: string
 ) {
   try {
+    const session = await auth();
+    if (!session?.user || !session.user.id) {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const userId = session.user.id;
+    const isAdmin = session.user.role === 'ADMIN';
+
     // 1. Verificar permissão (apenas o criador ou admin pode resolver)
     const market = await prisma.market.findUnique({
       where: { id: marketId },
@@ -399,9 +406,8 @@ export async function resolveMarket(
       return { success: false, message: 'Mercado não encontrado.' };
     }
 
-    if (market.creatorId !== userId) {
-      // TODO: Verificar se é Admin também
-      return { success: false, message: 'Apenas o criador pode encerrar esta aposta.' };
+    if (market.creatorId !== userId && !isAdmin) {
+      return { success: false, message: 'Apenas o criador ou o Admin podem encerrar esta aposta.' };
     }
 
     if (market.status === 'SETTLED') {
@@ -463,6 +469,7 @@ export async function resolveMarket(
     });
 
     revalidatePath('/dashboard');
+    revalidatePath('/admin');
     return { success: true, message: 'Aposta encerrada e pagamentos realizados!' };
   } catch (error) {
     console.error('Resolve market error:', error);
