@@ -40,7 +40,8 @@ export default async function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-20 overflow-hidden">
+        <section className="flex items-center relative py-10 overflow-hidden min-h-[90vh]">
+          <div className="absolute inset-0 bg-linear-to-br from-background via-background to-primary/10"></div>
           <div className="container flex content-between mx-auto px-4 relative z-10 max-w-7xl">
             <div className="w-4xl">
               <div className="inline-block px-3 py-1 mb-6 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium animate-pulse">
@@ -75,12 +76,12 @@ export default async function Home() {
 
             <div className="w-3xl flex items-center justify-center">
               {logoUrl && (
-                <div className="relative w-120 h-120 rounded-full shadow-lg shadow-orange-500/30">
+                <div className="relative w-120 h-120 rounded-full shadow-lg shadow-orange-500/30 animate-float-slow">
                   <Image
                     src={logoUrl}
                     alt="Logo Nossa Betânia"
                     fill
-                    className="object-fit contain"
+                    className="object-contain"
                     sizes="300px"
                   />
                 </div>
@@ -89,14 +90,8 @@ export default async function Home() {
           </div>
         </section>
 
-        <SectionDivider />
-
-        <HallOfFame users={topUsers} />
-
-        <SectionDivider />
-
         {/* Features Section */}
-        <section id="como-funciona" className="py-20 bg-slate-950">
+        <section id="como-funciona" className="py-20 bg-slate-800/5">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-2xl md:text-4xl font-bold mb-4">Como funciona o <span className="text-orange-500">esquema</span>?</h2>
@@ -142,6 +137,11 @@ export default async function Home() {
             </div>
           </div>
         </section>
+        <SectionDivider />
+
+        <HallOfFame users={topUsers} />
+
+        <SectionDivider />
       </main>
 
       <SiteFooter logoUrl={logoUrl} />
