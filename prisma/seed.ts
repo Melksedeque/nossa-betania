@@ -66,7 +66,7 @@ async function main() {
   // Usuários fictícios do elenco (arquivo JSON)
   const usersJsonPath = path.join(__dirname, '..', 'Referencias', 'usuarios.json');
   const raw = readFileSync(usersJsonPath, 'utf-8');
-  const jsonUsers: Array<{
+  const jsonUsersRaw = JSON.parse(raw) as Array<{
     name: string;
     email: string;
     password: string;
@@ -75,7 +75,16 @@ async function main() {
     bio?: string;
     image?: string;
     situation?: string;
-  }> = JSON.parse(raw);
+  }>;
+
+  // Deduplicar por email – última ocorrência ganha
+  const byEmail = new Map<string, (typeof jsonUsersRaw)[number]>();
+  for (const u of jsonUsersRaw) {
+    if (u.email) {
+      byEmail.set(u.email, u);
+    }
+  }
+  const jsonUsers = Array.from(byEmail.values());
 
   for (const u of jsonUsers) {
     const passwordHash = await bcrypt.hash(u.password || '123456', 10);
