@@ -57,7 +57,7 @@ export default async function ElencoPage() {
                 {ativos.map((user) => (
                   <article
                     key={user.id}
-                    className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-lg shadow-black/30"
+                    className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-lg shadow-black/30 hover:border-emerald-400/50 hover:shadow-emerald-400/30 hover:-translate-y-1 transition-all"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 overflow-hidden relative">
@@ -106,7 +106,7 @@ export default async function ElencoPage() {
                 {exilados.map((user) => (
                   <article
                     key={user.id}
-                    className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-lg shadow-black/30"
+                    className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-lg shadow-black/30 hover:border-rose-400/50 hover:shadow-rose-400/30 hover:-translate-y-1 transition-all"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 overflow-hidden relative">
