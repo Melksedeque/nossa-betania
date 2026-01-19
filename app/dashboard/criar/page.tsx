@@ -1,7 +1,6 @@
 import { auth } from '@/auth';
 import { CreateMarketForm } from '@/components/CreateMarketForm';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 
 export default async function CreateMarketPage() {
   const session = await auth();
