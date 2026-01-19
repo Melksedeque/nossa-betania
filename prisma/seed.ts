@@ -218,6 +218,19 @@ async function main() {
     ],
     // Expira Terça às 11:00
     expiresAt: new Date('2026-01-20T11:00:00'),
+  },
+  {
+    question: 'Bolão do Apocalipse: Quando sai o pedido de Recuperação Judicial?',
+    description: 'Façam suas apostas antes que o oficial de justiça leve a máquina de café.',
+    options: [
+      { label: '1º Sem 2026 (Otimismo Tóxico)', odds: 15.0 },
+      { label: '2º Sem 2026 (Pós-Festa da Firma)', odds: 5.0 },
+      { label: '1º Sem 2027 (Acabou o Runway)', odds: 1.8 },
+      { label: '2º Sem 2027 (A Profecia se Cumpre)', odds: 1.2 },
+      { label: 'Nunca (Lavagem de Dinheiro?)', odds: 50.0 },
+    ],
+    // Expira no final de Fevereiro (aproveite enquanto dura)
+    expiresAt: new Date('2026-02-28T23:59:59'),
   }
 ];
 
