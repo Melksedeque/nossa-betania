@@ -103,8 +103,8 @@ export default async function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <Card className="card hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500/30 mb-6 transition-transform group-hover:scale-120`}>
+              <Card className="group hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500/30 mb-6 transition-transform duration-300 group-hover:scale-120`}>
                   <Gift className={`w-8 h-8 text-green-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">1. Receba seu Bônus Corporativo</h3>
@@ -114,8 +114,8 @@ export default async function Home() {
                 </p>
               </Card>
 
-              <Card className="card hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-500/30 mb-6 transition-transform group-hover:scale-120`}>
+              <Card className="group hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-500/30 mb-6 transition-transform duration-300 group-hover:scale-120`}>
                   <Search className={`w-8 h-8 text-sky-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">2. Analise o Caos</h3>
@@ -125,8 +125,8 @@ export default async function Home() {
                 </p>
               </Card>
 
-              <Card className="card hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/30 mb-6 transition-transform group-hover:scale-120`}>
+              <Card className="group hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/30 mb-6 transition-transform duration-300 group-hover:scale-120`}>
                   <Trophy className={`w-8 h-8 text-amber-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário da Firma</h3>
