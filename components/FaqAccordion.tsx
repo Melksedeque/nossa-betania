@@ -2,12 +2,34 @@
 import { useState } from 'react';
 
 const faqs = [
-  { q: "O dinheiro é de verdade?", a: "Não. É tudo fictício. Se você ganhar, ganha honra. Se perder, ganha vergonha. Não aceitamos Pix, nem Boleto, nem Vale-Refeição." },
-  { q: "Posso sacar meus ganhos?", a: "Claro! O saque é processado imediatamente em forma de 'tapinha nas costas' e 'parabéns' no grupo da firma." },
-  { q: "Quem cria as apostas?", a: "Qualquer usuário cadastrado pode criar uma aposta. Mas cuidado: se ninguém apostar, você vai parecer aquele colega que marca happy hour e ninguém vai." },
-  { q: "O que acontece se eu perder tudo?", a: "O sistema te dá um 'Auxílio Emergencial Corporativo' diário para você continuar jogando. A casa nunca deixa você passar fome (de apostas)." },
-  { q: "O RH vai ver isso?", a: "Se eles tiverem senso de humor, sim. Se não, diga que é uma plataforma de 'Gamificação de Análise Preditiva de Riscos Corporativos'." },
-  { q: "Como subo no ranking?", a: "Ganhando apostas. Simples assim. Sorte no jogo, azar no amor (e no código)." }
+  { 
+    q: "O dinheiro é de verdade?", 
+    a: "Não, aqui trabalhamos com Armandólars ($AMD). É uma moeda lastreada em promessas de aumento, café frio e horas extras não pagas. Se você ganhar, acumula prestígio fictício. Se perder, é só mais uma terça-feira no escritório." 
+  },
+  { 
+    q: "Posso sacar meus ganhos via Pix?", 
+    a: "O saque é processado imediatamente em forma de 'Senso de Superioridade' sobre os colegas que apostaram errado. Não paga boleto, mas massageia o ego que é uma beleza." 
+  },
+  { 
+    q: "Quem define as odds (cotações)?", 
+    a: "Um algoritmo avançado que mistura Inteligência Artificial com a 'Rádio Peão'. Se todo mundo acha que o chefe vai atrasar, a odd cai. É a lei da oferta, da procura e da fofoca." 
+  },
+  { 
+    q: "O que é o tal do 'Elenco'?", 
+    a: "É o nosso arquivo confidencial aberto. Lá você vê quem ainda está Ativo (tankando o corporativo diariamente) e quem foi Exilado (pediu as contas ou 'foi convidado a buscar novos desafios'). Se sua Bio for boa, você vira personagem." 
+  },
+  { 
+    q: "O RH vai ver isso?", 
+    a: "Se eles tiverem senso de humor, vão rir. Se não tiverem, diga que você está testando uma plataforma de 'Gamificação de Análise Preditiva de Riscos e Engajamento de Stakeholders'. Eles adoram essas palavras-chave no LinkedIn." 
+  },
+  { 
+    q: "Perdi tudo. Vou ser demitido?", 
+    a: "Relaxa. Diferente do seu salário que acaba no dia 15, aqui a casa te dá um 'Auxílio Emergencial do Caos' se seu saldo zerar. O objetivo é manter você viciado na adrenalina da derrota iminente." 
+  },
+  { 
+    q: "Como viro 'Milho-nário' da firma?", 
+    a: "Acertando previsões impossíveis (tipo 'Reunião acabando no horário' ou 'Cliente aprovando de primeira'). Suba no Ranking, ganhe medalhas virtuais e torne-se uma lenda urbana nos canais do Slack." 
+  }
 ];
 
 export function FaqAccordion() {
@@ -28,10 +50,10 @@ export function FaqAccordion() {
           </button>
           <div
             className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              openIndex === index ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+              openIndex === index ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
-            <div className="p-4 pt-0 text-slate-400 text-sm border-t border-slate-800/50 mt-2">
+            <div className="p-4 pt-0 text-slate-400 text-sm border-t border-slate-800/50 mt-2 leading-relaxed">
               {faq.a}
             </div>
           </div>
