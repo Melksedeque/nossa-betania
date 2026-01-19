@@ -36,12 +36,12 @@ export default async function Home() {
   });
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <SiteHeader isLoggedIn={isLoggedIn} logoUrl={logoUrl} />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="flex items-center relative py-10 overflow-hidden min-h-[90vh]">
+        <section className="flex items-center relative py-10 overflow-hidden min-h-screen">
           <div className="absolute inset-0 bg-linear-to-br from-background via-background to-primary/10"></div>
           <div className="container flex content-between mx-auto px-4 relative z-10 max-w-7xl">
             <div className="w-4xl">
@@ -93,7 +93,9 @@ export default async function Home() {
         <section id="como-funciona" className="py-20 bg-slate-800/5">
           <div className="container max-w-7xl mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 leading-tight tracking-tight">Como funciona o <span className="text-orange-500">esquema</span>?</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 leading-tight tracking-tight">
+                Como funciona o <span className="text-orange-500">esquema</span>?
+              </h2>
               <p className="text-slate-400 max-w-xl mx-auto">
                 Pense na Nossa Betânia como aquela resenha pós-expediente, só que oficializada.
                 Em vez de só reclamar, você transforma o caos da firma em mercados de apostas.
@@ -101,8 +103,8 @@ export default async function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <Card className="hover:border-orange-500/50 transition-colors text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500/30 mb-6 transition-transform group-hover:scale-110`}>
+              <Card className="card hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500/30 mb-6 transition-transform group-hover:scale-120`}>
                   <Gift className={`w-8 h-8 text-green-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">1. Receba seu Bônus Corporativo</h3>
@@ -112,9 +114,9 @@ export default async function Home() {
                 </p>
               </Card>
 
-              <Card className="hover:border-orange-500/50 transition-colors text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-teal-500/30 mb-6 transition-transform group-hover:scale-110`}>
-                  <Search className={`w-8 h-8 text-teal-400`} />
+              <Card className="card hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-500/30 mb-6 transition-transform group-hover:scale-120`}>
+                  <Search className={`w-8 h-8 text-sky-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">2. Analise o Caos</h3>
                 <p className="text-slate-400">
@@ -123,8 +125,8 @@ export default async function Home() {
                 </p>
               </Card>
 
-              <Card className="hover:border-orange-500/50 transition-colors text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/30 mb-6 transition-transform group-hover:scale-110`}>
+              <Card className="card hover:border-orange-500/50 shadow-xl hover:shadow-orange-700/20 transition-all text-center">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/30 mb-6 transition-transform group-hover:scale-120`}>
                   <Trophy className={`w-8 h-8 text-amber-400`} />
                 </div>
                 <h3 className="text-xl font-bold mb-2">3. Vire Milho-nário da Firma</h3>
