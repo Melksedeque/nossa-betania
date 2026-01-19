@@ -117,7 +117,7 @@ Quer adicionar uma nova feature ou corrigir um bug?
 
 ## 📄 Licença
 
-Este projeto está sob a licença (**GPL 3.0**)[https://github.com/Melksedeque/nossa-betania?tab=GPL-3.0-1-ov-file] - ou seja, pode copiar, mantenha o código aberto pros coleguinhas, mas se quebrar a produção a culpa é sua.
+Este projeto está sob a licença **(GPL 3.0)[https://github.com/Melksedeque/nossa-betania?tab=GPL-3.0-1-ov-file]** - ou seja, pode copiar, mantenha o código aberto pros coleguinhas, mas se quebrar a produção a culpa é sua.
 
 ---
 
