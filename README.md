@@ -117,10 +117,22 @@ Quer adicionar uma nova feature ou corrigir um bug?
 
 ## 📄 Licença
 
-Este projeto está sob a licença [**GPL 3.0**](https://github.com/Melksedeque/nossa-betania?tab=GPL-3.0-1-ov-file) - ou seja, pode copiar, mas se quebrar a produção a culpa é sua.
+Este projeto está sob a licença **MIT** - ou seja, pode copiar, mas se quebrar a produção a culpa é sua.
+
+---
+
+## ⚠️ Disclaimer Jurídico (O famoso "Tira o meu da reta")
+
+Este projeto é uma obra de **ficção e sátira corporativa**, criada exclusivamente para fins educacionais, de portfólio e entretenimento.
+
+1.  **Personagens Fictícios:** Qualquer semelhança com gerentes reais, colegas tóxicos ou aquele estagiário que apagou o banco de produção é **mera coincidência** (ou trauma compartilhado).
+2.  **Dinheiro Fictício:** A moeda "Armandólar ($AMD)" não possui valor comercial, não pode ser trocada por Reais, Dólares ou Vale-Coxinha. Não somos uma casa de apostas real (ainda bem, senão a CVM batia aqui).
+3.  **Isenção de Responsabilidade:** O autor não se responsabiliza se você tentar implementar um sistema de apostas real na sua empresa e for convocado pelo RH. Use com moderação.
+
+**Resumo:** É tudo brincadeira. Por favor, não me processem. Eu sou apenas um dev tentando pagar os boletos.
 
 ---
 
 <div align="center">
-  <sub>Feito com 🧡 e muito ☕ por alguém que deveria estar trabalhando.</sub>
+  <sub>Feito com na base do ódio, mas com 🧡 e muito ☕ por alguém que deveria estar trabalhando.</sub>
 </div>
