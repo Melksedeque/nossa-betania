@@ -25,6 +25,28 @@ export const metadata: Metadata = {
       url: "/icone.png",
     },
   },
+  openGraph: {
+    title: "Nossa Betânia",
+    description: "Aposte no Caos Corporativo. Onde seu estresse vira lucro fictício.",
+    url: "https://nossa-betania.vercel.app",
+    siteName: "Nossa Betânia",
+    images: [
+      {
+        url: "/icone.png", 
+        width: 800,
+        height: 600,
+        alt: "Logo Nossa Betânia",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nossa Betânia",
+    description: "A primeira Casa de Apostas focada no Caos Corporativo.",
+    images: ["/icone.png"],
+  },
 };
 
 import { ToastProvider } from "@/components/Toast";
