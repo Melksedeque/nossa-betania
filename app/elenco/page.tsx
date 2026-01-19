@@ -36,7 +36,7 @@ export default async function ElencoPage() {
         <div className="container mx-auto px-4 max-w-6xl space-y-12">
           <header className="text-center max-w-2xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Elenco do Caos Corporativo
+              Elenco do <span className="text-orange-400">Caos Corporativo</span>
             </h1>
             <p className="text-slate-400 text-sm md:text-base">
               Aqui estão os personagens oficiais da Nossa Betânia: quem ainda está na

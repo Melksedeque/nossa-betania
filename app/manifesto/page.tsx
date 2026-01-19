@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Card } from "@/components/Card";
+import Image from "next/image";
 
 export default async function ManifestoPage() {
   const [session, logoSetting] = await Promise.all([
@@ -20,10 +21,10 @@ export default async function ManifestoPage() {
       <SiteHeader isLoggedIn={isLoggedIn} logoUrl={logoUrl} />
 
       <main className="flex-1 py-16">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <Card className="p-8 md:p-10 bg-slate-900/80 border-slate-800">
+        <div className="container flex items-center justify-between mx-auto px-4 max-w-6xl">
+          <Card className="p-8 md:p-10 bg-slate-900/80 border-slate-800 max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Manifesto da Nossa Betânia
+              <span className="text-orange-400">Manifesto</span> da Nossa <span className="text-orange-400">Bet</span>ânia
             </h1>
             <p className="text-slate-400 mb-4 text-lg">
               A Nossa Betânia existe para transformar o caos corporativo em diversão
@@ -51,6 +52,13 @@ export default async function ManifestoPage() {
               semana de caos com um pouco de bom humor.
             </p>
           </Card>
+          <Image
+            src="/mascote2.png"
+            alt="Manifesto da Nossa Betânia"
+            width={300}
+            height={635}
+            className="animate-float-slow"
+          />
         </div>
       </main>
 

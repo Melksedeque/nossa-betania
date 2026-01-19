@@ -38,7 +38,7 @@ export default async function MarketsPage() {
         <div className="container mx-auto px-4 max-w-5xl">
           <header className="mb-10 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-              Mercados Abertos
+              Mercados <span className="text-orange-400">Abertos</span>
             </h1>
             <p className="text-slate-400 max-w-2xl mx-auto">
               Aqui você vê todos os mercados da Nossa Betânia. Primeiro os que ainda

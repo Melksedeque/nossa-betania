@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Card } from "@/components/Card";
 import { ContactForm } from "./ContactForm";
+import Image from "next/image";
 
 export default async function ContatoPage() {
   const [session, logoSetting] = await Promise.all([
@@ -21,10 +22,10 @@ export default async function ContatoPage() {
       <SiteHeader isLoggedIn={isLoggedIn} logoUrl={logoUrl} />
 
       <main className="flex-1 py-16">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <Card className="p-8 md:p-10 bg-slate-900/80 border-slate-800">
+        <div className="container mx-auto px-4 flex items-center justify-between max-w-6xl">
+          <Card className="p-8 md:p-10 bg-slate-900/80 border-slate-800 max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Fale com o Dono da Banca
+              Fale com o <span className="text-orange-400">Dono da Banca</span>
             </h1>
             <p className="text-slate-400 mb-6">
               Tem uma ideia de mercado genial, um bug bizarro ou só quer desabafar
@@ -34,6 +35,13 @@ export default async function ContatoPage() {
 
             <ContactForm />
           </Card>
+          <Image
+            src="/mascote3.png"
+            alt="Ilustração de contato"
+            width={360}
+            height={390}
+            className="animate-float-slow"
+          />
         </div>
       </main>
 
