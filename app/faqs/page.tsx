@@ -15,7 +15,7 @@ export default async function FaqsPage() {
       <SiteHeader isLoggedIn={isLoggedIn} logoUrl={logoUrl} />
       <main className="flex-1 py-20">
         <div className="container mx-auto px-4 max-w-3xl">
-           <h1 className="text-4xl font-bold text-white text-center mb-8">Perguntas <span className="text-orange-400">Frequentes</span></h1>
+           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">Perguntas <span className="text-orange-400">Frequentes</span></h1>
            <p className="text-slate-400 text-center mb-12">Dúvidas que tiram o sono mais que deploy de sexta-feira.</p>
            <FaqAccordion />
         </div>

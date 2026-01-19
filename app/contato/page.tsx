@@ -24,7 +24,7 @@ export default async function ContatoPage() {
       <main className="flex-1 py-16">
         <div className="container mx-auto px-4 flex items-center justify-between max-w-6xl">
           <Card className="p-8 md:p-10 bg-slate-900/80 border-slate-800 max-w-2xl">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Fale com o <span className="text-orange-400">Dono da Banca</span>
             </h1>
             <p className="text-slate-400 mb-6">

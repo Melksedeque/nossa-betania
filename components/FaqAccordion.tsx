@@ -41,7 +41,7 @@ export function FaqAccordion() {
         <div key={index} className="border border-slate-800 rounded-lg bg-slate-900/50 overflow-hidden">
           <button
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-800/50 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-800/50 transition-colors cursor-pointer text-xl"
           >
             <span className="font-medium text-slate-200">{faq.q}</span>
             <span className={`transform transition-transform duration-300 text-orange-500 ${openIndex === index ? 'rotate-180' : ''}`}>
@@ -53,7 +53,7 @@ export function FaqAccordion() {
               openIndex === index ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
-            <div className="p-4 pt-0 text-slate-400 text-sm border-t border-slate-800/50 mt-2 leading-relaxed">
+            <div className="p-4 text-slate-400 text-md border-t border-slate-800/50 leading-relaxed">
               {faq.a}
             </div>
           </div>
