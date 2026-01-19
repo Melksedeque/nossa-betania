@@ -16,6 +16,15 @@ const oswald = Oswald({
 export const metadata: Metadata = {
   title: "Nossa Betânia",
   description: "A primeira Casa de Apostas focada no Caos Corporativo.",
+  icons: {
+    icon: "/icone.png",
+    shortcut: "/icone.png",
+    apple: "/icone.png",
+    other: {
+      rel: "apple-touch-icon-precomposed",
+      url: "/icone.png",
+    },
+  },
 };
 
 import { ToastProvider } from "@/components/Toast";
@@ -27,12 +36,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="icon" href="/icone.png" />
-      </head>
       <body
         className={`${inter.variable} ${oswald.variable} antialiased bg-slate-900 text-slate-50`}
       >
