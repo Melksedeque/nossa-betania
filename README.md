@@ -134,5 +134,5 @@ Este projeto é uma obra de **ficção e sátira corporativa**, criada exclusiva
 ---
 
 <div align="center">
-  <sub>Feito com na base do ódio, mas com 🧡 e muito ☕ por alguém que deveria estar trabalhando.</sub>
+  <sub>Feito na base do ódio, mas com 🧡 e muito ☕ por alguém que deveria estar trabalhando.</sub>
 </div>
