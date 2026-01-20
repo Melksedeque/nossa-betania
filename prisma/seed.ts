@@ -118,7 +118,7 @@ async function main() {
       { label: 'Mais de 15 vezes (Overdose)', odds: 1.2 },
     ],
     // Expira Segunda às 18h
-    expiresAt: new Date('2026-01-19T18:00:00'),
+    expiresAt: new Date('2026-01-19T21:00:00'),
   },
   {
     question: 'O "Mago do Prompt" vai terminar o sistema sozinho ou pedir socorro?',
@@ -129,7 +129,7 @@ async function main() {
       { label: 'Diz que a IA "está fora do ar"', odds: 3.5 },
     ],
     // Expira Quarta às 12h
-    expiresAt: new Date('2026-01-21T12:00:00'),
+    expiresAt: new Date('2026-01-21T15:00:00'),
   },
   {
     question: 'Horário de entrada do "Desenvolvedor do Caos" na Daily',
@@ -140,7 +140,7 @@ async function main() {
       { label: 'Entra mudo e sai calado no final', odds: 1.5 },
     ],
     // Expira Segunda às 09:15
-    expiresAt: new Date('2026-01-19T09:15:00'),
+    expiresAt: new Date('2026-01-19T12:15:00'),
   },
   {
     question: 'O "Shape de Compras" vai responder o chamado antes do treino?',
@@ -151,7 +151,7 @@ async function main() {
       { label: 'Culpa os meninos da TI', odds: 1.2 },
     ],
     // Expira Terça às 14:00
-    expiresAt: new Date('2026-01-20T14:00:00'),
+    expiresAt: new Date('2026-01-20T17:00:00'),
   },
   {
     question: 'Qual será o primeiro aviso da "Anônima do RH" na semana?',
@@ -162,7 +162,7 @@ async function main() {
       { label: '"Alguém esqueceu a marmita no microondas"', odds: 5.0 },
     ],
     // Expira Segunda às 10:00
-    expiresAt: new Date('2026-01-19T10:00:00'),
+    expiresAt: new Date('2026-01-19T13:00:00'),
   },
   {
     question: 'Quantos "Eu avisei" a Dra. Dináh vai soltar sobre o novo processo?',
@@ -173,7 +173,7 @@ async function main() {
       { label: 'Vai mandar o link do CLT no Slack', odds: 1.3 },
     ],
     // Expira Quinta às 17:00
-    expiresAt: new Date('2026-01-22T17:00:00'),
+    expiresAt: new Date('2026-01-22T20:00:00'),
   },
   {
     question: 'A "Herdeira do Nada" vai aparecer em qual reunião?',
@@ -184,7 +184,7 @@ async function main() {
       { label: 'Em todas para planejar a "Ação Ativa"', odds: 1.1 },
     ],
     // Expira Sexta às 16:00
-    expiresAt: new Date('2026-01-23T16:00:00'),
+    expiresAt: new Date('2026-01-23T19:00:00'),
   },
   {
     question: 'O próximo trocadilho do "Marketeiro" vai fazer alguém chorar?',
@@ -195,7 +195,7 @@ async function main() {
       { label: 'Alguém vai mutar o fone de ódio', odds: 4.0 },
     ],
     // Expira Quarta às 15:00
-    expiresAt: new Date('2026-01-21T15:00:00'),
+    expiresAt: new Date('2026-01-21T18:00:00'),
   },
   {
     question: 'Recorde da "Vendedora": Quanto tempo dura a reunião de ajuste salarial?',
@@ -206,7 +206,7 @@ async function main() {
       { label: 'Mais de 30 min (Promessa de bônus)', odds: 10.0 },
     ],
     // Expira Sexta às 18:00
-    expiresAt: new Date('2026-01-23T18:00:00'),
+    expiresAt: new Date('2026-01-23T21:00:00'),
   },
   {
     question: 'Status do Lead da "Rainha das Vendas"',
@@ -217,7 +217,7 @@ async function main() {
       { label: 'Lead Quente (Sumiu o contato)', odds: 6.0 },
     ],
     // Expira Terça às 11:00
-    expiresAt: new Date('2026-01-20T11:00:00'),
+    expiresAt: new Date('2026-01-20T14:00:00'),
   },
   {
     question: 'Bolão do Apocalipse: Quando sai o pedido de Recuperação Judicial?',
