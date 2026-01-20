@@ -24,10 +24,19 @@ async function getOpenMarkets() {
 
 async function getLeaderboard() {
   return await prisma.user.findMany({
+    where: { role: { not: 'ADMIN' } },
     take: 5,
     orderBy: { balance: 'desc' },
     select: { id: true, name: true, balance: true, image: true },
   });
+}
+
+async function getHouseBalance() {
+  const house = await prisma.user.findFirst({
+    where: { role: 'ADMIN' },
+    select: { balance: true }
+  });
+  return house?.balance ?? 0;
 }
 
 async function getUserBets(userId: string) {
@@ -103,6 +112,7 @@ export default async function DashboardPage() {
   const history = historyBetsRaw.map(mapBet);
 
   const leaderboard = await getLeaderboard();
+  const houseBalance = await getHouseBalance();
 
   return (
     <>
@@ -155,6 +165,19 @@ export default async function DashboardPage() {
 
           {/* Sidebar: Ranking */}
           <div className="space-y-6">
+            {/* Cofre da Banca */}
+            <div className="bg-slate-900/80 p-4 rounded-xl border border-red-900/30 shadow-lg shadow-red-900/10">
+              <h2 className="text-sm font-bold text-red-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+                🏦 Cofre da Banca
+              </h2>
+              <div className="flex justify-between items-end">
+                <p className="text-xs text-slate-500">Meta: Quebrar esse valor</p>
+                <p className="text-2xl font-mono font-black text-white">
+                  A$ {houseBalance.toFixed(0)}
+                </p>
+              </div>
+            </div>
+
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               🌽 Top Milho-nários
             </h2>
