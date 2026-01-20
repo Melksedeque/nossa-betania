@@ -6,6 +6,7 @@ import { Logo } from '@/components/Logo';
 import { LogoutButton } from '@/components/LogoutButton';
 import { ProfileModal } from '@/components/ProfileModal';
 import Image from 'next/image';
+import { Button } from './Button';
 
 interface DashboardHeaderProps {
   user: {
@@ -75,6 +76,16 @@ export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
               </div>
             </button>
              <div className="h-6 w-px bg-slate-800 mx-1"></div>
+             <Link href="/" className="text-slate-300 hover:text-white transition-colors">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="cursor-pointer text-xs md:text-sm text-slate-300 hover:text-white"
+                >
+                  Voltar ao site
+                </Button>
+             </Link>
              <LogoutButton />
           </div>
         </div>
