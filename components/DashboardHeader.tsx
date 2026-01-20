@@ -64,7 +64,7 @@ export function DashboardHeader({ user, logoUrl }: DashboardHeaderProps) {
               className="flex items-center gap-3 cursor-pointer hover:bg-slate-900 rounded-full pl-2 pr-4 py-1.5 transition-colors group border border-transparent hover:border-slate-800"
             >
               {user.image ? (
-                 <Image src={user.image} alt={user.name || 'User'} className="w-8 h-8 rounded-full object-cover border border-slate-700 group-hover:border-slate-500" />
+                 <Image src={user.image} alt={user.name || 'User'} className="w-10 h-10 rounded-full object-cover border border-slate-700 group-hover:border-slate-500" width={40} height={40} />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-white group-hover:bg-slate-700 transition-colors border border-slate-700">
                     <span className="text-sm font-bold">{user.name?.[0]?.toUpperCase() || 'U'}</span>
