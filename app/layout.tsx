@@ -16,15 +16,6 @@ const oswald = Oswald({
 export const metadata: Metadata = {
   title: "Nossa Betânia",
   description: "A primeira Casa de Apostas focada no Caos Corporativo.",
-  icons: {
-    icon: "/icone.png",
-    shortcut: "/icone.png",
-    apple: "/icone.png",
-    other: {
-      rel: "apple-touch-icon-precomposed",
-      url: "/icone.png",
-    },
-  },
   openGraph: {
     title: "Nossa Betânia",
     description: "Aposte no Caos Corporativo. Onde seu estresse vira lucro fictício.",
