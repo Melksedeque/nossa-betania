@@ -325,7 +325,7 @@ export async function createMarket(
   description: string,
   expiresAtString: string,
   creatorId: string,
-  optionsInput: { label: string; probability: number }[] = []
+  optionsInput: { label: string; odds: number }[] = []
 ) {
   try {
     const expiresAt = new Date(expiresAtString);
@@ -351,14 +351,14 @@ export async function createMarket(
         return { success: false, message: 'A aposta deve ter pelo menos 2 opções.' };
       }
 
-      const totalProbability = optionsInput.reduce((acc, curr) => acc + curr.probability, 0);
-      if (Math.abs(totalProbability - 100) > 0.1) {
-        return { success: false, message: 'A soma das probabilidades deve ser 100%.' };
+      const invalidOdds = optionsInput.some(opt => opt.odds <= 1.0);
+      if (invalidOdds) {
+        return { success: false, message: 'Todas as odds devem ser maiores que 1.00.' };
       }
 
       optionsToCreate = optionsInput.map(opt => ({
         label: opt.label,
-        odds: Number((100 / opt.probability).toFixed(2)) // 50% -> 2.0, 25% -> 4.0
+        odds: Number(opt.odds.toFixed(2))
       }));
     }
 

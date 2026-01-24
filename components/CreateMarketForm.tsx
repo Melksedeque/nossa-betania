@@ -17,25 +17,25 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
   
   // Estado para opções personalizadas
   const [options, setOptions] = useState([
-    { label: 'Sim', probability: 50 },
-    { label: 'Não', probability: 50 },
+    { label: 'Sim', odds: 1.90 },
+    { label: 'Não', odds: 1.90 },
   ]);
 
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
 
-  const handleOptionChange = (index: number, field: 'label' | 'probability', value: string | number) => {
+  const handleOptionChange = (index: number, field: 'label' | 'odds', value: string | number) => {
     const newOptions = [...options];
     if (field === 'label') {
       newOptions[index].label = value as string;
     } else {
-      newOptions[index].probability = Number(value);
+      newOptions[index].odds = Number(value);
     }
     setOptions(newOptions);
   };
 
   const addOption = () => {
-    setOptions([...options, { label: `Opção ${options.length + 1}`, probability: 0 }]);
+    setOptions([...options, { label: `Opção ${options.length + 1}`, odds: 1.50 }]);
   };
 
   const removeOption = (index: number) => {
@@ -58,9 +58,10 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
       return;
     }
 
-    const totalProb = options.reduce((acc, curr) => acc + curr.probability, 0);
-    if (Math.abs(totalProb - 100) > 0.1) {
-      setError(`A soma das probabilidades deve ser 100%. Atual: ${totalProb}%`);
+    // Validar se todas as odds são maiores que 1.0
+    const invalidOdds = options.some(opt => opt.odds <= 1.0);
+    if (invalidOdds) {
+      setError('Todas as odds devem ser maiores que 1.00');
       setIsPending(false);
       return;
     }
@@ -73,6 +74,7 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
     }
 
     try {
+      // @ts-expect-error - Ajustando para enviar odds
       const result = await createMarket(question, description, expirationDate.toISOString(), userId, options);
 
       if (result.success) {
@@ -128,7 +130,7 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
       <div>
         <div className="flex justify-between items-center mb-2">
           <label className="block text-sm font-medium text-slate-300">
-            Opções e Probabilidades
+            Opções e Odds (Multiplicadores)
           </label>
           <button
             type="button"
@@ -150,20 +152,17 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
                 className="flex-1 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
                 required
               />
-              <div className="relative w-24">
+              <div className="relative w-28">
                 <input
                   type="number"
-                  value={option.probability}
-                  onChange={(e) => handleOptionChange(index, 'probability', e.target.value)}
+                  value={option.odds}
+                  onChange={(e) => handleOptionChange(index, 'odds', e.target.value)}
                   className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 text-right pr-8"
-                  min="0"
-                  max="100"
+                  min="1.01"
+                  step="0.01"
                   required
                 />
-                <span className="absolute right-3 top-2 text-slate-500 text-sm">%</span>
-              </div>
-              <div className="w-16 text-right text-xs text-slate-400 font-mono">
-                x{option.probability > 0 ? (100 / option.probability).toFixed(2) : '∞'}
+                <span className="absolute right-3 top-2 text-slate-500 text-sm">x</span>
               </div>
               <button
                 type="button"
@@ -177,10 +176,8 @@ export function CreateMarketForm({ userId }: CreateMarketFormProps) {
           ))}
         </div>
         
-        <div className="mt-2 text-right text-sm">
-          <span className={`font-bold ${Math.abs(options.reduce((acc, curr) => acc + curr.probability, 0) - 100) < 0.1 ? 'text-green-400' : 'text-red-400'}`}>
-            Total: {options.reduce((acc, curr) => acc + curr.probability, 0)}%
-          </span>
+        <div className="mt-2 text-right text-xs text-slate-500">
+          Odds são os multiplicadores do retorno. Ex: 2.00 dobra o valor apostado.
         </div>
       </div>
 
