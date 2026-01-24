@@ -1273,3 +1273,225 @@ export async function adminUploadLogo(formData: FormData) {
     return { success: false, message: 'Erro ao fazer upload da logo.' };
   }
 }
+
+const AdminCreateUserSchema = z.object({
+  name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
+  email: z.email({ message: 'Email inválido.' }),
+  password: z.string().min(8, { message: 'A senha deve ter pelo menos 8 caracteres.' })
+    .regex(/[a-zA-Z]/, { message: 'A senha deve conter letras.' })
+    .regex(/[0-9]/, { message: 'A senha deve conter números.' }),
+  role: z.enum(['USER', 'ADMIN']),
+  situation: z.enum(['ATIVO', 'EXILADO']),
+});
+
+const AdminUpdateUserSchema = z.object({
+  id: z.string(),
+  name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
+  email: z.email({ message: 'Email inválido.' }),
+  password: z.string().optional().or(z.literal('')),
+  role: z.enum(['USER', 'ADMIN']),
+  situation: z.enum(['ATIVO', 'EXILADO']),
+  bio: z.string().optional().nullable(),
+});
+
+export async function adminCreateUser(formData: FormData) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const validated = AdminCreateUserSchema.safeParse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      role: formData.get('role') || 'USER',
+      situation: formData.get('situation') || 'ATIVO',
+    });
+
+    if (!validated.success) {
+      return { success: false, message: validated.error.errors[0].message };
+    }
+
+    const { name, email, password, role, situation } = validated.data;
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return { success: false, message: 'Email já cadastrado.' };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const avatarSeed = encodeURIComponent(name);
+    const image = `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`;
+
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        situation,
+        image,
+        balance: 100.0,
+      },
+    });
+
+    revalidatePath('/admin/configuracoes');
+    return { success: true, message: 'Usuário criado com sucesso!' };
+  } catch (error) {
+    console.error('Admin create user error:', error);
+    return { success: false, message: 'Erro ao criar usuário.' };
+  }
+}
+
+export async function adminUpdateUser(formData: FormData) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const validated = AdminUpdateUserSchema.safeParse({
+      id: formData.get('id'),
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      role: formData.get('role'),
+      situation: formData.get('situation'),
+      bio: formData.get('bio'),
+    });
+
+    if (!validated.success) {
+      return { success: false, message: validated.error.errors[0].message };
+    }
+
+    const { id, name, email, password, role, situation, bio } = validated.data;
+
+    // Check email uniqueness if changed
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser && existingUser.id !== id) {
+      return { success: false, message: 'Email já está em uso por outro usuário.' };
+    }
+
+    const updateData: any = {
+      name,
+      email,
+      role,
+      situation,
+      bio: bio || null,
+    };
+
+    if (password && password.length >= 8) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+
+    await prisma.user.update({
+      where: { id },
+      data: updateData,
+    });
+
+    revalidatePath('/admin/configuracoes');
+    return { success: true, message: 'Usuário atualizado com sucesso!' };
+  } catch (error) {
+    console.error('Admin update user error:', error);
+    return { success: false, message: 'Erro ao atualizar usuário.' };
+  }
+}
+
+export async function adminToggleUserStatus(userId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { success: false, message: 'Usuário não encontrado.' };
+    }
+
+    const newSituation = user.situation === 'ATIVO' ? 'EXILADO' : 'ATIVO';
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { situation: newSituation },
+    });
+
+    revalidatePath('/admin/configuracoes');
+    return { success: true, message: `Status alterado para ${newSituation}.` };
+  } catch (error) {
+    console.error('Admin toggle user status error:', error);
+    return { success: false, message: 'Erro ao alterar status.' };
+  }
+}
+
+export async function adminGetUsers(
+  page: number = 1,
+  limit: number = 10,
+  search: string = '',
+  status: string = 'ALL'
+) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return { success: false, message: 'Acesso negado.' };
+    }
+
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.UserWhereInput = {};
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (status !== 'ALL') {
+      where.situation = status;
+    }
+
+    const [users, total] = await prisma.$transaction([
+      prisma.user.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          situation: true,
+          balance: true,
+          image: true,
+          bio: true,
+          createdAt: true,
+          // We don't track last access in schema yet, using createdAt or adding a field later?
+          // Requirement says "Último Acesso". Schema doesn't have it.
+          // I will use emailVerified or just leave it blank for now, or infer from activities?
+          // Let's stick to what we have.
+        },
+      }),
+      prisma.user.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        users: users.map(u => ({
+            ...u,
+            createdAt: u.createdAt.toISOString()
+        })),
+        total,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
+  } catch (error) {
+    console.error('Admin get users error:', error);
+    return { success: false, message: 'Erro ao buscar usuários.' };
+  }
+}

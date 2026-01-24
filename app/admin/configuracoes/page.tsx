@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { PasswordForm } from '../PasswordForm';
 import { LogoUploadForm } from './LogoUploadForm';
+import { UserManagement } from './UserManagement';
 import { adminRestoreComment, adminHardDeleteComment, adminRestoreMarket, adminHardDeleteMarket } from '@/app/lib/actions';
 
 export default async function AdminSettingsPage() {
@@ -64,6 +65,8 @@ export default async function AdminSettingsPage() {
             <PasswordForm />
           </div>
         </div>
+
+        <UserManagement />
 
         <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
           <h2 className="text-xl font-bold text-white mb-4">Lixeira</h2>
